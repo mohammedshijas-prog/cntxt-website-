@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import styles from "./navMenu.module.css";
 
-type Column = { heading: string; items: { title: string; href: string }[] };
+type Column = { heading: string; items: { title: string; href: string; icon?: string }[] };
 
 export const menus: Record<MenuId, { href: string; columns: Column[]; rich?: boolean }> = {
   products: {
@@ -22,8 +22,8 @@ export const menus: Record<MenuId, { href: string; columns: Column[]; rich?: boo
       {
         heading: "Application AI",
         items: [
-          { title: "Munsit", href: "/products" },
-          { title: "Klkt", href: "/klkt" },
+          { title: "Munsit", href: "/products", icon: "/nav/munsit-icon.svg" },
+          { title: "Klkt", href: "/klkt", icon: "/nav/klkt-icon.svg" },
           { title: "Agentix", href: "/products" },
         ],
       },
@@ -161,8 +161,8 @@ export function NavMenu({
                   <a className={styles.item} href={item.href} tabIndex={open ? 0 : -1}>
                     {rich ? (
                       <>
-                        <span className={styles.icon} aria-hidden="true">
-                          <CubeIcon />
+                        <span className={`${styles.icon} ${item.icon ? styles.brandIcon : ""}`} aria-hidden="true">
+                          {item.icon ? <img src={item.icon} alt="" width={54} height={54} /> : <CubeIcon />}
                         </span>
                         <span>
                           <strong>{item.title}</strong>

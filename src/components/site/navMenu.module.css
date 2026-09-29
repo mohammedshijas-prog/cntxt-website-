@@ -117,8 +117,20 @@
   transition: background-color 160ms ease, color 160ms ease;
 }
 
-.item:hover .icon,
-.item:focus-visible .icon {
+/* Product logos come with their own tile. */
+.brandIcon {
+  overflow: hidden;
+  background: transparent;
+}
+
+.brandIcon img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.item:hover .icon:not(.brandIcon),
+.item:focus-visible .icon:not(.brandIcon) {
   background: #ece6ff;
   color: #7d52f4;
 }
