@@ -1,0 +1,121 @@
+/* Three notched image cards with a numbered label, title and description. */
+.list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+}
+
+.shot {
+  position: relative;
+  aspect-ratio: 608 / 564;
+  overflow: hidden;
+  -webkit-mask-image: url(/healthcare/mask.svg);
+  mask-image: url(/healthcare/mask.svg);
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+}
+
+.shot > img:first-child {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.shot::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.5) 13%, rgba(0, 0, 0, 0.22) 33%, rgba(0, 0, 0, 0) 61%);
+}
+
+.grain {
+  position: absolute;
+  top: 0;
+  left: 0;
+  mix-blend-mode: overlay;
+  opacity: 0.42;
+  pointer-events: none;
+}
+
+.label {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 1;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin: 0;
+  color: #fafaf8;
+  font-family: var(--font-heading);
+  font-size: var(--fs-lead);
+  font-weight: 500;
+  line-height: var(--lh-lead);
+}
+
+.label span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border: 1px solid #fafaf8;
+  font-size: 9px;
+  line-height: 9px;
+}
+
+.copy {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 16px;
+  padding: 32px 28px 64px;
+  border-left: 1px solid #dad8ce;
+}
+
+.copy h3 {
+  margin: 0;
+  color: var(--text-strong);
+  font-family: var(--font-heading);
+  font-size: var(--fs-h4);
+  font-weight: 500;
+  line-height: var(--lh-h4);
+  white-space: pre-line;
+}
+
+.copy p {
+  max-width: 520px;
+  margin: 0;
+  color: var(--text-muted);
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+}
+
+@media (max-width: 1200px) {
+  .list {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .copy {
+    padding: 24px 0 0;
+    border-left: 0;
+  }
+
+  /* Full-width cards: a landscape crop keeps the images from getting too tall. */
+  .shot {
+    aspect-ratio: 16 / 10;
+  }
+}

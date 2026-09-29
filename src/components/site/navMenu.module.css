@@ -1,0 +1,178 @@
+/* The root stays unpositioned so the panel anchors to the header, not the link. */
+.root {
+  display: contents;
+}
+
+.panel {
+  position: absolute;
+  z-index: 50;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+  width: min(1020px, calc(100vw - 32px));
+  padding: 36px 36px 32px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.14);
+  color: #000000;
+  text-align: left;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 180ms ease, transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1), visibility 0s linear 220ms;
+}
+
+/* Invisible bridge over the gap so the pointer can travel into the panel. */
+.panel::before {
+  content: "";
+  position: absolute;
+  top: -16px;
+  right: 0;
+  left: 0;
+  height: 16px;
+}
+
+.panel[data-placement="below"] {
+  top: calc(100% + 12px);
+  left: 50%;
+  transform: translate(-50%, -6px);
+}
+
+.panel[data-placement="side"] {
+  top: 0;
+  left: 100%;
+  transform: translate(8px, -6px);
+}
+
+.panel[data-placement="side"]::before {
+  top: 0;
+  bottom: 0;
+  left: -16px;
+  width: 16px;
+  height: auto;
+}
+
+.panel[data-open="true"] {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transition: opacity 180ms ease, transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1), visibility 0s;
+}
+
+.panel[data-placement="below"][data-open="true"] {
+  transform: translate(-50%, 0);
+}
+
+.panel[data-placement="side"][data-open="true"] {
+  transform: translate(8px, 0);
+}
+
+.panel .heading {
+  margin: 0 0 20px;
+  color: rgba(0, 0, 0, 0.6);
+  font-family: var(--font-heading);
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 20px;
+  text-transform: uppercase;
+}
+
+.column ul {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.item {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  padding: 4px 8px;
+  margin: -4px -8px;
+  border-radius: 12px;
+  color: inherit;
+  transition: background-color 160ms ease;
+}
+
+.item:hover,
+.item:focus-visible {
+  background: #f7f5ff;
+  outline: none;
+}
+
+.icon {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 54px;
+  height: 54px;
+  border-radius: 10px;
+  background: #f3f3f1;
+  color: #111111;
+  transition: background-color 160ms ease, color 160ms ease;
+}
+
+.item:hover .icon,
+.item:focus-visible .icon {
+  background: #ece6ff;
+  color: #7d52f4;
+}
+
+.item strong {
+  display: block;
+  font-family: var(--font-heading);
+  font-size: 17px;
+  font-weight: 500;
+  line-height: 24px;
+}
+
+.item small {
+  display: block;
+  color: rgba(0, 0, 0, 0.55);
+  font-family: var(--font-body);
+  font-size: 13px;
+  line-height: 20px;
+}
+
+/* Text-only variant: two columns split by a divider. */
+.simple {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0;
+  width: min(710px, calc(100vw - 32px));
+  padding: 32px 38px 28px;
+}
+
+.simple .column + .column {
+  padding-left: 24px;
+  border-left: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.simple .column ul {
+  gap: 6px;
+}
+
+.simple .item {
+  padding: 6px 8px;
+}
+
+.simple .item strong {
+  font-size: 17px;
+  line-height: 29px;
+}
+
+.simple .item:hover strong,
+.simple .item:focus-visible strong {
+  color: #7d52f4;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panel,
+  .panel[data-open="true"] {
+    transition: none;
+  }
+}

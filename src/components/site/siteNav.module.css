@@ -1,0 +1,194 @@
+/* Compact floating header, centered near the top of every page. */
+.navWrap {
+  position: fixed;
+  top: 16px;
+  left: 0;
+  z-index: 40;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding: 0 16px;
+  pointer-events: none;
+  transition: opacity 200ms ease, transform 200ms ease, visibility 0s;
+}
+
+.pending {
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(-12px);
+  transition: opacity 200ms ease, transform 200ms ease, visibility 0s linear 200ms;
+}
+
+.nav {
+  position: relative;
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 8px 8px 18px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.88);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  backdrop-filter: blur(20px);
+  pointer-events: auto;
+  transition: background-color 180ms ease, border-color 180ms ease;
+}
+
+.nav > a:first-child {
+  display: block;
+  line-height: 0;
+}
+
+.nav > a:first-child img {
+  display: block;
+  width: auto;
+  height: 16px;
+}
+
+.nav nav {
+  display: flex;
+  gap: 2px;
+  align-items: center;
+}
+
+.link {
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+  padding: 6px 10px;
+  border-radius: 8px;
+  color: #000000;
+  font-family: var(--font-heading);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  letter-spacing: -0.084px;
+  white-space: nowrap;
+  transition: color 180ms ease, background-color 180ms ease;
+}
+
+.link:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.link[aria-current="page"] {
+  color: #7d52f4;
+}
+
+.link img,
+.talk img {
+  display: block;
+}
+
+.link img {
+  width: 18px;
+  height: 18px;
+}
+
+.talk {
+  display: inline-flex;
+  gap: 10px;
+  align-items: center;
+  height: 36px;
+  padding: 0 7px 0 14px;
+  border-radius: 9px;
+  background: #7d52f4;
+  color: #ffffff;
+  font-family: var(--font-heading);
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 20px;
+  letter-spacing: -0.1px;
+  white-space: nowrap;
+}
+
+.talk:hover {
+  background: #6b40e6;
+}
+
+.talk span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  background: #ffffff;
+}
+
+.talk span img {
+  width: 14px;
+  height: 14px;
+}
+
+.nav a:focus-visible {
+  outline: 2px solid #7d52f4;
+  outline-offset: 2px;
+}
+
+/* Dark state: after scrolling, and on the home page once past the hero. */
+.dark .nav {
+  border-color: rgba(255, 255, 255, 0.1);
+  background: rgba(17, 17, 17, 0.88);
+  box-shadow: none;
+}
+
+.dark .link {
+  color: #ffffff;
+}
+
+.dark .link:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.dark .link[aria-current="page"] {
+  color: #b9a3ff;
+}
+
+.dark .link img {
+  filter: brightness(0) invert(1);
+}
+
+.dark .talk {
+  padding: 0 14px;
+  background: #ffffff;
+  color: #111111;
+}
+
+.dark .talk:hover {
+  background: #f4f0ff;
+}
+
+.dark .talk span {
+  display: none;
+}
+
+.dark .link:focus-visible,
+.dark .talk:focus-visible {
+  outline-color: #ffffff;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .navWrap,
+  .pending,
+  .nav,
+  .link {
+    transition: none;
+  }
+}
+
+@media (max-width: 1200px) {
+  .nav nav { display: none; }
+}
+
+@media (max-width: 720px) {
+  .nav { width: 100%; }
+  .talk { display: none; }
+}

@@ -1,0 +1,119 @@
+:root {
+  --background: #140e0b;
+  --foreground: #ffffff;
+  --font-heading: var(--font-host), "Host Grotesk", sans-serif;
+  --font-body: var(--font-manrope), Manrope, sans-serif;
+
+  /* Type scale, shared by every page. Titles use --font-heading,
+     descriptions use --font-body. */
+  --fs-display: 56px; /* page titles (h1) */
+  --lh-display: 64px;
+  --fs-h2: 44px; /* section titles */
+  --lh-h2: 52px;
+  --fs-h3: 28px; /* large card / sub-section titles */
+  --lh-h3: 36px;
+  --fs-h4: 22px; /* card titles */
+  --lh-h4: 30px;
+  --fs-h5: 18px; /* small titles, labels on images */
+  --lh-h5: 26px;
+  --fs-lead: 18px; /* intro paragraphs */
+  --lh-lead: 28px;
+  --fs-body: 16px; /* descriptions */
+  --lh-body: 24px;
+  --fs-small: 14px; /* meta text, eyebrows, chips */
+  --lh-small: 20px;
+  --fs-xs: 12px; /* legal, tiny labels */
+  --lh-xs: 16px;
+  --fs-button: 16px;
+
+  /* Text colours on light backgrounds. */
+  --text-strong: #0f0c0b;
+  --text-muted: rgba(15, 12, 11, 0.62);
+}
+
+@media (max-width: 1200px) {
+  :root {
+    --fs-display: 44px;
+    --lh-display: 52px;
+    --fs-h2: 36px;
+    --lh-h2: 44px;
+    --fs-h3: 24px;
+    --lh-h3: 32px;
+  }
+}
+
+@media (max-width: 720px) {
+  :root {
+    --fs-display: 36px;
+    --lh-display: 44px;
+    --fs-h2: 30px;
+    --lh-h2: 38px;
+    --fs-h3: 22px;
+    --lh-h3: 30px;
+    --fs-h4: 20px;
+    --lh-h4: 28px;
+    --fs-lead: 17px;
+    --lh-lead: 26px;
+  }
+}
+
+html {
+  height: 100%;
+}
+
+html,
+body {
+  max-width: 100vw;
+}
+
+body {
+  min-height: 100%;
+  color: var(--foreground);
+  background: var(--background);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Pages are built on a 1733px frame. On smaller desktop windows, lay the
+   page out at that width and scale it so type and spacing stay consistent. */
+@media (min-width: 1201px) and (max-width: 1732px) {
+  html {
+    max-width: none;
+    overflow-x: hidden;
+  }
+
+  body {
+    width: 1733px;
+    max-width: none;
+    zoom: calc(100vw / 1733px);
+  }
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-heading);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}

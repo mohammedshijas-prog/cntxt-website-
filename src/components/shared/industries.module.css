@@ -1,0 +1,255 @@
+/* "Industries we work in": floating industry tiles joined by moving lines. */
+.industryCopy a {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  height: 48px;
+  margin-top: 24px;
+  padding: 5px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0)), #7d52f4;
+  box-shadow: 0 1px 2px rgba(14, 18, 27, 0.24);
+  color: #ffffff;
+  font-family: var(--font-heading);
+  font-size: var(--fs-button);
+  font-weight: 500;
+  line-height: 20px;
+  letter-spacing: -0.12px;
+}
+
+.industries {
+  position: relative;
+  height: 988px;
+  overflow: hidden;
+}
+
+.orbit {
+  position: absolute;
+  inset: 0;
+}
+
+.orbitLines {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.orbitLine {
+  stroke: rgba(0, 0, 0, 0.18);
+  stroke-width: 1;
+  transition: stroke 240ms ease;
+}
+
+.orbitDash {
+  stroke: #000000;
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  transition: stroke 240ms ease;
+}
+
+.lineActive .orbitLine {
+  stroke: rgba(125, 82, 244, 0.55);
+}
+
+.lineActive .orbitDash {
+  stroke: #7d52f4;
+}
+
+.tile {
+  position: absolute;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  color: #000000;
+  will-change: transform;
+}
+
+.tile:hover,
+.tile:focus-visible {
+  z-index: 2;
+}
+
+.tile:focus-visible {
+  outline: none;
+}
+
+.tileFrame {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  border-radius: 18px;
+  background: #000000;
+  box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+  transform-origin: center;
+  transition: transform 420ms cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 420ms ease;
+}
+
+.tileFrame img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 700ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.tileFrame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0.55) 100%);
+  opacity: 0;
+  transition: opacity 320ms ease;
+}
+
+.tileExplore {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  z-index: 1;
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+  height: 30px;
+  padding: 0 10px 0 12px;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #000000;
+  font-family: var(--font-heading);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 280ms ease, transform 320ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.tile:hover .tileFrame,
+.tile:focus-visible .tileFrame {
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.18);
+  transform: scale(1.14);
+}
+
+.tile:focus-visible .tileFrame {
+  outline: 2px solid #7d52f4;
+  outline-offset: 3px;
+}
+
+.tile:hover .tileFrame img,
+.tile:focus-visible .tileFrame img {
+  transform: scale(1.08);
+}
+
+.tile:hover .tileFrame::after,
+.tile:focus-visible .tileFrame::after,
+.tile:hover .tileExplore,
+.tile:focus-visible .tileExplore {
+  opacity: 1;
+}
+
+.tile:hover .tileExplore,
+.tile:focus-visible .tileExplore {
+  transform: translateY(0);
+}
+
+.tileLabel {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  font-family: var(--font-heading);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 16px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: transform 420ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.tileLabel::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  background: #7d52f4;
+  clip-path: polygon(0 0, 100% 0, 0 100%);
+}
+
+/* Keep the label clear of the enlarged frame. */
+.tile:hover .tileLabel,
+.tile:focus-visible .tileLabel {
+  transform: translateY(12px);
+}
+
+.industryCopy {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+  width: min(742px, 70%);
+  text-align: center;
+  transform: translate(-50%, calc(-50% + 39px));
+}
+
+.industryCopy p {
+  color: rgba(0, 0, 0, 0.6);
+  font-family: var(--font-body);
+  font-size: var(--fs-lead);
+  line-height: var(--lh-lead);
+}
+
+.industryCopy h2 {
+  font-family: var(--font-heading);
+  font-size: var(--fs-display);
+  font-weight: 400;
+  line-height: var(--lh-display);
+}
+
+.industryCopy h2 span {
+  color: #7d52f4;
+}
+
+.industryCopy a {
+  width: 265px;
+  margin-top: 0;
+}
+
+
+@media (max-width: 1200px) {
+  .industries {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 32px;
+    height: auto;
+    padding: 64px 24px;
+  }
+  .orbit {
+    position: static;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+  }
+  .orbitLines { display: none; }
+  .tile {
+    position: static;
+    width: auto !important;
+    transform: none !important;
+  }
+  .tileFrame { height: auto !important; aspect-ratio: 1; }
+  .industryCopy {
+    position: static;
+    width: 100%;
+    transform: none;
+  }
+}
+
+@media (max-width: 720px) {
+  .orbit { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}

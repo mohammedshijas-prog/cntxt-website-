@@ -1,0 +1,548 @@
+.page {
+  position: relative;
+  background: #fafaf8;
+  color: #000000;
+}
+
+.page h1,
+.page h2,
+.page h3,
+.page p {
+  margin: 0;
+}
+
+.eyebrow {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  margin: 0 0 21px;
+  color: var(--text-strong);
+  font-family: var(--font-heading);
+  font-size: var(--fs-small);
+  font-weight: 500;
+  line-height: var(--lh-small);
+  letter-spacing: 0.44px;
+  text-transform: uppercase;
+}
+
+.tag {
+  position: relative;
+  flex: none;
+  width: 28px;
+  height: 14px;
+}
+
+.tag::before,
+.tag::after {
+  content: "";
+  position: absolute;
+  height: 4px;
+  background: linear-gradient(to left, #7d52f4, #d6c7ff);
+}
+
+.tag::before {
+  top: 4px;
+  left: 0;
+  width: 88%;
+}
+
+.tag::after {
+  top: 0;
+  right: 0;
+  width: 88%;
+  transform: rotate(180deg);
+}
+
+.navWrap {
+  position: absolute;
+  top: 63px;
+  left: 0;
+  z-index: 5;
+  width: 100%;
+  padding: 0 97px;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: min(1499px, 100%);
+  margin: 0 auto;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.92);
+  border-radius: 18px;
+  backdrop-filter: blur(55px);
+}
+
+.nav nav {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.nav nav a {
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+  padding: 6px 12px;
+  color: var(--text-strong);
+  font-family: var(--font-heading);
+  font-size: var(--fs-small);
+  font-weight: 500;
+  line-height: var(--lh-small);
+  letter-spacing: -0.084px;
+  border-radius: 96px;
+}
+
+.nav nav img,
+.talk img,
+.cta img,
+.band a img {
+  display: block;
+}
+
+.talk {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 148px;
+  height: 36px;
+  padding: 5px 10px 5px 9px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  background: #7d52f4;
+  color: #ffffff;
+  font-family: var(--font-heading);
+  font-size: var(--fs-button);
+  font-weight: 500;
+  line-height: 20px;
+  letter-spacing: -0.12px;
+}
+
+.talk span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 5px;
+  background: #ffffff;
+}
+
+.hero {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  min-height: 952px;
+  padding: 274px 117px 117px;
+}
+
+.heroCopy {
+  display: flex;
+  flex: 0 0 606px;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  width: min(606px, 42%);
+}
+
+.heroCopy h1 {
+  width: min(545px, 100%);
+  margin-bottom: 12px;
+  font-family: var(--font-heading);
+  font-size: var(--fs-display);
+  font-weight: 400;
+  line-height: var(--lh-display);
+}
+
+.heroCopy p {
+  width: min(620px, 100%);
+  margin-bottom: 32px;
+  color: var(--text-muted);
+  font-family: var(--font-body);
+  font-size: var(--fs-lead);
+  font-weight: 400;
+  line-height: var(--lh-lead);
+}
+
+.cta,
+.band a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 182px;
+  height: 49px;
+  padding: 5px 9px 5px 18px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  background: #7d52f4;
+  box-shadow: 0 1px 2px rgba(14, 18, 27, 0.24);
+  color: #ffffff;
+  font-family: var(--font-heading);
+  font-size: var(--fs-h5);
+  font-weight: 500;
+  line-height: var(--lh-h5);
+  letter-spacing: -0.12px;
+}
+
+.cta span,
+.band a span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 33px;
+  height: 33px;
+  border-radius: 10px;
+  background: #ffffff;
+}
+
+.heroArt {
+  flex: 1;
+  width: min(881px, 50%);
+  height: 687px;
+  object-fit: cover;
+  object-position: center top;
+  border-radius: 16px;
+}
+
+.challenges {
+  padding: 117px;
+  background: #f5f1ff;
+}
+
+.challenges h2,
+.products h2,
+.studies h2 {
+  margin-bottom: 32px;
+  font-family: var(--font-heading);
+  font-size: var(--fs-h2);
+  font-weight: 400;
+  line-height: var(--lh-h2);
+}
+
+.challengeGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 820fr) minmax(0, 780fr);
+  height: 529px;
+}
+
+.accordion {
+  display: flex;
+  flex-direction: column;
+}
+
+.item,
+.itemOpen {
+  border-top: 1px solid #dad8ce;
+}
+
+.item:last-child,
+.itemOpen:last-child {
+  border-bottom: 1px solid #dad8ce;
+}
+
+.accordion button {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  width: 100%;
+  padding: 24px 0;
+  background: transparent;
+  color: var(--text-strong);
+  font-family: var(--font-heading);
+  font-size: var(--fs-button);
+  font-weight: 500;
+  line-height: 24px;
+  letter-spacing: -0.2px;
+  text-align: left;
+}
+
+.item button {
+  opacity: 0.45;
+}
+
+.accordion button span {
+  width: 40px;
+}
+
+.itemOpen p {
+  max-width: 645px;
+  padding-bottom: 24px;
+  color: var(--text-muted);
+  font-family: var(--font-body);
+  font-size: var(--fs-lead);
+  font-weight: 400;
+  line-height: var(--lh-lead);
+  letter-spacing: normal;
+}
+
+.challengeArt {
+  position: relative;
+  overflow: hidden;
+  background: #ecebe5;
+}
+
+.challengeArt img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.challengeArt span {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border: 1px solid rgba(250, 250, 248, 0.85);
+  color: #fafaf8;
+  font-family: var(--font-heading);
+  font-size: var(--fs-xs);
+  line-height: var(--lh-xs);
+}
+
+.products,
+.studies {
+  padding: 83px;
+}
+
+/* Cards pin under the header and stack as the page scrolls. Every card
+   sticks at the same spot, so each folder tab stays visible in a row. */
+.productList {
+  display: flex;
+  flex-direction: column;
+  gap: 64px;
+  padding-bottom: 40px;
+}
+
+.product {
+  position: sticky;
+  top: 96px;
+  height: 528px;
+  overflow: hidden;
+}
+
+.wash {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+  filter: drop-shadow(0 -6px 18px rgba(0, 0, 0, 0.06));
+}
+
+.productLabel {
+  position: absolute;
+  top: 18px;
+  margin: 0;
+  color: var(--text-strong);
+  font-family: var(--font-heading);
+  font-size: var(--fs-h3);
+  font-weight: 500;
+  line-height: var(--lh-h3);
+  letter-spacing: -0.01em;
+}
+
+.labelBuild { left: 88px; }
+.labelApp { left: 358px; }
+.labelEval { left: 735px; }
+.labelHub { left: 1066px; }
+
+.productCopy {
+  position: absolute;
+  top: 180px;
+  left: 36px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: min(645px, 46%);
+}
+
+.productCopy h3 {
+  font-family: var(--font-heading);
+  font-size: var(--fs-h2);
+  font-weight: 400;
+  line-height: var(--lh-h2);
+  letter-spacing: -0.02em;
+}
+
+.productCopy p {
+  color: var(--text-muted);
+  font-family: var(--font-body);
+  font-size: var(--fs-lead);
+  line-height: var(--lh-lead);
+}
+
+.shot {
+  position: absolute;
+  top: 90px;
+  right: 22px;
+  width: min(656px, 42%);
+  height: 403px;
+  overflow: hidden;
+  border-radius: 13px;
+  background: #ffffff;
+}
+
+.shot img {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.shot .shotPhoto {
+  top: -17.17%;
+  height: 134.34%;
+}
+
+.studies ul {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.studies li img {
+  display: block;
+  width: 100%;
+  height: 486px;
+  object-fit: cover;
+  background: #000000;
+}
+
+.studies li p {
+  margin-top: 12px;
+  color: var(--text-muted);
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  font-weight: 400;
+  line-height: var(--lh-body);
+  letter-spacing: normal;
+}
+
+.studies li strong {
+  color: #201613;
+  font-weight: 500;
+}
+
+.band {
+  display: flex;
+  align-items: stretch;
+  height: 530px;
+  overflow: hidden;
+  background: #7d52f4;
+}
+
+.mapEdge {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  border-right: 1px solid #ffffff;
+}
+
+.mapEdge:last-child {
+  border-right: 0;
+  border-left: 1px solid #ffffff;
+}
+
+.mapEdge img {
+  position: absolute;
+  top: calc(50% + 65px);
+  left: calc(50% + 596px);
+  display: block;
+  transform: translate(-50%, -50%);
+}
+
+.band > div:nth-child(2) {
+  display: flex;
+  flex: 0 0 1215px;
+  flex-direction: column;
+  gap: 24px;
+  align-items: center;
+  justify-content: center;
+  width: min(1215px, 70%);
+  padding: 48px 52px;
+  text-align: center;
+}
+
+.band h2 {
+  color: #ffffff;
+  font-family: var(--font-heading);
+  font-size: var(--fs-h2);
+  font-weight: 400;
+  line-height: var(--lh-h2);
+}
+
+.band > div:nth-child(2) > p {
+  width: min(729px, 100%);
+  color: rgba(255, 255, 255, 0.6);
+  font-family: var(--font-body);
+  font-size: var(--fs-lead);
+  line-height: var(--lh-lead);
+}
+
+.band a {
+  width: auto;
+  gap: 8px;
+  background: #ffffff;
+  color: #000000;
+}
+
+@media (max-width: 1200px) {
+  .navWrap { padding: 0 24px; }
+  .nav nav { display: none; }
+  .hero,
+  .challenges,
+  .products,
+  .studies {
+    padding-right: 24px;
+    padding-left: 24px;
+  }
+  .hero {
+    flex-direction: column;
+    align-items: stretch;
+    min-height: 0;
+    padding-top: 150px;
+  }
+  .heroCopy { flex-basis: auto; width: 100%; }
+  .heroCopy h1 { font-size: var(--fs-display); line-height: var(--lh-display); }
+  .heroArt { width: 100%; height: 360px; }
+  .challengeGrid { grid-template-columns: 1fr; height: auto; }
+  .challengeArt { height: 360px; }
+  .challenges h2,
+  .products h2,
+  .studies h2 { font-size: var(--fs-h2); line-height: var(--lh-h2); }
+  /* Cards are taller than a phone screen, so they stack normally here. */
+  .product { position: relative; top: auto; height: auto; padding: 28px 20px 24px; }
+  .wash { display: none; }
+  .product:nth-child(1) { background: #f5f1ff; }
+  .product:nth-child(2) { background: #e1d5ff; }
+  .product:nth-child(3) { background: #baffb9; }
+  .product:nth-child(4) { background: #c3aefd; }
+  .productLabel,
+  .productCopy,
+  .shot { position: static; width: auto; }
+  .productCopy { width: 100%; margin: 16px 0 24px; }
+  /* Keep the screenshot positioned so its images stay inside it. */
+  .shot { position: relative; height: 280px; }
+  .studies ul { grid-template-columns: 1fr 1fr; }
+  .studies li img { height: 320px; }
+  .band { height: auto; flex-direction: column; }
+  .mapEdge { display: none; }
+  .band > div:nth-child(2) { flex-basis: auto; width: 100%; }
+  .band h2 { font-size: var(--fs-h2); line-height: var(--lh-h2); }
+}
+
+@media (max-width: 720px) {
+  .studies ul { grid-template-columns: 1fr; }
+  .heroCopy h1 { font-size: var(--fs-display); line-height: var(--lh-display); }
+}
