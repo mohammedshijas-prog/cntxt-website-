@@ -1,29 +1,43 @@
-"use client";
-
-import { useState } from "react";
 import { Hero } from "../Hero";
 import { BlogRail } from "./BlogRail";
-import { IndustriesSection } from "../shared/IndustriesSection";
+import { CustomerSpotlights } from "./CustomerSpotlights";
 import { LogoZoom } from "./LogoZoom";
 import { ScrollStory } from "./ScrollStory";
 import { SiteClose } from "../site/SiteClose";
 import { SiteNav } from "../site/SiteNav";
+import { IndustriesSection } from "../shared/IndustriesSection";
 import styles from "./home.module.css";
 
-const logos = [
-  { src: "/healthcare/logo-zenzap.png", name: "ZenZap", width: 64, height: 20 },
-  { src: "/healthcare/logo-sparkle.png", name: "sparkle", width: 72, height: 20 },
-  { src: "/healthcare/logo-craftgram.png", name: "Craftgram", width: 98, height: 20 },
-  { src: "/healthcare/logo-pulse.png", name: "Pulse", width: 77, height: 20 },
-  { src: "/healthcare/logo-pulse.png", name: "Pulse", width: 77, height: 20 },
-  { src: "/healthcare/logo-pulse.png", name: "Pulse", width: 77, height: 20 },
+/** Logo row under the Agents step; names without a logo file show as text. */
+const customerLogos: { name: string; logo?: string }[] = [
+  { name: "Emirates NBD", logo: "/customers/emirates-nbd.png" },
+  { name: "Mashreq", logo: "/customers/mashreq.png" },
+  { name: "DP World", logo: "/customers/dp-world.png" },
+  { name: "Burjeel" },
+  { name: "dnata", logo: "/customers/dnata.png" },
+  { name: "noon", logo: "/customers/noon.png" },
 ];
 
-const dek =
-  "why real data, real people and real deployment context are non-negotiable for AI that has to work outside the lab.";
-
-const munsit =
-  "The #1 ranked Arabic ASR model worldwide. Munsit delivers industry-leading Arabic Speech-to-Text and Text-to-Speech, powering real-time transcription, voice interaction, and content creation across the Arab world.";
+const proof = [
+  {
+    label: "Munsit ranks #1 for Arabic speech",
+    image: "/proven/munsit.png",
+    body: "Top of the Hugging Face Arabic ASR leaderboard. 76K+ hours, 25+ dialects, patent pending.",
+    href: "/products",
+  },
+  {
+    label: "One standard in every country",
+    image: "/proven/standard.png",
+    body: "Review floors in Abu Dhabi and Amman, with California opening in 2026, confirm every accepted hour through three layers. Aligned with ADGM and DIFC.",
+    href: "/security",
+  },
+  {
+    label: "Captures the data. Deploys the AI. Closes the loop.",
+    image: "/proven/loop.png",
+    body: "One company captures real work on signed sites, verifies it in-house, and deploys the AI back on the same floors.",
+    href: "/about",
+  },
+];
 
 function Eyebrow({ children }: { children: string }) {
   return (
@@ -44,8 +58,6 @@ function Explore({ href, children }: { href: string; children: string }) {
 }
 
 export function HomePage() {
-  const [logo, setLogo] = useState(0);
-
   return (
     <main className={styles.page}>
       <SiteNav pinAfterHero />
@@ -53,21 +65,48 @@ export function HomePage() {
 
       <ScrollStory
         steps={[
-          { title: "Real-world AI has no shortcuts.", body: dek },
           {
-            title: "More applications that actually work.",
-            body: dek,
-            cta: <Explore href="/data-hub">Explore data services</Explore>,
+            eyebrow: "Data",
+            title: "Data captured from real work, verified by humans.",
+            body: "Text, speech, vision, computer-use and robotics data, captured from real work and confirmed by certified reviewers.",
+            stat: (
+              <>
+                <strong>1000+</strong> data types, one verified pool.
+              </>
+            ),
+            cta: <Explore href="/products">Explore AI Lab</Explore>,
           },
           {
-            title: "Data powering AI that real humans use.",
-            body: dek,
-            cta: <Explore href="/data-hub">Explore data services</Explore>,
+            eyebrow: "Models",
+            title: "Models trained on real work.",
+            body: "Munsit, the leading Arabic speech model, plus foundation models for physical AI, trained and tested on our own captured data.",
+            stat: (
+              <>
+                <strong>#1</strong> on the Hugging Face Arabic ASR leaderboard.
+                <img className={styles.statLogo} src="/customers/hugging-face.png" alt="Hugging Face" />
+              </>
+            ),
+            cta: <Explore href="/products">Explore Munsit</Explore>,
           },
           {
-            title: "Real-world AI is lacking context.",
-            body: dek,
-            center: true,
+            eyebrow: "Agents",
+            title: "Agents that work where you work.",
+            body: "Agentix puts agents to work across the business. Built without code, deployed on-premise, live in minutes.",
+            stat: (
+              <>
+                <strong>250+</strong> government and enterprise organisations.
+              </>
+            ),
+            cta: <Explore href="/products">Explore Agentix</Explore>,
+            extra: (
+              <ul className={styles.logoRow} aria-label="Customers">
+                {customerLogos.map(({ name, logo }) => (
+                  <li key={name}>
+                    {logo ? <img src={logo} alt={name} /> : <span>{name}</span>}
+                  </li>
+                ))}
+              </ul>
+            ),
           },
         ]}
       />
@@ -76,151 +115,45 @@ export function HomePage() {
 
       <IndustriesSection />
 
-      <section className={styles.customers} aria-labelledby="customers-heading">
-        <Eyebrow>Customers & results</Eyebrow>
-        <h2 id="customers-heading">
-          Stale context. Lost work.
-          <br />
-          Governance rebuilt every time.
-        </h2>
-        <div className={styles.logoBar} role="tablist" aria-label="Customers">
-          {logos.map((item, index) => (
-            <button
-              key={`${item.name}-${index}`}
-              type="button"
-              role="tab"
-              aria-selected={logo === index}
-              aria-label={item.name}
-              onClick={() => setLogo(index)}
-            >
-              <img src={item.src} alt="" width={item.width} height={item.height} />
-            </button>
-          ))}
-        </div>
-        <div className={styles.result}>
-          <div className={styles.brand}>
-            <img className={styles.brandBg} src="/healthcare/brand-bg.png" alt="" />
-            <img className={styles.brandMark} src="/healthcare/brand-mark.svg" alt="" width={138} height={138} />
-            <img className={styles.brandWord} src="/healthcare/brand-word.svg" alt="Craftgram" width={312} height={66} />
-          </div>
-          <div className={styles.metric}>
-            <p>The orchestration layer simplifies complex workflows and makes easier to manage.</p>
-            <div>
-              <strong>85%</strong>
-              <span>Reduction in manual work</span>
-            </div>
-          </div>
-          <figure>
-            <img src="/healthcare/portrait.png" alt="" width={144} height={144} />
-            <blockquote>
-              AgentLab brings much-needed structure to AI automation workflows. The orchestration layer makes complex systems easier to understand, manage efficiently, and scale without breaking.”
-            </blockquote>
-            <figcaption>
-              <strong>Colton Pond</strong>
-              <span>Head of Partnership</span>
-            </figcaption>
-          </figure>
-        </div>
-      </section>
+      <CustomerSpotlights eyebrow={<Eyebrow>Customer spotlights</Eyebrow>} />
 
-      <section className={styles.standards} aria-labelledby="standards-heading">
-        <Eyebrow>Standards</Eyebrow>
-        <h2 id="standards-heading">The basis we work on</h2>
+      <section className={styles.proven} aria-labelledby="proven-heading">
+        <h2 id="proven-heading">Proven on the floor, in every industry.</h2>
         <ul>
-          <li>
-            <img src="/solutions/panel-build.png" alt="" />
-            <h3>Model & data isolation</h3>
-            <p>Your data and models are fully isolated from other customers. No cross-contamination, no shared infrastructure risks.</p>
-          </li>
-          <li>
-            <img src="/solutions/panel-guard.png" alt="" />
-            <h3>Annotator vetting & NDAs</h3>
-            <p>Every annotator undergoes thorough vetting and signs strict NDAs before accessing any data, ensuring confidentiality</p>
-          </li>
-          <li>
-            <img src="/solutions/panel-eval.png" alt="" />
-            <h3>Incident response</h3>
-            <p>A dedicated incident response team is ready around the clock, with clear protocols to detect, contain, and resolve security</p>
-          </li>
+          {proof.map((item) => (
+            <li key={item.label}>
+              <a href={item.href}>
+                <span className={styles.provenMedia}>
+                  <img src={item.image} alt="" />
+                </span>
+                <span className={styles.provenText}>
+                  <h3>{item.label}</h3>
+                  <p>{item.body}</p>
+                </span>
+              </a>
+            </li>
+          ))}
         </ul>
       </section>
 
-      <BlogRail eyebrow={<Eyebrow>Blogs</Eyebrow>} />
-
-      <section className={styles.engine} aria-labelledby="engine-heading">
-        <Eyebrow>Our engine</Eyebrow>
-        <h2 id="engine-heading">Our engine</h2>
-        <article>
-          <div>
-            <img src="/home/munsit.svg" alt="Munsit" width={174} height={42} />
-            <p>{munsit}</p>
-            <a href="/contact">
-              Explore Munsit
-              <span>
-                <img src="/healthcare/caret.svg" alt="" width={23} height={23} />
-              </span>
-            </a>
-          </div>
-          <div className={styles.visual}>
-            <img src="/home/munsit-ui.png" alt="" />
-            <span className={styles.overlay}>
-              <img src="/home/munsit-shot.png" alt="" />
-            </span>
-          </div>
-        </article>
-        <article className={styles.flip}>
-          <img src="/home/klkt-ui.png" alt="" />
-          <div>
-            <p className={styles.klkt}>
-              <img src="/home/klkt-mark.svg" alt="" width={41.306} height={36.8189} />
-              <img src="/home/klkt-word.svg" alt="KLKT" width={152.89} height={38.0077} />
-            </p>
-            <p>{munsit}</p>
-            <a href="/klkt">
-              Explore Munsit
-              <span>
-                <img src="/healthcare/caret.svg" alt="" width={23} height={23} />
-              </span>
-            </a>
-          </div>
-        </article>
-        <article>
-          <div>
-            <h3>Agentix</h3>
-            <p>{munsit}</p>
-            <a href="/contact">
-              Explore Munsit
-              <span>
-                <img src="/healthcare/caret.svg" alt="" width={23} height={23} />
-              </span>
-            </a>
-          </div>
-          <img src="/home/agentix-ui.png" alt="" />
-        </article>
-        <article className={styles.flip}>
-          <img src="/home/lab-ui.png" alt="" />
-          <div>
-            <h3 className={styles.lab}>AI Lab</h3>
-            <p>
-              The #1 ranked Arabic ASR model worldwide. Munsit delivers industry-leading Arabic Speech-to-Text and Text-to-Speech, powering real-time transcriptio
-            </p>
-            <a href="/contact">
-              Explore Munsit
-              <span>
-                <img src="/healthcare/caret.svg" alt="" width={23} height={23} />
-              </span>
-            </a>
-          </div>
-        </article>
-      </section>
+      <BlogRail
+        eyebrow={<Eyebrow>Latest</Eyebrow>}
+        title={
+          <>
+            From the floor to the real world.{" "}
+            <br />
+            The latest from CNTXT.
+          </>
+        }
+      />
 
       <section className={styles.band} aria-labelledby="ready-heading">
         <div className={styles.mapEdge} aria-hidden="true">
           <img src="/security/map-left.svg" alt="" />
         </div>
         <div>
-          <h2 id="ready-heading">Ready to build?</h2>
-          <p>One line of supporting copy.</p>
+          <h2 id="ready-heading">Your site. Your data. Your AI.</h2>
+          <p>Book a demo and see how CNTXT builds real-world AI for your organisation.</p>
           <a href="/contact">
             Get started
             <span>

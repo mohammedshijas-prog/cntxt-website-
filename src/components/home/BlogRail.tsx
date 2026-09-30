@@ -4,48 +4,30 @@ import Link from "next/link";
 import { useEffect, useRef, type ReactNode } from "react";
 import styles from "./home.module.css";
 
-const posts = [
+const posts: { category: string; title: string; image: string; href: string; body?: string }[] = [
   {
-    category: "Security",
-    title: "Access control & auditing",
-    image: "/security/practice-a.png",
-    href: "/blog",
-    body: "Who touched which data, when, and why. How role-based access and a complete audit trail keep enterprise AI accountable.",
-  },
-  {
-    category: "Sovereignty",
-    title: "Data residency & sovereignty",
+    category: "Announcement",
+    title: "Introducing AI Lab",
     image: "/blog/feature.png",
     href: "/blog",
-    body: "The top rep closes at three times the team average. Zaro reads every call, every email, and every deal, surfaces what the best do differently, and writes the playbook. The team coaches from the evidence.",
   },
   {
-    category: "Security",
-    title: "Encryption in transit & at rest",
+    category: "Physical AI",
+    title: "Closing the 100× data gap in robotics",
     image: "/security/practice-b.png",
     href: "/blog",
-    body: "Keys, protocols and storage: what end-to-end encryption actually covers across a production AI stack.",
   },
   {
-    category: "Enterprise adoption",
-    title: "Five hundred licences, almost no one uses them",
-    image: "/blog/cover-summit.png",
-    href: "/blog/five-hundred-licences",
-    body: "The demo always lands. Three months later, nobody uses it. Why enterprise AI stalls after the pilot - and the context layer that makes it compound.",
-  },
-  {
-    category: "Audio",
-    title: "Universal Music Group and ElevenLabs",
+    category: "Munsit",
+    title: "Why Arabic voice AI needs 25 dialects, not one",
     image: "/blog/cover-traffic.png",
     href: "/blog",
-    body: "What a licensing deal between a major label and a voice-AI company means for training data, rights and consent.",
   },
   {
-    category: "Geospatial",
-    title: "Mapping what matters",
-    image: "/blog/cover-causes.png",
+    category: "Public sector",
+    title: "Sovereign AI: in-country data, regulator-aligned",
+    image: "/security/practice-a.png",
     href: "/blog",
-    body: "Satellite, drone and street-level imagery turned into ground truth that models can learn from.",
   },
 ];
 
@@ -58,7 +40,7 @@ const SIDE_SCALE = 0.8;
 const FIRST = 1;
 const LAST = posts.length - 2;
 
-export function BlogRail({ eyebrow }: { eyebrow: ReactNode }) {
+export function BlogRail({ eyebrow, title = "From the blog" }: { eyebrow: ReactNode; title?: ReactNode }) {
   const sectionRef = useRef<HTMLElement>(null);
   const stickyRef = useRef<HTMLDivElement>(null);
   const cardRefs = useRef<(HTMLAnchorElement | null)[]>([]);
@@ -124,7 +106,7 @@ export function BlogRail({ eyebrow }: { eyebrow: ReactNode }) {
     >
       <div className={styles.blogsSticky} ref={stickyRef}>
         {eyebrow}
-        <h2 id="blogs-heading">From the blog</h2>
+        <h2 id="blogs-heading">{title}</h2>
         <div className={styles.rail}>
           {posts.map((post, i) => (
             <Link
@@ -138,7 +120,7 @@ export function BlogRail({ eyebrow }: { eyebrow: ReactNode }) {
                 <img src={post.image} alt="" />
                 <strong>{post.title}</strong>
               </div>
-              <p className={styles.cardBody}>{post.body}</p>
+              {post.body ? <p className={styles.cardBody}>{post.body}</p> : null}
             </Link>
           ))}
         </div>

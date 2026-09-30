@@ -19,21 +19,51 @@ type Industry = {
 };
 
 const industries: Industry[] = [
-  { label: "Energy", href: "/solutions", image: "/healthcare/tile-energy.png", x: 3, y: 14, size: 210, drift: 14, speed: 0.9, phase: 0 },
-  { label: "Government", href: "/solutions", image: "/healthcare/tile-gov.jpg", x: 27, y: 8, size: 154, drift: 12, speed: 1.1, phase: 1.7 },
-  { label: "Healthcare", href: "/healthcare", image: "/healthcare/tile-lab.jpg", x: 60, y: 7, size: 158, drift: 13, speed: 0.8, phase: 3.1 },
-  { label: "Logistics", href: "/solutions", image: "/healthcare/tile-ship.jpg", x: 81, y: 27, size: 176, drift: 15, speed: 1, phase: 4.4 },
-  { label: "Robotics", href: "/solutions", image: "/healthcare/tile-robot.jpg", x: 83, y: 63, size: 214, drift: 12, speed: 0.7, phase: 2.2 },
-  { label: "Finance", href: "/solutions", image: "/healthcare/tile-chart.jpg", x: 14, y: 67, size: 184, drift: 13, speed: 0.95, phase: 0.8 },
+  // Left side
+  { label: "Artificial Intelligence", href: "/products", image: "/blog/cover-causes.png", x: 3, y: 6, size: 132, drift: 10, speed: 0.9, phase: 0 },
+  { label: "Government", href: "/solutions", image: "/industries/government.jpg", x: 19, y: 3, size: 116, drift: 10, speed: 1.05, phase: 1.7 },
+  { label: "Energy", href: "/solutions", image: "/healthcare/tile-energy.png", x: 13, y: 33, size: 128, drift: 11, speed: 0.85, phase: 3.1 },
+  { label: "Finance", href: "/solutions", image: "/healthcare/tile-chart.jpg", x: 2, y: 55, size: 112, drift: 10, speed: 1.1, phase: 0.8 },
+  { label: "Healthcare", href: "/healthcare", image: "/healthcare/tile-lab.jpg", x: 20, y: 64, size: 124, drift: 11, speed: 0.95, phase: 2.4 },
+  { label: "Sovereignty", href: "/security", image: "/security/practice-a.png", x: 6, y: 80, size: 108, drift: 10, speed: 1, phase: 4.6 },
+  // Right side
+  { label: "Logistics", href: "/solutions", image: "/healthcare/tile-ship.jpg", x: 72, y: 3, size: 120, drift: 10, speed: 1, phase: 4.4 },
+  { label: "Hospitality", href: "/solutions", image: "/industries/hospitality.jpg", x: 88, y: 8, size: 128, drift: 11, speed: 0.95, phase: 2.2 },
+  { label: "Robotics", href: "/solutions", image: "/healthcare/tile-robot.jpg", x: 79, y: 36, size: 132, drift: 11, speed: 0.75, phase: 5.1 },
+  { label: "Research", href: "/about", image: "/solutions/study-4.png", x: 90, y: 56, size: 108, drift: 10, speed: 1.05, phase: 1.1 },
+  { label: "Retail", href: "/solutions", image: "/security/practice-b.png", x: 73, y: 66, size: 120, drift: 10, speed: 1.1, phase: 3.6 },
+  { label: "Operations", href: "/solutions", image: "/solutions/study-3.png", x: 87, y: 81, size: 108, drift: 10, speed: 0.9, phase: 0.4 },
 ];
 
-/** Pairs of industry indexes joined by a line. */
+/** Meeting points where the two sides join, above and below the copy (% of the section). */
+const hubs = [
+  { x: 50, y: 9 },
+  { x: 50, y: 94 },
+];
+const TOP = industries.length;
+const BOTTOM = industries.length + 1;
+
+/**
+ * Each side is one unbroken chain through all of its tiles; the chains split
+ * from the top hub and rejoin at the bottom hub.
+ */
 const edges: [number, number][] = [
-  [0, 1],
-  [0, 5],
+  // Left: Government → AI → Energy → Finance → Sovereignty → Healthcare
+  [TOP, 1],
+  [1, 0],
+  [0, 2],
   [2, 3],
-  [2, 4],
-  [3, 4],
+  [3, 5],
+  [5, 4],
+  [4, BOTTOM],
+  // Right: Logistics → Hospitality → Robotics → Research → Operations → Retail
+  [TOP, 6],
+  [6, 7],
+  [7, 8],
+  [8, 9],
+  [9, 11],
+  [11, 10],
+  [10, BOTTOM],
 ];
 
 const DASH = 26;
@@ -91,13 +121,20 @@ export function IndustryOrbit() {
         if (tile) tile.style.transform = `translate3d(${offsets[i].x}px, ${offsets[i].y}px, 0)`;
       });
 
+      // Centre of a tile's frame, or a hub point, in px.
+      const point = (i: number) => {
+        const hub = hubs[i - industries.length];
+        if (hub) return { x: (hub.x / 100) * size.w, y: (hub.y / 100) * size.h };
+        const item = industries[i];
+        return {
+          x: (item.x / 100) * size.w + item.size / 2 + offsets[i].x,
+          y: (item.y / 100) * size.h + item.size / 2 + offsets[i].y,
+        };
+      };
+
       edges.forEach(([from, to], i) => {
-        const a = industries[from];
-        const b = industries[to];
-        const x1 = (a.x / 100) * size.w + a.size / 2 + offsets[from].x;
-        const y1 = (a.y / 100) * size.h + a.size / 2 + offsets[from].y;
-        const x2 = (b.x / 100) * size.w + b.size / 2 + offsets[to].x;
-        const y2 = (b.y / 100) * size.h + b.size / 2 + offsets[to].y;
+        const { x: x1, y: y1 } = point(from);
+        const { x: x2, y: y2 } = point(to);
         const length = Math.hypot(x2 - x1, y2 - y1);
 
         for (const line of [lineRefs.current[i], dashRefs.current[i]]) {
@@ -138,6 +175,9 @@ export function IndustryOrbit() {
             </g>
           );
         })}
+        {hubs.map((hub) => (
+          <circle key={`${hub.x}-${hub.y}`} className={styles.orbitHub} cx={`${hub.x}%`} cy={`${hub.y}%`} r="3" />
+        ))}
       </svg>
       {industries.map((item, i) => (
         <a

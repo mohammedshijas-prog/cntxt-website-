@@ -5,9 +5,15 @@ import { LayeredScene } from "../shared/LayeredScene";
 import styles from "./home.module.css";
 
 type Step = {
+  /** Small label above the title; also names this step's layer in the strip. */
+  eyebrow?: string;
   title: string;
   body: string;
+  /** Highlighted figure under the body, e.g. "1000+ data types". */
+  stat?: ReactNode;
   cta?: ReactNode;
+  /** Extra content under the link, such as a logo row. */
+  extra?: ReactNode;
   /** Centers the image with the copy underneath, instead of side by side. */
   center?: boolean;
   /** Swaps in a different image while this step is active. */
@@ -222,9 +228,12 @@ export function ScrollStory({ steps }: { steps: Step[] }) {
             data-side={step.center ? "center" : sideOf(i, step) === "left" ? "right" : "left"}
             data-state={i === active ? "active" : i < active ? "past" : "next"}
           >
+            {step.eyebrow ? <p className={styles.storyEyebrow}>{step.eyebrow}</p> : null}
             <h2>{step.title}</h2>
             <p>{step.body}</p>
+            {step.stat ? <p className={styles.storyStat}>{step.stat}</p> : null}
             {step.cta}
+            {step.extra}
           </div>
         ))}
       </div>

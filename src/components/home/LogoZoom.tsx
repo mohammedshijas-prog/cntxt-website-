@@ -14,7 +14,8 @@ const REVEAL = 0.2;
 const clamp = (value: number) => Math.min(1, Math.max(0, value));
 
 /**
- * Pinned section: the wordmark grows in from the center, then scrolling flies
+ * "The full stack", pinned: the wordmark grows in from the center with the
+ * copy around it, then scrolling flies
  * the camera into it until its white fills the screen and hands off to the
  * next section.
  */
@@ -22,7 +23,8 @@ export function LogoZoom() {
   const sectionRef = useRef<HTMLElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
   const svgRef = useRef<SVGSVGElement>(null);
-  const captionRef = useRef<HTMLParagraphElement>(null);
+  const captionRef = useRef<HTMLDivElement>(null);
+  const bodyRef = useRef<HTMLDivElement>(null);
   const washRef = useRef<HTMLDivElement>(null);
   const fadeRef = useRef<HTMLDivElement>(null);
 
@@ -89,8 +91,15 @@ export function LogoZoom() {
       if (captionRef.current) {
         const fade = clamp(1 - zoom * 6);
         captionRef.current.style.opacity = `${logo * fade}`;
-        captionRef.current.style.top = `${h * 0.54 - baseHeight / 2 - 44}px`;
-        captionRef.current.style.transform = `translateX(-50%) translateY(${(1 - logo) * 12}px)`;
+        captionRef.current.style.top = `${h * 0.54 - baseHeight / 2 - 28}px`;
+        captionRef.current.style.transform = `translate(-50%, calc(-100% + ${(1 - logo) * 12}px))`;
+      }
+      if (bodyRef.current) {
+        const fade = clamp(1 - zoom * 6);
+        bodyRef.current.style.opacity = `${logo * fade}`;
+        bodyRef.current.style.top = `${h * 0.54 + baseHeight / 2 + 32}px`;
+        bodyRef.current.style.transform = `translate(-50%, ${(1 - logo) * 16}px)`;
+        bodyRef.current.style.pointerEvents = logo * fade > 0.5 ? "auto" : "none";
       }
       // Last stretch: settle on the page background so the next section follows on.
       if (washRef.current) washRef.current.style.opacity = `${clamp((zoom - 0.9) / 0.1)}`;
@@ -131,17 +140,28 @@ export function LogoZoom() {
   }, []);
 
   return (
-    <section ref={sectionRef} className={styles.logoZoom} aria-label="That’s why we created CNTXT AI">
+    <section ref={sectionRef} className={styles.logoZoom} aria-labelledby="stack-heading">
       <div ref={stageRef} className={styles.logoStage}>
         <div ref={fadeRef} className={styles.logoFade} aria-hidden="true" />
-        <p ref={captionRef} className={styles.logoCaption} aria-hidden="true">
-          That’s why we created
-        </p>
+        <div ref={captionRef} className={styles.logoCaption}>
+          <p>The full stack</p>
+          <h2 id="stack-heading">CNTXT covers it all.</h2>
+        </div>
         <svg ref={svgRef} className={styles.logoArt} preserveAspectRatio="none" aria-hidden="true">
           {logoPaths.map((d) => (
             <path key={d.slice(0, 24)} d={d} />
           ))}
         </svg>
+        <div ref={bodyRef} className={styles.logoBody}>
+          <p>
+            Most vendors sell one layer. We run the whole loop: the data is captured and verified
+            by us, the models are trained on it by us, and the agents are deployed by us. What the
+            agents do on the job becomes the next round of data.
+          </p>
+          <a href="/products">
+            Explore the stack <span aria-hidden="true">→</span>
+          </a>
+        </div>
         <div ref={washRef} className={styles.logoWash} aria-hidden="true" />
       </div>
     </section>

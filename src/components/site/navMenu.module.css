@@ -151,6 +151,13 @@
   line-height: 20px;
 }
 
+/* Icon variant with a single column (Models, Agents). */
+.single {
+  grid-template-columns: 1fr;
+  width: min(400px, calc(100vw - 32px));
+  padding: 28px 28px 24px;
+}
+
 /* Text-only variant: two columns split by a divider. */
 .simple {
   grid-template-columns: repeat(2, minmax(0, 1fr));

@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 import { SiteClose } from "../site/SiteClose";
 import { SiteNav } from "../site/SiteNav";
@@ -63,7 +64,7 @@ export function BlogArticle() {
         <ul>
           {readNext.map((item) => (
             <li key={item.under + item.image}>
-              <a href="/blog">
+              <Link href="/blog">
                 <span className={styles.nextPhoto}>
                   <img src="/blog/next-base.png" alt="" />
                   <img src={item.under} alt="" />
@@ -76,7 +77,7 @@ export function BlogArticle() {
                   <em>Sep 8, 2026</em>
                   <em>Company</em>
                 </span>
-              </a>
+              </Link>
             </li>
           ))}
         </ul>

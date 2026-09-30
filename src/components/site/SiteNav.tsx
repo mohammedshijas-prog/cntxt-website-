@@ -1,18 +1,16 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { MobileMenu } from "./MobileMenu";
-import { NavMenu } from "./NavMenu";
+import { NavMenu, menuOrder, menus, type MenuId } from "./NavMenu";
 import styles from "./siteNav.module.css";
 
 type Current = "products" | "solutions" | "data-hub";
 
-const links = [
-  { label: "Products", href: "/products", id: "products" as const, caret: true },
-  { label: "Solutions", href: "/solutions", id: "solutions" as const, caret: true },
-  { label: "Data Hub", href: "/data-hub", id: "data-hub" as const, caret: false },
-  { label: "Resources", href: "/blog", id: "resources" as const, caret: true },
-];
+// Older page ids map onto the new top-level menus.
+const currentMenu: Record<Current, MenuId> = { products: "models", solutions: "industries", "data-hub": "data" };
+
 
 export function SiteNav({
   current,
@@ -47,42 +45,28 @@ export function SiteNav({
   return (
     <header className={`${styles.navWrap} ${dark ? styles.dark : ""} ${shown ? "" : styles.pending}`}>
       <div className={styles.nav}>
-        <a href="/" aria-label="CNTXT AI">
+        <Link href="/" aria-label="CNTXT AI">
           <img
             src={dark ? "/nav/logo-white.svg" : "/partners/nav-logo.svg"}
             alt=""
             width={145}
             height={22}
           />
-        </a>
+        </Link>
         <nav aria-label="Primary">
-          {links.map((link) => {
-            const content = (
-              <>
-                {link.label}
-                {link.caret ? (
-                  <img src="/partners/nav-caret.svg" alt="" width={20} height={20} />
-                ) : null}
-              </>
-            );
-            return link.id === "products" || link.id === "solutions" || link.id === "resources" ? (
-              <NavMenu key={link.label} menu={link.id} className={styles.link} current={current === link.id}>
-                {content}
-              </NavMenu>
-            ) : (
-              <a key={link.label} className={styles.link} href={link.href} aria-current={current === link.id ? "page" : undefined}>
-                {content}
-              </a>
-            );
-          })}
+          {menuOrder.map((id) => (
+            <NavMenu
+              key={id}
+              menu={id}
+              className={styles.link}
+              current={current ? currentMenu[current] === id : false}
+            >
+              {menus[id].label}
+              <img src="/partners/nav-caret.svg" alt="" width={20} height={20} />
+            </NavMenu>
+          ))}
         </nav>
         <div className={styles.actions}>
-          <a className={styles.talk} href="/contact">
-          Talk to us
-          <span>
-            <img src="/partners/nav-arrow.svg" alt="" width={17} height={17} />
-          </span>
-        </a>
           <MobileMenu dark={dark} />
         </div>
       </div>

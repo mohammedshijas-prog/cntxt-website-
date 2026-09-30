@@ -1,16 +1,11 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useRef } from "react";
 import { MobileMenu } from "./site/MobileMenu";
-import { NavMenu, type MenuId } from "./site/NavMenu";
+import { NavMenu, menuOrder, menus } from "./site/NavMenu";
 import styles from "./Hero.module.css";
 
-const navItems: { label: string; href: string; hasMenu: boolean; menu?: MenuId }[] = [
-  { label: "Products", href: "/products", hasMenu: true, menu: "products" },
-  { label: "Solutions", href: "/solutions", hasMenu: true, menu: "solutions" },
-  { label: "Data Hub", href: "/data-hub", hasMenu: false },
-  { label: "Resources", href: "/blog", hasMenu: true, menu: "resources" },
-];
 
 const clamp = (value: number) => Math.min(1, Math.max(0, value));
 const mix = (a: number, b: number, t: number) => a + (b - a) * t;
@@ -40,7 +35,11 @@ export function Hero() {
       frame = 0;
       const end = document.querySelector<HTMLElement>("[data-hero-end]");
       const target = document.querySelector<HTMLElement>("[data-hero-target]");
-      if (!end || !target || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      // Phones and tablets don't pin the next section, so skip the fly-in there.
+      const flat =
+        window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
+        window.matchMedia("(max-width: 1200px)").matches;
+      if (!end || !target || flat) {
         video.removeAttribute("style");
         root.style.removeProperty("--scene-reveal");
         root.style.removeProperty("--scene-photo");
@@ -103,7 +102,6 @@ export function Hero() {
       if (!frame) frame = requestAnimationFrame(update);
     };
 
-    reset();
     update();
     window.addEventListener("scroll", request, { passive: true });
     window.addEventListener("resize", request);
@@ -137,44 +135,30 @@ export function Hero() {
       <header className={styles.header}>
         <nav className={styles.nav} aria-label="Primary">
           <ul className={styles.navList}>
-            {navItems.map((item) => {
-              const content = (
-                <>
-                  <span className={styles.navLabel}>{item.label}</span>
-                  {item.hasMenu ? (
-                    <img className={styles.chevron} src="/chevron.svg" alt="" />
-                  ) : null}
-                </>
-              );
-              return (
-                <li key={item.label}>
-                  {item.menu ? (
-                    <NavMenu menu={item.menu} className={styles.navLink} placement="side">
-                      {content}
-                    </NavMenu>
-                  ) : (
-                    <a className={styles.navLink} href={item.href}>
-                      {content}
-                    </a>
-                  )}
-                </li>
-              );
-            })}
+            {menuOrder.map((id) => (
+              <li key={id}>
+                <NavMenu menu={id} className={styles.navLink} placement="side">
+                  <span className={styles.navLabel}>{menus[id].label}</span>
+                  <img className={styles.chevron} src="/chevron.svg" alt="" />
+                </NavMenu>
+              </li>
+            ))}
           </ul>
         </nav>
-        <a className={styles.logo} href="/" aria-label="CNTXT AI">
+        <Link className={styles.logo} href="/" aria-label="CNTXT AI">
           <img className={styles.logoImage} src="/logo.svg" alt="" />
-        </a>
+        </Link>
         <div className={styles.actions}>
-          <a className={styles.cta} href="/contact">
-            Talk to us
-          </a>
           <MobileMenu dark />
         </div>
       </header>
-      <h1 className={styles.headline} id="hero-heading">
-        The world’s most important decisions need real-world AI.
-      </h1>
+      <div className={styles.headline}>
+        <h1 id="hero-heading">Real-world AI for the world&apos;s most important work.</h1>
+        <a className={styles.cta} href="/contact">
+          Get started
+          <img src="/healthcare/caret.svg" alt="" width={20} height={20} />
+        </a>
+      </div>
       <p className={styles.srOnly}>
         The appearance of U.S. Department of War (DoW) visual information does
         not imply or constitute DoW endorsement.

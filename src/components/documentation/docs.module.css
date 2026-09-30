@@ -101,6 +101,10 @@
   scrollbar-width: thin;
 }
 
+.navToggle {
+  display: none;
+}
+
 .search {
   display: flex;
   align-items: center;
@@ -567,6 +571,56 @@
     max-height: none;
   }
 
+  .sidebar {
+    gap: 12px;
+    padding: 14px;
+  }
+
+  .navToggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #e6e2f5;
+    border-radius: 10px;
+    background: #f7f5ff;
+    color: var(--text-strong);
+    font-family: var(--font-heading);
+    font-size: var(--fs-small);
+    font-weight: 500;
+    line-height: var(--lh-small);
+    text-align: left;
+  }
+
+  .navToggle small {
+    display: block;
+    color: var(--text-muted);
+    font-size: var(--fs-xs);
+    font-weight: 400;
+    line-height: var(--lh-xs);
+  }
+
+  .navToggle svg {
+    flex: none;
+    transition: transform 200ms ease;
+  }
+
+  .navToggle[aria-expanded="true"] svg {
+    transform: rotate(180deg);
+  }
+
+  .sidebar[data-open="false"] .group,
+  .sidebar[data-open="false"] .empty {
+    display: none;
+  }
+
+  .code,
+  .cardLines {
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
   .snippet {
     left: 24px;
     width: calc(100% - 48px);
@@ -597,8 +651,9 @@
     margin-bottom: 24px;
   }
 
+  /* Keep code lines intact; the block scrolls sideways instead. */
   .code p {
-    white-space: normal;
+    white-space: pre;
   }
 
   .pager {

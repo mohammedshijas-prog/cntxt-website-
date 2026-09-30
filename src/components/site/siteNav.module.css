@@ -184,6 +184,11 @@
   }
 }
 
+/* Only holds the mobile menu button now, so it is hidden on desktop. */
+@media (min-width: 1201px) {
+  .actions { display: none; }
+}
+
 @media (max-width: 1200px) {
   .nav nav { display: none; }
 }

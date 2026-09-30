@@ -2,15 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
-import { menus, type MenuId } from "./NavMenu";
+import { menuOrder, menus } from "./NavMenu";
 import styles from "./mobileMenu.module.css";
 
-const sections: { label: string; menu?: MenuId; href?: string }[] = [
-  { label: "Products", menu: "products" },
-  { label: "Solutions", menu: "solutions" },
-  { label: "Data Hub", href: "/data-hub" },
-  { label: "Resources", menu: "resources" },
-];
 
 /** Menu button and full-screen link list for screens where the header links are hidden. */
 export function MobileMenu({ dark = false }: { dark?: boolean }) {
@@ -53,28 +47,17 @@ export function MobileMenu({ dark = false }: { dark?: boolean }) {
             <div id="mobile-menu" className={styles.panel}>
               <nav aria-label="Mobile">
                 <ul className={styles.list}>
-                  {sections.map((section) => {
-                    if (!section.menu) {
-                      return (
-                        <li key={section.label}>
-                          <a className={styles.top} href={section.href}>
-                            {section.label}
-                          </a>
-                        </li>
-                      );
-                    }
-                    const isOpen = expanded === section.label;
+                  {menuOrder.map((id) => {
+                    const isOpen = expanded === id;
                     return (
-                      <li key={section.label}>
+                      <li key={id}>
                         <button
                           type="button"
                           className={styles.top}
                           aria-expanded={isOpen}
-                          onClick={() =>
-                            setExpanded(isOpen ? null : section.label)
-                          }
+                          onClick={() => setExpanded(isOpen ? null : id)}
                         >
-                          {section.label}
+                          {menus[id].label}
                           <svg
                             width="16"
                             height="16"
@@ -93,7 +76,7 @@ export function MobileMenu({ dark = false }: { dark?: boolean }) {
                         </button>
                         {isOpen ? (
                           <div className={styles.sub}>
-                            {menus[section.menu].columns.map((column) => (
+                            {menus[id].columns.map((column) => (
                               <div key={column.heading}>
                                 <p>{column.heading}</p>
                                 <ul>
@@ -111,9 +94,6 @@ export function MobileMenu({ dark = false }: { dark?: boolean }) {
                     );
                   })}
                 </ul>
-                <a className={styles.cta} href="/contact">
-                  Talk to us
-                </a>
               </nav>
             </div>,
             document.body,

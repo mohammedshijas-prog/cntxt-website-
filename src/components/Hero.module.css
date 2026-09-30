@@ -113,23 +113,25 @@
 
 .cta {
   display: inline-flex;
+  gap: 8px;
   align-items: center;
   justify-content: center;
-  width: 136px;
-  height: 36px;
-  margin-top: 0;
-  padding: 5px 10px 5px 6px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  height: 48px;
+  padding: 0 14px 0 20px;
   border-radius: 10px;
   background: #ffffff;
-  color: #7d52f4;
+  color: #111111;
   font-family: var(--font-heading);
   font-weight: 500;
   font-size: var(--fs-button);
   line-height: 20px;
-  letter-spacing: -0.12px;
-  font-feature-settings: "ss11" 1, "calt" 0, "liga" 0;
   white-space: nowrap;
+  pointer-events: auto;
+}
+
+.cta img {
+  display: block;
+  filter: brightness(0);
 }
 
 .cta:hover {
@@ -151,6 +153,15 @@
   font-style: normal;
   line-height: var(--lh-display);
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  align-items: center;
+}
+
+.headline h1 {
+  margin: 0;
+  font: inherit;
 }
 
 .srOnly {

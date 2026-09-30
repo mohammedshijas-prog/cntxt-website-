@@ -1,71 +1,61 @@
+import Link from "next/link";
 import styles from "../security/security.module.css";
 
 const footerColumns = [
-  {
-    title: "Products",
-    links: [
-      "Build AI",
-      "Physical AI",
-      "Data Engine",
-      "AI Lab",
-      "For Governments",
-      "Munsit",
-      "KLKT",
-      "Agntix",
-      "Evaluate AI",
-    ],
-  },
+  { title: "Products", links: ["AI Lab", "Agentix", "Munsit", "KLKT"] },
   {
     title: "Solutions",
-    links: [
-      "Enterprises",
-      "Healthcare",
-      "Logistics",
-      "Government",
-      "Finance",
-      "Energy",
-      "Retail",
-    ],
+    links: ["Enterprise", "Healthcare", "Logistics", "Finance", "Public Sector", "Robotics"],
   },
-  {
-    title: "Data Hub",
-    links: ["Browse datasets", "Request a dataset"],
-  },
+  { title: "Company", links: ["About", "Careers", "Security", "Terms", "Privacy"] },
   {
     title: "Resources",
-    links: ["Blog", "Events", "Documentation", "Partnerships"],
+    links: ["Blog", "Contact us", "Events", "Documentation", "Data partnerships"],
   },
   {
-    title: "Company",
-    links: ["About", "Careers", "Contact", "Security"],
+    title: "Guides",
+    links: ["Data labelling", "Physical AI data", "Arabic speech AI", "Enterprise agents"],
   },
 ];
 
-const legalLinks = [
-  "Privacy policy",
-  "Terms and conditions",
-  "Terms of use",
-  "Cookie policy",
-  "Code of conduct",
-  "Cookie settings",
-];
+const legalLinks = ["Terms of use", "Privacy policy", "Cookie preferences"];
+
+const hrefs: Record<string, string> = {
+  "AI Lab": "/products",
+  Agentix: "/products",
+  Munsit: "/products",
+  KLKT: "/klkt",
+  Enterprise: "/solutions",
+  Healthcare: "/healthcare",
+  Logistics: "/solutions",
+  Finance: "/solutions",
+  "Public Sector": "/solutions",
+  Robotics: "/solutions",
+  About: "/about",
+  Careers: "/careers",
+  Security: "/security",
+  Blog: "/blog",
+  "Contact us": "/contact",
+  Events: "/blog",
+  Documentation: "/documentation",
+  "Data partnerships": "/partners",
+  "Data labelling": "/data-hub",
+  "Physical AI data": "/products",
+  "Arabic speech AI": "/products",
+  "Enterprise agents": "/solutions",
+};
 
 function hrefFor(label: string) {
-  if (label === "Security") return "/security";
-  if (label === "Contact") return "/contact";
-  if (label === "Partnerships") return "/partners";
-  if (label === "Documentation") return "/documentation";
-  if (label === "Careers") return "/careers";
-  if (label === "Blog") return "/blog";
-  if (label === "About") return "/about";
-  if (label === "Browse datasets" || label === "Request a dataset") return "/data-hub";
-  if (label === "Healthcare") return "/healthcare";
-  if (label === "Enterprises") return "/solutions";
-  if (label === "Evaluate AI") return "/evaluate-ai";
-  if (label === "Build AI") return "/products";
-  if (label === "KLKT") return "/klkt";
-  return `#${label.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")}`;
+  return hrefs[label] ?? `#${label.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")}`;
 }
+
+/** Page ids used by the pages, mapped to the footer link they highlight. */
+const currentLink: Record<string, string> = {
+  Contact: "Contact us",
+  Partnerships: "Data partnerships",
+  Enterprises: "Enterprise",
+  "Build AI": "AI Lab",
+};
 
 export function SiteClose({
   current,
@@ -126,9 +116,12 @@ export function SiteClose({
       <footer className={styles.footer}>
         <div className={styles.footerTop}>
           <div className={styles.brand}>
-            <a href="/" aria-label="CNTXT AI">
-              <img src="/security/logo.svg" alt="" />
-            </a>
+            <div>
+              <Link href="/" aria-label="CNTXT AI">
+                <img src="/security/logo.svg" alt="" />
+              </Link>
+              <p className={styles.tagline}>Arabic-first, on-prem AI, verified where the work happens.</p>
+            </div>
             <div className={styles.social}>
               <a href="https://www.linkedin.com" aria-label="LinkedIn">
                 <img src="/security/linkedin.svg" alt="" />
@@ -147,7 +140,7 @@ export function SiteClose({
                     <li key={link}>
                       <a
                         href={hrefFor(link)}
-                        aria-current={link === current ? "page" : undefined}
+                        aria-current={link === (current && (currentLink[current] ?? current)) ? "page" : undefined}
                       >
                         {link}
                       </a>
@@ -159,11 +152,11 @@ export function SiteClose({
           </nav>
         </div>
         <div className={styles.legal}>
-          <p>©2026 CNTXT. ALL RIGHTS RESERVED.</p>
+          <p>© 2026 CNTXT AI. All rights reserved.</p>
           <ul>
             {legalLinks.map((link) => (
               <li key={link}>
-                {link === "Cookie settings" ? (
+                {link === "Cookie preferences" ? (
                   <button type="button">{link}</button>
                 ) : (
                   <a id={hrefFor(link).slice(1)} href={hrefFor(link)}>

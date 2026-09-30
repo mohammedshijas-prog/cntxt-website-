@@ -104,7 +104,7 @@ export function Practices() {
       <div
         ref={viewportRef}
         className={styles.carousel}
-        data-dragging={dragging && drag.current.moved}
+        data-dragging={dragging && Math.abs(dragX) > 6}
         role="region"
         aria-roledescription="carousel"
         aria-label="Security practices"

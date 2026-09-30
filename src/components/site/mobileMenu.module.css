@@ -145,19 +145,6 @@
   color: #7d52f4;
 }
 
-.cta {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 48px;
-  margin-top: 24px;
-  border-radius: 10px;
-  background: #7d52f4;
-  color: #ffffff;
-  font-family: var(--font-heading);
-  font-size: var(--fs-button);
-  font-weight: 500;
-}
 
 @media (max-width: 1200px) {
   .toggle {

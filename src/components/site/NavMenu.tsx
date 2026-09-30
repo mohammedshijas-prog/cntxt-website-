@@ -3,61 +3,94 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import styles from "./navMenu.module.css";
 
-type Column = { heading: string; items: { title: string; href: string; icon?: string }[] };
+type Column = {
+  heading: string;
+  items: { title: string; href: string; icon?: string; desc?: string }[];
+};
 
-export const menus: Record<MenuId, { href: string; columns: Column[]; rich?: boolean }> = {
-  products: {
-    href: "/products",
-    rich: true,
+export const menus: Record<MenuId, { label: string; href: string; columns: Column[]; rich?: boolean }> = {
+  data: {
+    label: "Data",
+    href: "/data-hub",
     columns: [
       {
-        heading: "Build AI",
+        heading: "Data",
         items: [
-          { title: "Build AI (overview)", href: "/products" },
-          { title: "Physical AI", href: "/products" },
-          { title: "Data Engine", href: "/products" },
-          { title: "For Governments", href: "/products" },
-        ],
-      },
-      {
-        heading: "Application AI",
-        items: [
-          { title: "Munsit", href: "/products", icon: "/nav/munsit-icon.svg" },
-          { title: "Klkt", href: "/klkt", icon: "/nav/klkt-icon.svg" },
-          { title: "Agentix", href: "/products" },
-        ],
-      },
-      {
-        heading: "Evaluate AI",
-        items: [
+          { title: "AI Lab", href: "/products" },
+          { title: "Data Hub", href: "/data-hub" },
           { title: "Evaluate AI", href: "/evaluate-ai" },
-          { title: "For Model Developers", href: "/evaluate-ai" },
-          { title: "For Enterprises", href: "/evaluate-ai" },
+        ],
+      },
+      {
+        heading: "Guides",
+        items: [
+          { title: "Data labelling", href: "/data-hub" },
+          { title: "Physical AI data", href: "/products" },
+          { title: "Data partnerships", href: "/partners" },
         ],
       },
     ],
   },
-  solutions: {
+  models: {
+    label: "Models",
+    href: "/products",
+    rich: true,
+    columns: [
+      {
+        heading: "Models",
+        items: [
+          {
+            title: "Munsit",
+            href: "/products",
+            icon: "/nav/munsit-icon.svg",
+            desc: "Arabic speech-to-text and text-to-speech",
+          },
+          { title: "Physical AI models", href: "/products", desc: "Foundation models for robotics" },
+        ],
+      },
+    ],
+  },
+  agents: {
+    label: "Agents",
+    href: "/products",
+    rich: true,
+    columns: [
+      {
+        heading: "Agents",
+        items: [
+          { title: "Agentix", href: "/products", desc: "Agents built without code, deployed on-premise" },
+          { title: "KLKT", href: "/klkt", icon: "/nav/klkt-icon.svg", desc: "Turn any workflow into an AI app" },
+          { title: "Enterprise agents", href: "/solutions", desc: "Customer service and operations" },
+        ],
+      },
+    ],
+  },
+  industries: {
+    label: "Industries",
     href: "/solutions",
     columns: [
       {
-        heading: "Solutions",
-        items: [{ title: "For Enterprises", href: "/solutions" }],
-      },
-      {
-        heading: "By industry",
+        heading: "Industries",
         items: [
+          { title: "Enterprise", href: "/solutions" },
           { title: "Healthcare", href: "/healthcare" },
           { title: "Logistics", href: "/solutions" },
-          { title: "Government", href: "/solutions" },
           { title: "Finance", href: "/solutions" },
-          { title: "Energy", href: "/solutions" },
+        ],
+      },
+      {
+        heading: "More",
+        items: [
+          { title: "Public Sector", href: "/solutions" },
+          { title: "Robotics", href: "/solutions" },
           { title: "Retail", href: "/solutions" },
+          { title: "Energy", href: "/solutions" },
         ],
       },
     ],
   },
   resources: {
+    label: "Resources",
     href: "/blog",
     columns: [
       {
@@ -66,7 +99,7 @@ export const menus: Record<MenuId, { href: string; columns: Column[]; rich?: boo
           { title: "Blog", href: "/blog" },
           { title: "Events", href: "/blog" },
           { title: "Documentation", href: "/documentation" },
-          { title: "Partnerships", href: "/partners" },
+          { title: "Data partnerships", href: "/partners" },
         ],
       },
       {
@@ -82,9 +115,11 @@ export const menus: Record<MenuId, { href: string; columns: Column[]; rich?: boo
   },
 };
 
-export type MenuId = "products" | "solutions" | "resources";
+export type MenuId = "data" | "models" | "agents" | "industries" | "resources";
 
-const subtitle = "Save money and time";
+/** Header order, shared by the desktop header, the hero header and the mobile menu. */
+export const menuOrder: MenuId[] = ["data", "models", "agents", "industries", "resources"];
+
 
 /**
  * A header link plus its mega menu. `placement` picks where the panel opens:
@@ -148,7 +183,7 @@ export function NavMenu({
         {children}
       </a>
       <div
-        className={`${styles.panel} ${rich ? "" : styles.simple}`}
+        className={`${styles.panel} ${rich ? styles.single : styles.simple}`}
         data-open={open}
         data-placement={placement}
       >
@@ -166,7 +201,7 @@ export function NavMenu({
                         </span>
                         <span>
                           <strong>{item.title}</strong>
-                          <small>{subtitle}</small>
+                          {item.desc ? <small>{item.desc}</small> : null}
                         </span>
                       </>
                     ) : (

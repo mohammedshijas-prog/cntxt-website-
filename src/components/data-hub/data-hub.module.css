@@ -116,12 +116,24 @@
 
 .heroCopy {
   position: relative;
+  isolation: isolate;
   display: flex;
   flex-direction: column;
   gap: 32px;
   align-items: center;
   width: min(749px, 100%);
   text-align: center;
+}
+
+/* Soft wash behind the copy keeps it readable over the moving digits. */
+.heroCopy::before {
+  content: "";
+  position: absolute;
+  inset: -40px -60px;
+  z-index: -1;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(245, 241, 255, 0.95), rgba(245, 241, 255, 0.7) 60%, rgba(245, 241, 255, 0));
+  pointer-events: none;
 }
 
 .heroCopy h1 {

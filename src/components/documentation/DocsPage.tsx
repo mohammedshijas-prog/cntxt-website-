@@ -109,6 +109,8 @@ export function DocsPage() {
   const [query, setQuery] = useState("");
   const [activeId, setActiveId] = useState("basic-sizing");
   const [tocId, setTocId] = useState("fixed-widths");
+  // Phones and tablets: the page list is collapsed behind a toggle.
+  const [navOpen, setNavOpen] = useState(false);
 
   const needle = query.trim().toLowerCase();
   const visibleGroups = useMemo(
@@ -159,7 +161,7 @@ export function DocsPage() {
       <SiteNav />
 
       <div className={styles.docs}>
-        <aside className={styles.sidebar} aria-label="Documentation">
+        <aside className={styles.sidebar} aria-label="Documentation" data-open={navOpen}>
           <label className={styles.search}>
             <span className={styles.searchField}>
               <img src="/documentation/search.svg" alt="" width={18} height={18} />
@@ -175,6 +177,21 @@ export function DocsPage() {
             <kbd>⌘ K</kbd>
           </label>
 
+          <button
+            type="button"
+            className={styles.navToggle}
+            aria-expanded={navOpen}
+            onClick={() => setNavOpen((value) => !value)}
+          >
+            <span>
+              <small>Browsing</small>
+              {active.title}
+            </span>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path d="M4 6l4 4 4-4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </button>
+
           {visibleGroups.length === 0 ? (
             <p className={styles.empty}>No matching pages.</p>
           ) : (
@@ -187,7 +204,10 @@ export function DocsPage() {
                       <button
                         type="button"
                         aria-current={item.id === active.id ? "page" : undefined}
-                        onClick={() => setActiveId(item.id)}
+                        onClick={() => {
+                          setActiveId(item.id);
+                          setNavOpen(false);
+                        }}
                       >
                         <span aria-hidden="true"><DocIcon name={item.icon} /></span>
                         {item.title}
