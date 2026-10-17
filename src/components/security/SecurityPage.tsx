@@ -2,29 +2,33 @@ import { SiteClose } from "../site/SiteClose";
 import { SiteNav } from "../site/SiteNav";
 import { Practices } from "./Practices";
 import styles from "./security.module.css";
+import { faqs } from "../shared/faqs";
+import { Faq } from "../shared/Faq";
 
 const gridLayers = Array.from({ length: 15 }, (_, index) => `/security/hero-grid/${index}.svg`);
 
 const certifications = [
-  "ISO 27001",
-  "SOC 2",
-  "[Regional data law]",
-  "GDPR",
+  {
+    name: "SOC 2 Type II",
+    mark: "/brand/certs/soc2.svg",
+    copy: "CNTXT AI holds SOC 2 Type II. The controls behind it are published in our trust centre at cntxt.trust.site.",
+  },
+  {
+    name: "ISO 27001",
+    mark: "/brand/certs/iso-27001.svg",
+    copy: "CNTXT AI holds ISO 27001, the international standard for managing information security across the organisation.",
+  },
+  {
+    name: "GDPR",
+    mark: "/brand/certs/gdpr.svg",
+    copy: "GDPR is listed in our trust centre. Hosting and processing stay in-region, with on-premises deployment available.",
+  },
+  {
+    name: "HIPAA",
+    mark: "/brand/certs/hipaa.svg",
+    copy: "HIPAA is listed in our trust centre alongside the controls that cover product, data, network and endpoint security.",
+  },
 ];
-
-const certificationCopy =
-  "Encord has successfully completed its Systems and Organizational Control (SOC)-2 Examination. In doing so, Encord maintains its adherence to";
-
-const apps = [
-  { src: "/security/icons/gmail.svg", name: "Gmail" },
-  { src: "/security/icons/slack.svg", name: "Slack" },
-  { src: "/security/icons/sheets.svg", name: "Sheets" },
-  { src: "/security/icons/drive.svg", name: "Drive" },
-  { src: "/security/icons/notion.svg", name: "Notion" },
-  { src: "/security/icons/teams.svg", name: "Teams" },
-];
-
-const actions = ["Read", "Write", "Send", "Copy", "Move", "Generate"];
 
 
 export function SecurityPage() {
@@ -35,15 +39,15 @@ export function SecurityPage() {
         <div className={styles.heroCopy}>
           <h1 id="security-heading">Security and data sovereignty, by design.</h1>
           <p>
-            Protecting customer data is our highest priority. Encord was built
-            from the ground up with enterprise-grade security, governance, and
-            compliance at every layer.
+            CNTXT AI holds SOC 2 Type II and ISO 27001, with GDPR
+            and HIPAA listed in our trust centre. Your data is hosted and processed in-region, and we
+            deploy on-premises, hybrid or in the cloud.
           </p>
           <div className={styles.heroActions}>
-            <a className={styles.primary} href="#procurement">
-              Request security pack
+            <a className={styles.primary} href="https://cntxt.trust.site">
+              Visit the trust centre
             </a>
-            <a className={styles.secondary} href="/contact">
+            <a className={styles.secondary} href="/contact?topic=Security">
               Contact security
             </a>
           </div>
@@ -53,15 +57,15 @@ export function SecurityPage() {
             <img key={src} className={styles.gridLine} src={src} alt="" />
           ))}
           <div className={styles.lockFrame}>
-            <img className={styles.lock} src="/security/lock.png" alt="" />
+            <img className={styles.lock} src="/security/lock.webp" alt="" />
           </div>
           <div className={styles.requestCard}>
             <span className={styles.requestIcon}>
               <img src="/security/shield.svg" alt="" />
             </span>
             <span>
-              <strong>Work Request</strong>
-              <em>read,write,or tool call</em>
+              <strong>Work request</strong>
+              <em>read, write or tool call</em>
             </span>
           </div>
           <div className={styles.permissionCard}>
@@ -79,13 +83,13 @@ export function SecurityPage() {
 
       <section className={styles.compliance} aria-labelledby="compliance-heading">
         <div className={styles.complianceCard}>
-          <h2 id="compliance-heading">Compliance & certifications</h2>
+          <h2 id="compliance-heading">Compliance and certifications</h2>
           <ul>
-            {certifications.map((name) => (
+            {certifications.map(({ name, copy, mark }) => (
               <li key={name}>
-                <img src="/security/soc2.png" alt="" width={150} height={150} />
+                <img src={mark} alt={`${name} mark`} width={150} height={150} />
                 <h3>{name}</h3>
-                <p>{certificationCopy}</p>
+                <p>{copy}</p>
               </li>
             ))}
           </ul>
@@ -103,96 +107,25 @@ export function SecurityPage() {
             </span>
             Infrastructure
           </p>
-          <h2 id="infrastructure-heading">How Our Systems Are Built</h2>
+          <h2 id="infrastructure-heading">How our systems are built</h2>
           <p>
-            Built on secure, redundant infrastructure — isolated environments,
-            restricted access, and regular disaster recovery testing to keep the
-            platform resilient.
+            We deploy on-premises, hybrid or in the cloud, with hosting and
+            processing kept in-region. Network connections are limited, and
+            access is checked against a role and recorded.
           </p>
         </div>
         <div className={styles.infraPanel}>
-          <div className={styles.flow}>
-            <article className={styles.requestRow}>
-              <span className={styles.flowLead}>
-                <span className={styles.iconWell}>
-                  <img src="/security/icons/bot.svg" alt="" />
-                </span>
-                Request
-              </span>
-              <span className={styles.appRow}>
-                {apps.map((app) => (
-                  <span className={styles.appIcon} key={app.name}>
-                    <img src={app.src} alt="" />
-                  </span>
-                ))}
-              </span>
-            </article>
-
-            <article className={styles.governance}>
-              <p>Governance layer</p>
-              <div className={styles.govCard}>
-                <span className={styles.iconWellTeal}>
-                  <img src="/security/icons/shield.svg" alt="" />
-                </span>
-                <span>
-                  <strong>Permission check</strong>
-                  <em>Is this connection allowed in this workspace?</em>
-                </span>
-              </div>
-              <div className={styles.govCard}>
-                <span className={styles.policyRow}>
-                  <span className={styles.iconWellTeal}>
-                    <img src="/security/icons/policy.svg" alt="" />
-                  </span>
-                  <span>
-                    <strong>Policy decision</strong>
-                    <em>The layer decides what the agent may do</em>
-                  </span>
-                </span>
-                <span className={styles.pills}>
-                  <span className={styles.allow}>Allow</span>
-                  <span className={styles.escalate}>Escalate</span>
-                  <span className={styles.block}>Block</span>
-                </span>
-              </div>
-            </article>
-
-            <article className={styles.toolCard}>
-              <span className={styles.policyRow}>
-                <span className={styles.iconWellGreen}>
-                  <img src="/security/icons/play.svg" alt="" />
-                </span>
-                <span>
-                  <strong>Tool action</strong>
-                  <em>Runs only within the granted scope</em>
-                </span>
-              </span>
-              <span className={styles.actionRow}>
-                {actions.map((action) => (
-                  <span key={action}>{action}</span>
-                ))}
-                <span className={styles.more} aria-hidden="true">
-                  <img src="/security/icons/more.svg" alt="" />
-                </span>
-              </span>
-            </article>
-
-            <article className={styles.logCard}>
-              <span className={styles.iconWell}>
-                <img src="/security/icons/history.svg" alt="" />
-              </span>
-              <span>
-                <strong>Logged outcome</strong>
-                <em>Who called what, when, and why</em>
-              </span>
-            </article>
-          </div>
+          <img
+            src="/art/deploy.svg"
+            alt="Three deployment options: on-premises, hybrid and cloud, all with in-region hosting and processing"
+            style={{ position: "relative", zIndex: 1, display: "block", width: "100%", height: "100%", objectFit: "contain", background: "#f5f1ff" }}
+          />
         </div>
       </section>
 
       <section className={styles.disclosure} id="report" aria-labelledby="disclosure-heading">
         <div className={styles.folder}>
-          <p className={styles.folderTab}>Security & Governance</p>
+          <p className={styles.folderTab}>Security and governance</p>
           <div className={styles.folderBody}>
             <div className={styles.folderCopy}>
               <h2 id="disclosure-heading">
@@ -201,21 +134,23 @@ export function SecurityPage() {
                 Tell us before anyone else finds out.
               </h2>
               <p>
-                We take reports from independent researchers seriously and
-                won&apos;t pursue legal action against good-faith testing.
+                We take reports from independent researchers seriously. Send
+                us the details through our contact page and the team will follow up.
               </p>
-              <a className={styles.lightButton} href="#report">
+              <a className={styles.lightButton} href="/contact?topic=Security">
                 Report a vulnerability
               </a>
             </div>
-            <img className={styles.folderLock} src="/security/disclosure-lock.png" alt="" />
+            <img className={styles.folderLock} src="/security/disclosure-lock.webp" alt="" />
           </div>
         </div>
       </section>
 
+      <Faq items={faqs.security} topic="Security" />
+
       <SiteClose
         current="Security"
-        packHref="#procurement"
+        packHref="https://cntxt.trust.site"
         procurementId="procurement"
       />
     </main>

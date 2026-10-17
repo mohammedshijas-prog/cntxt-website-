@@ -1,0 +1,150 @@
+.faq {
+  display: grid;
+  grid-template-columns: minmax(0, 0.7fr) minmax(0, 1fr);
+  gap: 64px;
+  align-items: start;
+  width: min(1499px, 100%);
+  margin: 0 auto;
+  padding: 117px 117px 117px;
+  color: #0f0c0b;
+}
+
+.intro {
+  position: sticky;
+  top: 120px;
+}
+
+.kicker {
+  margin: 0 0 16px;
+  color: #7d52f4;
+  font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
+  font-size: 13px;
+  letter-spacing: 0.14em;
+  line-height: 18px;
+}
+
+.intro h2 {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: var(--fs-h2);
+  font-weight: 400;
+  line-height: var(--lh-h2);
+}
+
+.intro h2 + p {
+  margin: 16px 0 0;
+  color: rgba(15, 12, 11, 0.62);
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+}
+
+.intro a {
+  color: #7d52f4;
+  text-decoration: underline;
+}
+
+.list {
+  border-top: 1px solid rgba(15, 12, 11, 0.14);
+}
+
+.list details {
+  border-bottom: 1px solid rgba(15, 12, 11, 0.14);
+}
+
+.list summary {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 0;
+  cursor: pointer;
+  font-family: var(--font-heading);
+  font-size: var(--fs-h5);
+  line-height: var(--lh-h5);
+  list-style: none;
+}
+
+.list summary::-webkit-details-marker {
+  display: none;
+}
+
+.list summary:hover {
+  color: #5a3fc0;
+}
+
+.list summary:focus-visible {
+  outline: 2px solid #7d52f4;
+  outline-offset: 4px;
+}
+
+/* Plus that turns into a minus. */
+.list summary span {
+  position: relative;
+  flex: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #efe8ff;
+}
+
+.list summary span::before,
+.list summary span::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 12px;
+  height: 1.6px;
+  border-radius: 1px;
+  background: #5a3fc0;
+  transform: translate(-50%, -50%);
+  transition: transform 220ms ease;
+}
+
+.list summary span::after {
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+
+.list details[open] summary span::after {
+  transform: translate(-50%, -50%) rotate(0deg);
+}
+
+.list details p {
+  max-width: 720px;
+  margin: 0;
+  padding: 0 52px 26px 0;
+  color: rgba(15, 12, 11, 0.7);
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+}
+
+@media (max-width: 1200px) {
+  .faq {
+    grid-template-columns: 1fr;
+    gap: 32px;
+    padding: 80px 40px;
+  }
+
+  .intro {
+    position: static;
+  }
+}
+
+@media (max-width: 720px) {
+  .faq {
+    padding: 64px 20px;
+  }
+
+  .list details p {
+    padding-right: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .list summary span::before,
+  .list summary span::after {
+    transition: none;
+  }
+}

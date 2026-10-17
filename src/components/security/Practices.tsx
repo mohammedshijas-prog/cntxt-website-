@@ -6,21 +6,21 @@ import styles from "./security.module.css";
 const slides = [
   {
     category: "Access",
-    title: "Access control & auditing",
+    title: "Access control and logging",
     image: "/security/practice-a.png",
-    body: "Role-based access decides who can see which data, and every read, write and tool call is logged, so you can answer who touched what, when and why.",
+    body: "Role-based access decides who can see which data, and access is logged. Identity validation and limited network connections are among our published controls.",
   },
   {
     category: "Sovereignty",
-    title: "Data residency & sovereignty",
-    image: "/security/practice-a.png",
-    body: "Choose where your data is stored and processed. It stays in-region, under your jurisdiction, and never leaves it for training or support.",
+    title: "Data residency and sovereignty",
+    image: "/industries/government.jpg",
+    body: "Data is stored and processed in-region. Deployments can be configured to meet regional data-residency requirements such as the UAE and Saudi PDPL.",
   },
   {
     category: "Encryption",
-    title: "Encryption in transit & at rest",
-    image: "/security/practice-b.png",
-    body: "TLS 1.2+ protects every connection and AES-256 protects everything stored, with keys managed and rotated per customer.",
+    title: "Encryption in transit and at rest",
+    image: "/art/cover-5.svg",
+    body: "Data is encrypted at rest and in transit. The full list of controls, from anti-malware to breach notification, is published in our trust centre.",
   },
 ];
 

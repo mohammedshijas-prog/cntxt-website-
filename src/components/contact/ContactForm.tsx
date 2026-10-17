@@ -1,9 +1,19 @@
 "use client";
 
+import { useSearchParams } from "next/navigation";
 import { FormEvent, useState } from "react";
 import styles from "./contact.module.css";
 
-const helpOptions = ["Sales", "Partnerships", "Data needs", "Security", "Other"];
+const helpOptions = [
+  "Data services",
+  "Physical AI data",
+  "Arabic voice AI (Munsit)",
+  "AI evaluation",
+  "Custom AI solutions",
+  "Partnerships",
+  "Security",
+  "Other",
+];
 
 const empty = {
   firstName: "",
@@ -15,8 +25,20 @@ const empty = {
 };
 
 export function ContactForm() {
-  const [values, setValues] = useState(empty);
+  // Links such as /contact?topic=AI%20evaluation&about=Model%20audit arrive with
+  // the topic chosen and the first line of the message written.
+  const params = useSearchParams();
+  const [values, setValues] = useState(() => {
+    const topic = params.get("topic") ?? "";
+    const about = params.get("about") ?? "";
+    return {
+      ...empty,
+      help: helpOptions.includes(topic) ? topic : "",
+      message: about ? `I would like to ask about: ${about}.` : "",
+    };
+  });
   const [submittedEmail, setSubmittedEmail] = useState("");
+
 
   function update(field: keyof typeof empty, value: string) {
     setValues((current) => ({ ...current, [field]: value }));
@@ -25,6 +47,12 @@ export function ContactForm() {
   function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!event.currentTarget.reportValidity()) return;
+    // No form backend yet: hand the message to the visitor's own email app.
+    const body = Object.entries(values)
+      .filter(([, value]) => value)
+      .map(([field, value]) => `${field}: ${value}`)
+      .join("\n");
+    window.location.href = `mailto:sales@cntxt.tech?subject=${encodeURIComponent("Enquiry from the CNTXT website")}&body=${encodeURIComponent(body)}`;
     setSubmittedEmail(values.email);
   }
 
@@ -32,8 +60,11 @@ export function ContactForm() {
     return (
       <div className={styles.formCard} role="status">
         <div className={styles.success}>
-          <h2>Thanks. We’ll be in touch.</h2>
-          <p>We received your note and will reply at {submittedEmail}.</p>
+          <h2>One more step.</h2>
+          <p>
+            Your email app should have opened with your message addressed to sales@cntxt.tech.
+            Send it from there and we will reply at {submittedEmail}.
+          </p>
           <button
             type="button"
             className={styles.again}
@@ -58,8 +89,8 @@ export function ContactForm() {
               className={styles.field}
               name="firstName"
               autoComplete="given-name"
-              placeholder="First Name *"
-              aria-label="First Name"
+              placeholder="First name *"
+              aria-label="First name"
               required
               value={values.firstName}
               onChange={(event) => update("firstName", event.target.value)}
@@ -68,8 +99,8 @@ export function ContactForm() {
               className={styles.field}
               name="lastName"
               autoComplete="family-name"
-              placeholder="Last Name *"
-              aria-label="Last Name"
+              placeholder="Last name *"
+              aria-label="Last name"
               required
               value={values.lastName}
               onChange={(event) => update("lastName", event.target.value)}
@@ -80,8 +111,8 @@ export function ContactForm() {
             type="email"
             name="email"
             autoComplete="email"
-            placeholder="Business Email *"
-            aria-label="Business Email"
+            placeholder="Work email *"
+            aria-label="Work email"
             required
             value={values.email}
             onChange={(event) => update("email", event.target.value)}
@@ -90,8 +121,8 @@ export function ContactForm() {
             className={styles.field}
             name="company"
             autoComplete="organization"
-            placeholder="Company Name *"
-            aria-label="Company Name"
+            placeholder="Company name *"
+            aria-label="Company name"
             required
             value={values.company}
             onChange={(event) => update("company", event.target.value)}
@@ -105,7 +136,7 @@ export function ContactForm() {
               onChange={(event) => update("help", event.target.value)}
             >
               <option value="" disabled>
-                What can we help with?*
+                What can we help with? *
               </option>
               {helpOptions.map((option) => (
                 <option key={option} value={option}>
@@ -118,8 +149,8 @@ export function ContactForm() {
           <textarea
             className={styles.textarea}
             name="message"
-            placeholder="Tell us about the opportunity"
-            aria-label="Tell us about the opportunity"
+            placeholder="Tell us what you need"
+            aria-label="Tell us what you need"
             value={values.message}
             onChange={(event) => update("message", event.target.value)}
           />
@@ -132,7 +163,7 @@ export function ContactForm() {
           <p className={styles.legalNote}>
             By continuing, you accept that your data will be processed in
             accordance with{" "}
-            <a href="#privacy-policy">CNTXT Privacy Policy</a>.
+            <a href="https://www.cntxt.tech/privacy-policy">CNTXT Privacy Policy</a>.
           </p>
         </div>
       </div>

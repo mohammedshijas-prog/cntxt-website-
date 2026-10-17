@@ -42,6 +42,7 @@ export function LogoZoom() {
     let entryTarget = 0;
     let entry = -1;
     let frame = 0;
+    let resized = true;
 
     // The page is CSS-zoomed on mid-size desktops (see globals.css), which shrinks
     // 100vh; size the stage from the real window height so it fills the screen.
@@ -60,6 +61,8 @@ export function LogoZoom() {
     const render = (progress: number, rise: number) => {
       const w = stage.clientWidth;
       const h = stage.clientHeight;
+      // Not laid out yet (or hidden): there is no box to fit the logo to.
+      if (!w || !h) return false;
       const baseWidth = Math.min(w * (w < 720 ? 0.86 : 0.62), 1080);
       const baseHeight = (baseWidth * LOGO_HEIGHT) / LOGO_WIDTH;
 
@@ -103,6 +106,7 @@ export function LogoZoom() {
       }
       // Last stretch: settle on the page background so the next section follows on.
       if (washRef.current) washRef.current.style.opacity = `${clamp((zoom - 0.9) / 0.1)}`;
+      return true;
     };
 
     const tick = () => {
@@ -112,9 +116,11 @@ export function LogoZoom() {
       const next = ease(current, target);
       const nextEntry = ease(entry, entryTarget);
       const settled = Math.abs(next - target) < 0.0005 && Math.abs(nextEntry - entryTarget) < 0.0005;
+      const moved = current !== (settled ? target : next) || entry !== (settled ? entryTarget : nextEntry);
       current = settled ? target : next;
       entry = settled ? entryTarget : nextEntry;
-      render(current, entry);
+      // Away from the section both values sit at their ends: nothing to redraw.
+      if (moved || resized) resized = !render(current, entry);
       if (!settled) frame = requestAnimationFrame(tick);
     };
 
@@ -124,6 +130,7 @@ export function LogoZoom() {
     };
 
     const onResize = () => {
+      resized = true;
       fitStage();
       request();
     };

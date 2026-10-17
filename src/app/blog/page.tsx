@@ -2,9 +2,10 @@ import type { Metadata } from "next";
 import { BlogIndex } from "@/components/blog/BlogIndex";
 
 export const metadata: Metadata = {
-  title: "Blog | CNTXT AI",
+  title: "Blog",
+  alternates: { canonical: "/blog" },
   description:
-    "Product updates, engineering deep-dives, and how teams are turning their context into software that runs itself.",
+    "Research notes and practical guides from CNTXT AI on Arabic AI, training data, evaluation and putting AI to work in regulated industries.",
 };
 
 export default function BlogPage() {

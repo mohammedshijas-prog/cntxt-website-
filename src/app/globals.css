@@ -29,6 +29,16 @@
   /* Text colours on light backgrounds. */
   --text-strong: #0f0c0b;
   --text-muted: rgba(15, 12, 11, 0.62);
+
+  /* Height of the screen for full-height sections. Use this instead of 100vh:
+     it stays correct when the page is scaled (see the zoom rule below). */
+  --screen-h: 100vh;
+}
+
+@supports (height: 100dvh) {
+  :root {
+    --screen-h: 100dvh;
+  }
 }
 
 @media (max-width: 1200px) {
@@ -78,6 +88,11 @@ body {
 /* Pages are built on a 1733px frame. On smaller desktop windows, lay the
    page out at that width and scale it so type and spacing stay consistent. */
 @media (min-width: 1201px) and (max-width: 1732px) {
+  :root {
+    /* Zooming the body shrinks viewport units with it; scale them back up. */
+    --screen-h: calc(100vh / (100vw / 1733px));
+  }
+
   html {
     max-width: none;
     overflow-x: hidden;

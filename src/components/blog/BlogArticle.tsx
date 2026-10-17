@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useState } from "react";
 import { SiteClose } from "../site/SiteClose";
 import { SiteNav } from "../site/SiteNav";
@@ -24,8 +23,8 @@ export function BlogArticle() {
           </h1>
           <p className={styles.byline}>{article.meta}</p>
           <div className={styles.heroImage}>
-            <img src="/blog/hero-under.png" alt="" />
-            <img src="/blog/feature.png" alt="" />
+            <img src="/blog/hero-under.webp" alt="" />
+            <img src="/art/cover-1.svg" alt="" />
           </div>
           <div className={styles.body}>
             {article.paragraphs.map((paragraph) => (
@@ -35,7 +34,7 @@ export function BlogArticle() {
           <img className={styles.midImage} src="/blog/article-mid.jpg" alt="" />
           <h2>{article.subhead}</h2>
           <div className={styles.body}>
-            {article.paragraphs.map((paragraph) => (
+            {article.more.map((paragraph) => (
               <p key={`next-${paragraph.slice(0, 24)}`}>{paragraph}</p>
             ))}
           </div>
@@ -63,21 +62,19 @@ export function BlogArticle() {
         <h2 id="read-next">Read next</h2>
         <ul>
           {readNext.map((item) => (
-            <li key={item.under + item.image}>
-              <Link href="/blog">
+            <li key={item.href}>
+              <a href={item.href} target="_blank" rel="noopener noreferrer">
                 <span className={styles.nextPhoto}>
-                  <img src="/blog/next-base.png" alt="" />
+                  <img src="/blog/next-base.webp" alt="" />
                   <img src={item.under} alt="" />
                   <img src={item.image} alt="" />
                 </span>
-                <strong>
-                  Universal Music Group and ElevenLabs announce multi-year strategic agreement
-                </strong>
+                <strong>{item.title}</strong>
                 <span>
-                  <em>Sep 8, 2026</em>
-                  <em>Company</em>
+                  <em>{item.category}</em>
+                  <em>Insight hub</em>
                 </span>
-              </Link>
+              </a>
             </li>
           ))}
         </ul>

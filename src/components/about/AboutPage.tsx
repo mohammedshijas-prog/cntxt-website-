@@ -1,37 +1,27 @@
 import { CountUp } from "../shared/CountUp";
+import { LogoWall } from "../shared/LogoWall";
 import { SiteClose } from "../site/SiteClose";
 import { SiteNav } from "../site/SiteNav";
 import styles from "./about.module.css";
+import { CtaBand } from "../shared/CtaBand";
 
-const leaders = [
-  {
-    src: "/about/leader-1.png",
-    name: "Mohammed Abu sheikh",
-    role: "Co founder and ceo",
-  },
-  {
-    src: "/about/leader-2.png",
-    name: "Mohammed Abu sheikh",
-    role: "Co founder",
-  },
-  {
-    src: "/about/leader-3.png",
-    name: "Mohammed Abu sheikh",
-    role: "Co founder and ceo",
-  },
-  {
-    src: "/about/leader-3.png",
-    name: "Mohammed Abu sheikh",
-    role: "Co founder and ceo",
-  },
+// Portraits are the ones published on cntxt.tech. `avatar` is a small round
+// photo for people we only have a thumbnail of.
+const leaders: { src?: string; avatar?: string; position?: string; name: string; role: string }[] = [
+  { src: "/brand/people/mohammad-abu-sheikh.webp", position: "62% top", name: "Mohammad Abu Sheikh", role: "Co-Founder & CEO" },
+  { src: "/brand/people/hassan-abu-sheikh.webp", name: "Hassan Abu Sheikh", role: "Co-Founder" },
+  { avatar: "/brand/people/muhammed-shabreen.webp", name: "Muhammed Shabreen", role: "CTO" },
+  { name: "Khalid Ghiboub", role: "VP of AI Models" },
+  { src: "/brand/people/shameed-sait.webp", name: "Shameed Sait", role: "Director of AI & Engineering" },
+  { src: "/brand/people/rym-bachouche.webp", name: "Rym Bachouche", role: "VP of Marketing" },
+  { src: "/brand/people/lathan-jacobs.webp", name: "Lathan Jacobs", role: "VP Operations & Commercial" },
 ];
 
-const logos = [
-  { src: "/about/logo-lovable.png", name: "Lovable" },
-  { src: "/about/logo-polyai.png", name: "PolyAI" },
-  { src: "/about/logo-lovable.png", name: "Lovable" },
-  { src: "/about/logo-polyai.png", name: "PolyAI" },
-  { src: "/about/logo-lovable.png", name: "Lovable" },
+const stats = [
+  { value: 250, suffix: "+", label: "Organisations served" },
+  { value: 30, suffix: "M+", label: "Data points annotated" },
+  { value: 25, suffix: "+", label: "Arabic dialects" },
+  { value: 98, suffix: "%", label: "Labelling accuracy" },
 ];
 
 function Eyebrow({ children }: { children: string }) {
@@ -52,20 +42,21 @@ export function AboutPage() {
         <div className={styles.heroCopy}>
           <Eyebrow>Why CNTXT</Eyebrow>
           <h1 id="about-heading">
-            Real-world AI is lacking context.{" "}
-            <span>That’s why we created cntxt.</span>
+            AI projects fail on data, not on models.{" "}
+            <span>That is why we built CNTXT.</span>
           </h1>
           <p>
-            Protecting customer data is our highest priority. Encord was built
-            from the ground up with enterprise-grade security,
+            CNTXT AI is a data and AI company headquartered in Abu Dhabi. We
+            help organisations build and run AI while keeping full control of
+            their data.
           </p>
         </div>
         <div className={styles.photo}>
-          <img className={styles.texture} src="/about/texture.png" alt="" />
+          <img className={styles.texture} src="/about/texture.webp" alt="" />
           <div className={styles.mark}>
             <img src="/about/mark.svg" alt="" width={677} height={610} />
           </div>
-          <img className={styles.team} src="/about/team.png" alt="The CNTXT team" />
+          <img className={styles.team} src="/about/team.webp" alt="The CNTXT team" />
         </div>
       </section>
 
@@ -73,33 +64,33 @@ export function AboutPage() {
         <div className={styles.storyCopy}>
           <Eyebrow>Our story</Eyebrow>
           <h2 id="story-heading">
-            Retrieval was sufficient while software only read. It stopped being
-            sufficient <span>when software began to act.</span>
+            Data ≥ AI. Fix the data foundation first,{" "}
+            <span>then build the model.</span>
           </h2>
         </div>
         <div className={styles.storyBody}>
           <p>
-            For two decades enterprise systems assumed a person sat at the end
-            of the process. Search returned ten results and a human chose
-            between them. Tolerance for staleness and unexplained gaps was
-            high, because human judgement was doing the work the system did
-            not.
+            Brothers Mohammad and Hassan Abu Sheikh founded CNTXT on one
+            observation: AI projects fail on messy data, not on models. Today
+            we capture and verify data from real work, train models on it,
+            such as Munsit for Arabic speech, and deploy AI on-premise so
+            organisations keep sovereign control of their data.
           </p>
           <p>
-            Software now drafts the email, reallocates the spend and files the
-            report. The human reviews an outcome rather than choosing between
-            candidates, and usually cannot establish whether it was complete. A
-            stale index a person would have caught becomes a decision nobody
-            questioned.
+            Munsit ranks #1 on the Hugging Face Open Universal Arabic ASR
+            Leaderboard. In June 2026 we acquired Actualize, which builds
+            Arabic voice agents, and raised a $60M Series A co-led by AI71 and
+            BlueFive Capital. More than 250 enterprise and government
+            organisations have worked with us.
           </p>
         </div>
       </section>
 
       <section className={styles.stats} aria-label="Company figures">
-        {Array.from({ length: 4 }, (_, index) => (
-          <div key={index}>
-            <CountUp className={styles.figure} value={250} suffix="+" />
-            <p>Data Points Annotated</p>
+        {stats.map((stat) => (
+          <div key={stat.label}>
+            <CountUp className={styles.figure} value={stat.value} suffix={stat.suffix} />
+            <p>{stat.label}</p>
           </div>
         ))}
       </section>
@@ -107,12 +98,25 @@ export function AboutPage() {
       <section className={styles.teamSection} aria-labelledby="team-heading">
         <div className={styles.teamCopy}>
           <Eyebrow>Our team</Eyebrow>
-          <h2 id="team-heading">Meet our Leadership</h2>
+          <h2 id="team-heading">Meet our leadership</h2>
         </div>
         <ul className={styles.leaders}>
           {leaders.map((leader, index) => (
             <li key={`${leader.role}-${index}`}>
-              <img src={leader.src} alt="" />
+              {leader.src ? (
+                <img src={leader.src} alt={leader.name} style={{ objectPosition: leader.position }} />
+              ) : (
+                <span className={styles.monogram} aria-hidden="true">
+                  {leader.avatar ? (
+                    <img src={leader.avatar} alt="" />
+                  ) : (
+                    leader.name
+                      .split(" ")
+                      .map((part) => part[0])
+                      .join("")
+                  )}
+                </span>
+              )}
               <div>
                 <p>{leader.name}</p>
                 <p>{leader.role}</p>
@@ -122,18 +126,16 @@ export function AboutPage() {
         </ul>
       </section>
 
-      <section className={styles.investors} aria-labelledby="investors-heading">
-        <h2 id="investors-heading">Partners & investors</h2>
-        <ul>
-          {logos.map((logo, index) => (
-            <li key={`${logo.name}-${index}`}>
-              <img src={logo.src} alt={logo.name} width={284} height={80} />
-            </li>
-          ))}
-        </ul>
-      </section>
+      <LogoWall headingId="investors-heading" title="Partners & investors" />
 
-      <SiteClose current="About" packHref="/security#procurement" />
+      <CtaBand
+        id="about-cta"
+        title="Build with the team behind Munsit and Agentix."
+        body="Tell us what you are working on. We will show you how data, models and agents would fit."
+        secondary={{ label: "Meet the stack", href: "/products" }}
+      />
+
+      <SiteClose current="About" hideBand />
     </main>
   );
 }

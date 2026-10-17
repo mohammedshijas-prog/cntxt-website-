@@ -9,12 +9,12 @@ export function IndustriesSection() {
       <div className={styles.industryCopy}>
         <p>Industries we work in</p>
         <h2 id="industries-heading">
-          Artificial Intelligence
+          Real work.
           <br />
-          Real <span>Research</span>
+          Real <span>industries.</span>
         </h2>
         <a href="/contact">
-          Schedule a consult
+          Speak to an expert
           <img src="/home/caret.svg" alt="" width={24} height={24} />
         </a>
       </div>

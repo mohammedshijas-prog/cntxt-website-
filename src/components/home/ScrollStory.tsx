@@ -148,8 +148,9 @@ export function ScrollStory({ steps }: { steps: Step[] }) {
     const onKey = (event: KeyboardEvent) => {
       const target = event.target as HTMLElement | null;
       if (target?.closest("input, textarea, select, [contenteditable]")) return;
-      const down = ["ArrowDown", "PageDown", " "].includes(event.key) && !event.shiftKey;
-      const up = ["ArrowUp", "PageUp"].includes(event.key) || (event.key === " " && event.shiftKey);
+      // Space is left alone so it can still press focused buttons and links.
+      const down = ["ArrowDown", "PageDown"].includes(event.key);
+      const up = ["ArrowUp", "PageUp"].includes(event.key);
       if (!down && !up) return;
       // Keys repeat when held; treat every press as its own gesture.
       lastInput = 0;
@@ -168,22 +169,51 @@ export function ScrollStory({ steps }: { steps: Step[] }) {
       lastInput = performance.now();
     };
 
+    /*
+     * Blocking wheel and touch listeners make the browser wait on this script
+     * before every scroll, so they are only attached while the section is
+     * within a screen of the viewport, and never on layouts that don't pin.
+     */
+    let near = false;
+    let locking = false;
+    const syncLock = () => {
+      const want = near && pinned.matches;
+      if (want === locking) return;
+      locking = want;
+      if (want) {
+        window.addEventListener("wheel", onWheel, { passive: false });
+        window.addEventListener("keydown", onKey);
+        window.addEventListener("touchstart", onTouchStart, { passive: true });
+        window.addEventListener("touchmove", onTouchMove, { passive: false });
+      } else {
+        window.removeEventListener("wheel", onWheel);
+        window.removeEventListener("keydown", onKey);
+        window.removeEventListener("touchstart", onTouchStart);
+        window.removeEventListener("touchmove", onTouchMove);
+      }
+    };
+    const nearby = new IntersectionObserver(
+      ([entry]) => {
+        near = entry.isIntersecting;
+        syncLock();
+      },
+      { rootMargin: "120% 0px" },
+    );
+    nearby.observe(section);
+    pinned.addEventListener("change", syncLock);
+
     update();
     window.addEventListener("scroll", request, { passive: true });
     window.addEventListener("resize", request);
-    window.addEventListener("wheel", onWheel, { passive: false });
-    window.addEventListener("keydown", onKey);
-    window.addEventListener("touchstart", onTouchStart, { passive: true });
-    window.addEventListener("touchmove", onTouchMove, { passive: false });
     return () => {
       cancelAnimationFrame(frame);
       cancelAnimationFrame(gliding);
+      nearby.disconnect();
+      pinned.removeEventListener("change", syncLock);
+      near = false;
+      syncLock();
       window.removeEventListener("scroll", request);
       window.removeEventListener("resize", request);
-      window.removeEventListener("wheel", onWheel);
-      window.removeEventListener("keydown", onKey);
-      window.removeEventListener("touchstart", onTouchStart);
-      window.removeEventListener("touchmove", onTouchMove);
     };
   }, [steps.length]);
 

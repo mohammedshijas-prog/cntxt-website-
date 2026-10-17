@@ -1,0 +1,174 @@
+/* The real dashboard, lifted over the edge of the hero. */
+.screen {
+  position: relative;
+  z-index: 1;
+  width: min(1300px, calc(100% - 96px));
+  margin: -64px auto 0;
+}
+
+.screen img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid rgba(15, 12, 11, 0.08);
+  border-radius: 18px;
+  box-shadow: 0 40px 80px rgba(76, 46, 170, 0.22);
+}
+
+.uses {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 32px;
+}
+
+.uses li {
+  padding: 6px 14px;
+  border-radius: 20px;
+  background: #efe8ff;
+  color: #5a3fc0;
+  font-family: var(--font-heading);
+  font-size: var(--fs-small);
+  line-height: var(--lh-small);
+}
+
+.agent {
+  color: var(--text-muted);
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+}
+
+.agent strong {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--text-strong);
+  font-family: var(--font-heading);
+  font-size: var(--fs-h4);
+  font-weight: 400;
+  line-height: var(--lh-h4);
+}
+
+/* Telephony: copy left, the provider grid right, on lilac. */
+.telephony {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1fr);
+  gap: 64px;
+  align-items: center;
+  margin: 117px 24px 0;
+  padding: 80px 93px;
+  border-radius: 24px;
+  background: linear-gradient(180deg, #efe8ff 0%, #d6caf6 100%);
+}
+
+.telephony h2 + p {
+  width: min(480px, 100%);
+  margin-top: 16px;
+  color: rgba(15, 12, 11, 0.72);
+  font-family: var(--font-body);
+  font-size: var(--fs-lead);
+  line-height: var(--lh-lead);
+}
+
+.flags {
+  display: block;
+  width: 172px;
+  height: auto;
+  margin-top: 32px;
+}
+
+.providers {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Details as a ruled table. */
+.facts {
+  width: min(1499px, 100%);
+  margin: 0 auto;
+  padding: 117px 117px 0;
+}
+
+.facts dl {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 64px;
+  margin-top: 48px;
+  border-top: 1px solid rgba(15, 12, 11, 0.14);
+}
+
+.facts dl div {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: 16px;
+  padding: 22px 0;
+  border-bottom: 1px solid rgba(15, 12, 11, 0.14);
+}
+
+.facts dt {
+  color: #7d52f4;
+  font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  line-height: 24px;
+  text-transform: uppercase;
+}
+
+.facts dd {
+  font-family: var(--font-heading);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+}
+
+.source {
+  margin-top: 24px;
+  color: rgba(15, 12, 11, 0.55);
+  font-family: var(--font-body);
+  font-size: var(--fs-small);
+  line-height: var(--lh-small);
+}
+
+@media (max-width: 1200px) {
+  .screen {
+    width: calc(100% - 48px);
+    margin-top: -32px;
+  }
+
+  .telephony {
+    grid-template-columns: 1fr;
+    gap: 40px;
+    margin-top: 80px;
+    padding: 56px 40px;
+  }
+
+  .facts {
+    padding: 80px 40px 0;
+  }
+
+  .facts dl {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .screen {
+    width: calc(100% - 24px);
+    margin-top: -20px;
+  }
+
+  .telephony {
+    margin: 64px 12px 0;
+    padding: 40px 20px;
+    border-radius: 18px;
+  }
+
+  .facts {
+    padding: 64px 20px 0;
+  }
+
+  .facts dl div {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+}

@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import { EvaluatePage } from "@/components/evaluate/EvaluatePage";
 
 export const metadata: Metadata = {
-  title: "Evaluate AI | CNTXT AI",
-  description: "Know how your AI performs in the real world before your users do.",
+  title: "Evaluate AI",
+  alternates: { canonical: "/evaluate-ai" },
+  description: "TestAI tests, evaluates and audits AI systems for bias, reliability and compliance before deployment, with human review by domain experts and native Arabic speakers.",
 };
 
 export default function EvaluateAi() {

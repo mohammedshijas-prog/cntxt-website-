@@ -5,9 +5,9 @@ import styles from "./partner.module.css";
 
 const partnershipTypes = [
   "Technology & cloud",
-  "Solution / integration",
-  "Data & annotation",
-  "Research & academic",
+  "Commercial & delivery",
+  "Data",
+  "Research",
 ];
 
 const empty = {
@@ -44,6 +44,12 @@ export function PartnerForm() {
       }
     }
     if (!form.reportValidity()) return;
+    // No form backend yet: hand the message to the visitor's own email app.
+    const body = Object.entries(values)
+      .filter(([, value]) => value)
+      .map(([field, value]) => `${field}: ${value}`)
+      .join("\n");
+    window.location.href = `mailto:sales@cntxt.tech?subject=${encodeURIComponent("Partnership enquiry from the CNTXT website")}&body=${encodeURIComponent(body)}`;
     setSubmittedEmail(values.email);
   }
 
@@ -51,8 +57,11 @@ export function PartnerForm() {
     return (
       <div className={styles.formCard} role="status">
         <div className={styles.success}>
-          <h2>Thanks. We’ll be in touch.</h2>
-          <p>We received your partnership note and will reply at {submittedEmail}.</p>
+          <h2>One more step.</h2>
+          <p>
+            Your email app should have opened with your message addressed to sales@cntxt.tech.
+            Send it from there and we will reply at {submittedEmail}.
+          </p>
           <button
             type="button"
             className={styles.again}
@@ -77,8 +86,8 @@ export function PartnerForm() {
               className={styles.field}
               name="firstName"
               autoComplete="given-name"
-              placeholder="First Name *"
-              aria-label="First Name"
+              placeholder="First name *"
+              aria-label="First name"
               required
               value={values.firstName}
               onChange={(event) => update("firstName", event.target.value)}
@@ -88,8 +97,8 @@ export function PartnerForm() {
               type="email"
               name="email"
               autoComplete="email"
-              placeholder="Your Email *"
-              aria-label="Your Email"
+              placeholder="Work email *"
+              aria-label="Work email"
               required
               value={values.email}
               onChange={(event) => update("email", event.target.value)}
@@ -99,8 +108,8 @@ export function PartnerForm() {
             className={styles.field}
             name="company"
             autoComplete="organization"
-            placeholder="Company Name *"
-            aria-label="Company Name"
+            placeholder="Company name *"
+            aria-label="Company name"
             required
             value={values.company}
             onChange={(event) => update("company", event.target.value)}
@@ -110,8 +119,8 @@ export function PartnerForm() {
             name="website"
             autoComplete="url"
             inputMode="url"
-            placeholder="Company Website *"
-            aria-label="Company Website"
+            placeholder="Company website *"
+            aria-label="Company website"
             required
             value={values.website}
             onChange={(event) => {
@@ -128,7 +137,7 @@ export function PartnerForm() {
               onChange={(event) => update("type", event.target.value)}
             >
               <option value="" disabled>
-                Partnership type?*
+                Partnership type *
               </option>
               {partnershipTypes.map((option) => (
                 <option key={option} value={option}>
@@ -141,8 +150,8 @@ export function PartnerForm() {
           <textarea
             className={styles.textarea}
             name="message"
-            placeholder="Tell us about the opportunity"
-            aria-label="Tell us about the opportunity"
+            placeholder="Tell us about the partnership you have in mind"
+            aria-label="Tell us about the partnership you have in mind"
             value={values.message}
             onChange={(event) => update("message", event.target.value)}
           />
@@ -154,7 +163,7 @@ export function PartnerForm() {
           </button>
           <p className={styles.legalNote}>
             By continuing, you accept that your data will be processed in
-            accordance with <a href="#privacy-policy">CNTXT Privacy Policy</a>.
+            accordance with <a href="https://www.cntxt.tech/privacy-policy">CNTXT Privacy Policy</a>.
           </p>
         </div>
       </div>

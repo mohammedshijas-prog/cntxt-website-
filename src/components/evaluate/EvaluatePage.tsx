@@ -1,38 +1,37 @@
 import { SiteClose } from "../site/SiteClose";
 import { SiteNav } from "../site/SiteNav";
 import styles from "./evaluate.module.css";
+import { AuditMock, TerminalMock } from "../shared/graphics";
+import { faqs } from "../shared/faqs";
+import { Faq } from "../shared/Faq";
+import { ProofBar } from "../shared/ProofBar";
 
 const dek =
-  "Independent evaluation for teams shipping language models — benchmarks, human review, and adversarial testing that catches what your own test suite doesn't.";
+  "TestAI tests, evaluates and audits AI systems for bias, reliability and compliance before deployment, with human review by domain experts and native Arabic speakers.";
+
+const developersDek =
+  "Test your model before it breaks in production. Domain experts and native Arabic reviewers judge its outputs, and you see where it fails before release.";
+
+const enterprisesDek =
+  "Buying a model or an AI product? We audit it for bias, reliability and compliance on the work you need it to do, before you put it in front of your users.";
 
 const cards = [
   {
-    image: "/solutions/panel-build.png",
-    title: "Model & data isolation",
-    body: "Your data and models are fully isolated from other customers. No cross-contamination, no shared infrastructure risks.",
+    image: "/art/audit.svg",
+    title: "Bias, reliability and compliance",
+    body: "TestAI tests, evaluates and audits your AI system for bias, reliability and compliance before it is deployed.",
   },
   {
-    image: "/solutions/panel-guard.png",
-    title: "Annotator vetting & NDAs",
-    body: "Every annotator undergoes thorough vetting and signs strict NDAs before accessing any data, ensuring confidentiality",
+    image: "/art/experts.svg",
+    title: "Domain expert evaluators",
+    body: "Human evaluators with expertise in biology, medicine, finance and coding review model outputs, alongside bilingual reviewers.",
   },
   {
-    image: "/solutions/panel-eval.png",
-    title: "Incident response",
-    body: "A dedicated incident response team is ready around the clock, with clear protocols to detect, contain, and resolve security",
+    image: "/art/dialects.svg",
+    title: "Native Arabic review",
+    body: "Native Arabic reviewers across 25+ dialects check how your model handles the Arabic that people speak and write.",
   },
 ];
-
-const apps = [
-  { src: "/security/icons/gmail.svg", name: "Gmail" },
-  { src: "/security/icons/slack.svg", name: "Slack" },
-  { src: "/security/icons/sheets.svg", name: "Sheets" },
-  { src: "/security/icons/drive.svg", name: "Drive" },
-  { src: "/security/icons/notion.svg", name: "Notion" },
-  { src: "/security/icons/teams.svg", name: "Teams" },
-];
-
-const actions = ["Read", "Write", "Send", "Copy", "Move", "Generate"];
 
 function Eyebrow({ children }: { children: string }) {
   return (
@@ -55,21 +54,33 @@ export function EvaluatePage() {
             Know how your AI performs in the real world before your users do.
           </h1>
           <p>{dek}</p>
-          <a className={styles.cta} href="/contact">
+          <a className={styles.cta} href="/contact?topic=AI%20evaluation">
             Request an evaluation
             <span>
               <img src="/healthcare/caret.svg" alt="" width={23} height={23} />
             </span>
           </a>
         </div>
-        <img className={styles.heroArt} src="/evaluate/hero.png" alt="" />
+        <img
+          className={styles.heroArt}
+          src="/brand/product/testai.webp"
+          alt="TestAI, CNTXT's platform for monitoring and testing voice and chat agents"
+          style={{
+            objectPosition: "left top",
+            border: "1px solid rgba(15, 12, 11, 0.08)",
+            borderRadius: 18,
+            boxShadow: "0 30px 60px rgba(76, 46, 170, 0.18)",
+          }}
+        />
       </section>
+
+      <ProofBar />
 
       <section className={styles.audience} aria-labelledby="developers-heading">
         <div className={styles.audienceIntro}>
-          <Eyebrow>Audience switch</Eyebrow>
+          <Eyebrow>Before release</Eyebrow>
           <h2 id="developers-heading">For model developers</h2>
-          <p>{dek}</p>
+          <p>{developersDek}</p>
         </div>
         <ul className={styles.cards}>
           {cards.map((card) => (
@@ -84,32 +95,32 @@ export function EvaluatePage() {
 
       <section className={styles.enterprises} aria-labelledby="enterprises-heading">
         <div className={styles.audienceIntro}>
-          <Eyebrow>Audience switch</Eyebrow>
+          <Eyebrow>Before purchase</Eyebrow>
           <h2 id="enterprises-heading">For enterprises</h2>
-          <p>{dek}</p>
+          <p>{enterprisesDek}</p>
         </div>
         <div className={styles.ramp}>
-          <a href="/contact">
-            <img src="/evaluate/ramp-coding.png" alt="" />
-            <h3>Let Ramp handle the coding.</h3>
+          <a href="/contact?topic=AI%20evaluation">
+            <AuditMock />
+            <h3>Audit a model before you deploy it.</h3>
             <p>
-              Every field and line item coded instantly—correct on the first pass 9 out
-              of 10 times, and it gets better as you teach it.
+              TestAI audits the AI system you plan to buy for bias, reliability and
+              compliance, with domain experts reviewing its outputs.
             </p>
             <span>
-              Learn about Ramp Intelligence
+              Request an audit
               <img src="/evaluate/arrow.svg" alt="" width={16} height={16} />
             </span>
           </a>
-          <a href="/contact">
-            <img src="/evaluate/ramp-close.png" alt="" />
-            <h3>Real-time close.</h3>
+          <a href="https://pypi.org/project/rag-meter/">
+            <TerminalMock />
+            <h3>Measure your RAG system.</h3>
             <p>
-              Ramp auto-syncs routine, in-policy spend to your ERP so close runs
-              continuously and month-end doesn&apos;t pile up.
+              RAGMeter is our open-source RAG evaluation toolkit. Install it from
+              PyPI as rag-meter and run it on your own retrieval pipeline.
             </p>
             <span>
-              Learn what Ramp auto-syncs
+              Get RAGMeter on PyPI
               <img src="/evaluate/arrow.svg" alt="" width={16} height={16} />
             </span>
           </a>
@@ -117,110 +128,26 @@ export function EvaluatePage() {
         <div className={styles.erp} id="erp-sync">
           <div>
             <h3>
-              Syncs to your ERP in real-time
+              Evaluation data stays in-region
               <br />
-              across every field and entity.
+              under certified security controls.
             </h3>
             <p>
-              Ramp supports 30+ ERPs and complex setups —multi-entity, multi-currency,
-              custom fields, and custom dimensions—so you can scale without manual work
-              or messy reconciliations.
+              Hosting and processing stay in-region, and we deploy on-premises, hybrid
+              or in the cloud. CNTXT AI holds SOC 2 Type II and ISO 27001 with GDPR
+              and HIPAA listed in our trust centre. The controls are published in our trust centre.
             </p>
           </div>
-          <img src="/solutions/panel-guard.png" alt="" />
+          <img src="/art/deploy.svg" alt="" />
         </div>
       </section>
 
-      <section className={styles.infrastructure} aria-labelledby="infrastructure-heading">
-        <div className={styles.infraIntro}>
-          <Eyebrow>Infrastructure</Eyebrow>
-          <h2 id="infrastructure-heading">How Our Systems Are Built</h2>
-          <p>
-            Built on secure, redundant infrastructure — isolated environments,
-            restricted access, and regular disaster recovery testing to keep the
-            platform resilient.
-          </p>
-        </div>
-        <div className={styles.infraPanel}>
-          <div className={styles.flow}>
-            <article className={styles.requestRow}>
-              <span className={styles.flowLead}>
-                <span className={styles.iconWell}>
-                  <img src="/security/icons/bot.svg" alt="" />
-                </span>
-                Request
-              </span>
-              <span className={styles.appRow}>
-                {apps.map((app) => (
-                  <span className={styles.appIcon} key={app.name}>
-                    <img src={app.src} alt="" />
-                  </span>
-                ))}
-              </span>
-            </article>
-            <article className={styles.governance}>
-              <p>Governance layer</p>
-              <div className={styles.govCard}>
-                <span className={styles.iconWellTeal}>
-                  <img src="/security/icons/shield.svg" alt="" />
-                </span>
-                <span>
-                  <strong>Permission check</strong>
-                  <em>Is this connection allowed in this workspace?</em>
-                </span>
-              </div>
-              <div className={styles.govCard}>
-                <span className={styles.policyRow}>
-                  <span className={styles.iconWellTeal}>
-                    <img src="/security/icons/policy.svg" alt="" />
-                  </span>
-                  <span>
-                    <strong>Policy decision</strong>
-                    <em>The layer decides what the agent may do</em>
-                  </span>
-                </span>
-                <span className={styles.pills}>
-                  <span className={styles.allow}>Allow</span>
-                  <span className={styles.escalate}>Escalate</span>
-                  <span className={styles.block}>Block</span>
-                </span>
-              </div>
-            </article>
-            <article className={styles.toolCard}>
-              <span className={styles.policyRow}>
-                <span className={styles.iconWellGreen}>
-                  <img src="/security/icons/play.svg" alt="" />
-                </span>
-                <span>
-                  <strong>Tool action</strong>
-                  <em>Runs only within the granted scope</em>
-                </span>
-              </span>
-              <span className={styles.actionRow}>
-                {actions.map((action) => (
-                  <span key={action}>{action}</span>
-                ))}
-                <span className={styles.more} aria-hidden="true">
-                  <img src="/security/icons/more.svg" alt="" />
-                </span>
-              </span>
-            </article>
-            <article className={styles.logCard}>
-              <span className={styles.iconWell}>
-                <img src="/security/icons/history.svg" alt="" />
-              </span>
-              <span>
-                <strong>Logged outcome</strong>
-                <em>Who called what, when, and why</em>
-              </span>
-            </article>
-          </div>
-        </div>
-      </section>
+
+      <Faq items={faqs.evaluate} topic="AI evaluation" />
 
       <section className={styles.band} aria-labelledby="evaluate-cta">
         <div className={styles.mapEdge} aria-hidden="true">
-          <img src="/security/map-left.svg" alt="" />
+          <img src="/security/map-left.webp" alt="" />
         </div>
         <div>
           <h2 id="evaluate-cta">
@@ -229,10 +156,10 @@ export function EvaluatePage() {
             model or vendor
           </h2>
           <p>
-            Get our SOC 2 report, pen test summary, and architecture overview in one
-            package — usually within one business day.
+            Tell us what you are building or buying. We will scope the tests and
+            the reviewers that fit it.
           </p>
-          <a href="/contact">
+          <a href="/contact?topic=AI%20evaluation">
             Request an evaluation
             <span>
               <img src="/healthcare/caret.svg" alt="" width={23} height={23} />
@@ -240,7 +167,7 @@ export function EvaluatePage() {
           </a>
         </div>
         <div className={styles.mapEdge} aria-hidden="true">
-          <img src="/security/map-right.svg" alt="" />
+          <img src="/security/map-right.webp" alt="" />
         </div>
       </section>
 

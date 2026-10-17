@@ -9,15 +9,22 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Data Hub | CNTXT AI",
+  title: "Data Hub",
+  alternates: { canonical: "/data-hub" },
   description:
-    "Browse curated datasets collected and annotated by cntxt. Request access or a custom collection.",
+    "Arabic speech, handwritten pages, first-person video of everyday work, and labelled text, image, video and LiDAR data. Request a category or a custom collection.",
 };
 
-export default function DataHub() {
+export default async function DataHub({
+  searchParams,
+}: {
+  searchParams: Promise<{ category?: string | string[] }>;
+}) {
+  // Menu links such as /data-hub?category=Audio open with that category chosen.
+  const { category } = await searchParams;
   return (
     <div className={geistMono.variable}>
-      <DataHubPage />
+      <DataHubPage initialCategory={typeof category === "string" ? category : undefined} />
     </div>
   );
 }

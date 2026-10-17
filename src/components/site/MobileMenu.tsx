@@ -76,7 +76,7 @@ export function MobileMenu({ dark = false }: { dark?: boolean }) {
                         </button>
                         {isOpen ? (
                           <div className={styles.sub}>
-                            {menus[id].columns.map((column) => (
+                            {[...menus[id].columns, ...(menus[id].browse ?? []).map((tab) => ({ heading: tab.title, items: tab.items }))].map((column) => (
                               <div key={column.heading}>
                                 <p>{column.heading}</p>
                                 <ul>
@@ -95,6 +95,9 @@ export function MobileMenu({ dark = false }: { dark?: boolean }) {
                   })}
                 </ul>
               </nav>
+              <a className={styles.demo} href="/contact">
+                Book a demo
+              </a>
             </div>,
             document.body,
           )

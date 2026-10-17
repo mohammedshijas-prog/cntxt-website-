@@ -1,0 +1,245 @@
+.tabs {
+  display: grid;
+  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+  margin-top: 48px;
+  border: 1px solid rgba(15, 12, 11, 0.1);
+  border-radius: 18px;
+  overflow: hidden;
+  background: #ffffff;
+}
+
+.list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-right: 1px solid rgba(15, 12, 11, 0.1);
+}
+
+.list li + li {
+  border-top: 1px solid rgba(15, 12, 11, 0.1);
+}
+
+.list button {
+  position: relative;
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  width: 100%;
+  padding: 26px 64px 26px 28px;
+  text-align: left;
+  transition: background-color 200ms ease;
+}
+
+.list button:hover {
+  background: #fbfaff;
+}
+
+.list button:focus-visible {
+  outline: 2px solid #7d52f4;
+  outline-offset: -2px;
+}
+
+.icon {
+  flex: none;
+  margin-top: 2px;
+}
+
+.text strong {
+  display: block;
+  color: #0f0c0b;
+  font-family: var(--font-heading);
+  font-size: var(--fs-h4);
+  font-weight: 400;
+  line-height: var(--lh-h4);
+}
+
+.text .body {
+  display: grid;
+  grid-template-rows: 0fr;
+  color: rgba(15, 12, 11, 0.62);
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  opacity: 0;
+  transition: grid-template-rows 320ms ease, opacity 320ms ease, margin 320ms ease;
+}
+
+/* The inner span collapses to nothing while its item is closed. */
+.text .body > span {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.list li[data-open="true"] .text .body {
+  grid-template-rows: 1fr;
+  margin-top: 8px;
+  opacity: 1;
+}
+
+/* The open item gets an accent rule on the right. */
+.bar {
+  position: absolute;
+  top: 38px;
+  right: 28px;
+  width: 24px;
+  height: 2px;
+  border-radius: 1px;
+  background: rgba(15, 12, 11, 0.16);
+  transition: background-color 200ms ease, width 200ms ease;
+}
+
+.list li[data-open="true"] .bar {
+  background: #7d52f4;
+}
+
+.stage {
+  position: relative;
+  min-height: 420px;
+  background-color: #faf9f7;
+  background-image:
+    linear-gradient(rgba(15, 12, 11, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(15, 12, 11, 0.05) 1px, transparent 1px);
+  background-size: 76px 76px;
+}
+
+.visual {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 36px;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 360ms ease, transform 360ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  pointer-events: none;
+}
+
+.visual[data-active="true"] {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+
+.visual > * {
+  max-width: 100%;
+}
+
+/* Coverage grid card. */
+.card {
+  width: min(440px, 100%);
+  padding: 22px;
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 24px 50px rgba(76, 46, 170, 0.14);
+}
+
+.card p {
+  margin: 0 0 14px;
+  color: #0f0c0b;
+  font-family: var(--font-heading);
+  font-size: 15px;
+}
+
+.heat {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+}
+
+.heat i {
+  display: block;
+  aspect-ratio: 1.45;
+  border-radius: 6px;
+}
+
+.legend {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  justify-content: flex-end;
+  margin-top: 12px;
+  color: rgba(15, 12, 11, 0.5);
+  font-family: var(--font-body);
+  font-size: 11px;
+}
+
+.legend i {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+}
+
+/* Egocentric clip grid. */
+.ego {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  width: min(520px, 100%);
+}
+
+.ego figure {
+  position: relative;
+  margin: 0;
+  padding: 5px;
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow: 0 10px 24px rgba(76, 46, 170, 0.12);
+}
+
+.ego img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+.ego figcaption {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  right: 12px;
+  padding: 4px 7px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.92);
+  color: #0f0c0b;
+  font-family: var(--font-heading);
+  font-size: 10px;
+  line-height: 13px;
+}
+
+@media (max-width: 1200px) {
+  .tabs {
+    grid-template-columns: 1fr;
+  }
+
+  .list {
+    border-right: 0;
+    border-bottom: 1px solid rgba(15, 12, 11, 0.1);
+  }
+
+  .stage {
+    min-height: 380px;
+  }
+}
+
+@media (max-width: 720px) {
+  .list button {
+    padding: 20px 52px 20px 18px;
+  }
+
+  .stage {
+    min-height: 320px;
+  }
+
+  .visual {
+    padding: 18px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .text .body,
+  .visual {
+    transition: none;
+  }
+}

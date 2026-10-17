@@ -173,13 +173,19 @@
 /* Scroll story: one pinned section whose copy steps through on scroll. */
 .story {
   position: relative;
-  height: calc(100vh + (var(--story-steps, 3) - 1) * 80vh);
+  z-index: 2;
+  height: calc(var(--screen-h) + (var(--story-steps, 3) - 1) * 80vh);
+  /* Rises over the hero like a curtain. */
+  margin-top: -48px;
+  border-radius: 40px 40px 0 0;
+  background: #fafaf8;
+  box-shadow: 0 -24px 60px rgba(11, 8, 16, 0.28);
 }
 
 .storySticky {
   position: sticky;
   top: 0;
-  height: 100vh;
+  height: var(--screen-h);
   min-height: 720px;
   overflow: hidden;
 }
@@ -314,7 +320,7 @@
 /* Blogs: pinned while the page scrolls, cards slide sideways. */
 .blogs {
   position: relative;
-  height: calc(100vh + var(--steps, 3) * 55vh);
+  height: calc(var(--screen-h) + var(--steps, 3) * 55vh);
   background: #f5f1ff;
   text-align: center;
 }
@@ -325,7 +331,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  height: 100vh;
+  height: var(--screen-h);
   min-height: 720px;
   padding: 88px 0 48px;
   overflow: hidden;
@@ -629,13 +635,13 @@
 /* Logo zoom: pinned purple stage, the wordmark grows in then the camera flies into it. */
 .logoZoom {
   position: relative;
-  height: calc(100vh + 260vh);
+  height: calc(var(--screen-h) + 260vh);
 }
 
 .logoStage {
   position: sticky;
   top: 0;
-  height: 100vh;
+  height: var(--screen-h);
   min-height: 640px;
   overflow: hidden;
   background: linear-gradient(180deg, #d6caf6 0%, #bca6f6 36%, #9a79f4 100%);
@@ -1025,5 +1031,5 @@
   .logoText { font-size: var(--fs-small); }
   .blogs h2 br { display: none; }
   /* Shorter pinned run so the zoom doesn't leave screens of empty colour. */
-  .logoZoom { height: calc(100vh + 160vh); }
+  .logoZoom { height: calc(var(--screen-h) + 160vh); }
 }

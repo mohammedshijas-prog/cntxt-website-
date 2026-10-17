@@ -13,10 +13,29 @@ const manrope = Manrope({
   variable: "--font-manrope",
 });
 
+const description =
+  "CNTXT AI captures and verifies data from real work, trains models on it and deploys AI on-premise for enterprises and governments.";
+
 export const metadata: Metadata = {
-  title: "CNTXT AI",
-  description:
-    "The world’s most important decisions need real-world AI.",
+  metadataBase: new URL("https://www.cntxt.tech"),
+  title: {
+    default: "CNTXT AI | Real-world AI, from data to deployment",
+    template: "%s | CNTXT AI",
+  },
+  description,
+  openGraph: {
+    type: "website",
+    siteName: "CNTXT AI",
+    title: "CNTXT AI | Real-world AI, from data to deployment",
+    description,
+    images: [{ url: "/og.png", width: 1200, height: 630, alt: "CNTXT AI" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "CNTXT AI | Real-world AI, from data to deployment",
+    description,
+    images: ["/og.png"],
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

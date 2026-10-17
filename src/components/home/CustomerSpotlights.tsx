@@ -30,10 +30,10 @@ const spotlights: Spotlight[] = [
     logo: "/customers/munsit.svg",
     aspect: 4.14,
     weight: 0.62,
-    sector: "Arabic voice AI",
+    sector: "Our product · Arabic voice AI",
     figure: "250+",
     figureLabel: "Government & enterprise organisations",
-    body: "Arabic voice AI for 300K people, inside government and enterprise workflows.",
+    body: "Arabic voice AI for 150,000+ users, inside government and enterprise workflows.",
   },
   {
     name: "Burjeel",
@@ -82,10 +82,10 @@ const spotlights: Spotlight[] = [
     name: "TII",
     logo: "/customers/tii.png",
     aspect: 1.81,
-    sector: "Research",
+    sector: "Research partner",
     figure: "Research",
-    figureLabel: "Arabic language & embodied AI",
-    body: "Frontier research partnership on Arabic language and embodied AI data.",
+    figureLabel: "Arabic language models",
+    body: "Research partner on Arabic-centric language models: specialised linguistic datasets, multilingual annotation frameworks and evaluation methods.",
   },
 ];
 
@@ -130,7 +130,7 @@ export function CustomerSpotlights({ eyebrow }: { eyebrow: React.ReactNode }) {
         aria-labelledby={`spot-tab-${active}`}
       >
         <div className={styles.brand}>
-          <img className={styles.brandBg} src="/healthcare/brand-bg.png" alt="" />
+          <img className={styles.brandBg} src="/healthcare/brand-bg.webp" alt="" />
           {item.logo ? (
             <span className={styles.brandCard}>
               <img src={item.logo} alt={item.name} />

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { BlogArticle } from "@/components/blog/BlogArticle";
-import { articleSlug } from "@/components/blog/posts";
+import { article, articleSlug } from "@/components/blog/posts";
 
 export function generateStaticParams() {
   return [{ slug: articleSlug }];
@@ -13,11 +13,11 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  if (slug !== articleSlug) return { title: "Blog | CNTXT AI" };
+  if (slug !== articleSlug) return { title: "Blog" };
   return {
-    title: "Five Hundred Licenses | CNTXT AI",
-    description:
-      "Why enterprise AI stalls after the pilot, and the context layer that makes it compound.",
+    title: "Why Arabic voice AI needs 25 dialects, not one",
+    alternates: { canonical: `/blog/${articleSlug}` },
+    description: article.description,
   };
 }
 

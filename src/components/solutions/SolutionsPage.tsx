@@ -4,76 +4,130 @@ import { useState } from "react";
 import { SiteClose } from "../site/SiteClose";
 import { SiteNav } from "../site/SiteNav";
 import styles from "./solutions.module.css";
-
-const lorem =
-  "Lorem Ipsum\u00a0is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since 1966, when designers at Letraset ";
+import { faqs } from "../shared/faqs";
+import { Faq } from "../shared/Faq";
+import { ProofBar } from "../shared/ProofBar";
 
 const challenges = [
   {
     number: "01",
-    title: "Knowledge nobody can find",
-    body: "Search exists because your knowledge is not readable. It indexes an estate on a schedule, answers from that snapshot, writes nothing back, and cannot tell you the scope of what it looked at. Once the knowledge itself is readable, current and attributable, much of what search was bought to solve stops being a problem.",
+    title: "Pilots that stall on messy data",
+    body: "AI projects fail on messy data, not on models. Demos run on clean samples; production runs on scattered documents, recordings and records. We source, label and verify the data first: text, image, video and audio at 98% accuracy, with human-in-the-loop quality assurance.",
   },
   {
     number: "02",
-    title: "Pilots that never reach production",
-    body: "Demos work on clean samples and then stall on real data, real permissions and real users. We build on your actual systems from day one, so what you test is what you ship.",
+    title: "Global models that miss Arabic",
+    body: "Global models underperform in Arabic, and more so in dialect, because the training data is scarce. Our native Arabic annotators cover 25+ dialects, and Munsit, our Arabic voice AI, ranks first on the Hugging Face Open Universal Arabic ASR Leaderboard.",
   },
   {
     number: "03",
-    title: "Governance rebuilt for every project",
-    body: "Each new AI tool brings its own access rules and audit gaps. One shared policy layer covers every agent and app, with a full record of who did what and why.",
+    title: "Data that cannot leave the region",
+    body: "Some data cannot be sent abroad. We host and process data in region, and deploy on-premises, hybrid or in the cloud. CNTXT AI holds SOC 2 Type II and ISO 27001, and complies with GDPR and HIPAA.",
   },
   {
     number: "04",
-    title: "No way to measure what works",
-    body: "Without evaluation on your own data, every model choice is a guess. Continuous testing against real tasks shows accuracy, cost and risk before users ever see a result.",
+    title: "No way to measure model quality",
+    body: "Without evaluation, every model choice is a guess. Domain experts test, evaluate and audit AI systems for bias, reliability and compliance before deployment. RAGMeter, our open-source toolkit, evaluates RAG pipelines.",
   },
 ];
 
-const products = [
+type Product = {
+  label: string;
+  title: [string, string];
+  body: string;
+  link?: { href: string; text: string };
+  wash: string;
+  washWidth: number;
+  washHeight: number;
+  labelClass: string;
+  shots: { src: string; photo?: boolean }[];
+};
+
+const products: Product[] = [
   {
-    label: "Build AI",
+    label: "Custom AI",
+    title: ["Built on your data.", "Run where you choose."],
+    body: "Custom AI integrated with enterprise and government systems and trained on proprietary and regional data. Delivery runs from discovery and roadmap through two build phases, with review and iteration between them, to sign-off.",
     wash: "/solutions/wash-build.svg",
     washWidth: 1567,
     washHeight: 562,
     labelClass: styles.labelBuild,
-    shots: [{ src: "/solutions/panel-build.png" }],
+    shots: [{ src: "/art/deploy.svg" }],
   },
   {
-    label: "Application AI",
+    label: "Data services",
+    title: ["Sourced, labelled", "and verified."],
+    body: "Domain-specific datasets, field collection, enterprise integration and synthetic data. Text, image, video and audio labelling at 98% accuracy, by native Arabic annotators and domain experts in finance, healthcare, logistics and government.",
     wash: "/solutions/wash-app.svg",
     washWidth: 1567,
     washHeight: 562.5,
     labelClass: styles.labelApp,
-    shots: [
-      { src: "/solutions/panel-app.png", photo: true },
-      { src: "/solutions/panel-guard.png" },
-    ],
+    shots: [{ src: "/brand/product/label-text.webp" }],
   },
   {
-    label: "Evaluate AI",
+    label: "Evaluation",
+    title: ["Tested before it", "reaches production."],
+    body: "TestAI tests, evaluates and audits AI systems for bias, reliability and compliance before deployment. Human evaluators bring medical, financial, coding and bilingual expertise.",
     wash: "/solutions/wash-eval.svg",
     washWidth: 1567,
     washHeight: 558.5,
     labelClass: styles.labelEval,
-    shots: [{ src: "/solutions/panel-eval.png" }],
+    shots: [{ src: "/brand/product/testai.webp" }],
   },
   {
-    label: "Data Hub",
+    label: "Munsit",
+    title: ["Arabic voice AI", "across 25+ dialects."],
+    body: "Speech-to-text and text-to-speech in one platform, ranked first on the Hugging Face Open Universal Arabic ASR Leaderboard. Deploys via API, on-premises, sovereign cloud or on-device.",
+    link: { href: "https://munsit.com", text: "munsit.com" },
     wash: "/solutions/wash-hub.svg",
     washWidth: 1567,
     washHeight: 558.5,
     labelClass: styles.labelHub,
-    shots: [{ src: "/solutions/panel-guard.png" }],
+    shots: [{ src: "/brand/product/munsit-app.webp" }],
   },
 ];
 
 const studies = [
-  "/solutions/study-1.png",
-  "/solutions/panel-app.png",
-  "/solutions/study-3.png",
-  "/solutions/study-4.png",
+  {
+    image: "/solutions/study-1.webp",
+    title: "Contract compliance",
+    body: "AI-assisted contract compliance review made reviews 85% faster and application processing 60% faster.",
+  },
+  {
+    image: "/solutions/panel-app.webp",
+    title: "Insurance claims",
+    body: "A rejection rate above 70% was cut by an estimated 72%, with 60% less processing time.",
+  },
+  {
+    image: "/solutions/study-3.webp",
+    title: "Real estate operations",
+    body: "Reviews ran 22% faster and legal workload fell by 28%.",
+  },
+  {
+    image: "/solutions/study-4.webp",
+    title: "Hiring and supply chain",
+    body: "Across 3,000+ CVs, admin cost fell 21% and hiring and onboarding ran 32% faster. In supply chain, projected gains are 23% faster processing and 17% fewer data-entry errors.",
+  },
+];
+
+/** Sector cards, mirroring the Solutions menu. One-liners restate each page's sourced lead. */
+const sectors = [
+  { group: "Enterprise", name: "Financial services", line: "KYC, VAT and contract reviews, with data kept inside the UAE.", href: "/industries/financial-services", image: "/healthcare/tile-chart.webp" },
+  { group: "Government", name: "Public sector", line: "Sovereign AI trained on policies, regulations and official records.", href: "/industries/public-sector", image: "/industries/government.jpg" },
+  { group: "Enterprise", name: "Healthcare", line: "Medical evaluation, healthcare annotation and Arabic clinical speech.", href: "/healthcare", image: "/healthcare/tile-lab.webp" },
+  { group: "Enterprise", name: "Real estate", line: "One data foundation for sales, finance, HR and marketing.", href: "/industries/real-estate", image: "/solutions/study-4.webp" },
+  { group: "Enterprise", name: "Insurance", line: "Claims validated in real time, before they are submitted.", href: "/industries/insurance", image: "/security/practice-a.png" },
+  { group: "Physical AI", name: "Robotics", line: "First-person video of real work, recorded with consent and labelled.", href: "/physical-ai", image: "/healthcare/tile-robot.webp" },
+];
+
+const modalities = [
+  { label: "Audio and speech", category: "Audio" },
+  { label: "Text", category: "Text" },
+  { label: "Documents", category: "Document" },
+  { label: "Image", category: "Image" },
+  { label: "Video", category: "Video" },
+  { label: "3D and LiDAR", category: "3D" },
+  { label: "Model evaluation", category: "Evaluation" },
 ];
 
 function Eyebrow({ children }: { children: string }) {
@@ -96,15 +150,57 @@ export function SolutionsPage() {
         <div className={styles.heroCopy}>
           <Eyebrow>Solutions</Eyebrow>
           <h1 id="solutions-heading">Real-world AI for enterprises.</h1>
-          <p>{lorem}</p>
-          <a className={styles.cta} href="/contact">
-            Talk to us
-            <span>
-              <img src="/healthcare/caret.svg" alt="" width={23} height={23} />
-            </span>
-          </a>
+          <p>
+            CNTXT AI captures and verifies data from real work, trains models on it and
+            deploys them on-premises, hybrid or in the cloud, for enterprises and
+            governments in finance, the public sector, logistics, healthcare, real
+            estate and insurance.
+          </p>
+          <div className={styles.heroActions}>
+            <a className={styles.cta} href="/contact?topic=Custom%20AI%20solutions">
+              Book a demo
+              <span>
+                <img src="/healthcare/caret.svg" alt="" width={23} height={23} />
+              </span>
+            </a>
+            <a className={styles.ghostCta} href="/products">
+              Explore the AI Lab
+            </a>
+          </div>
         </div>
-        <img className={styles.heroArt} src="/healthcare/hero.png" alt="" />
+        <img className={styles.heroArt} src="/healthcare/hero.webp" alt="" />
+      </section>
+
+      <ProofBar />
+
+      <section className={styles.browse} aria-labelledby="browse-heading">
+        <p className={styles.browseKicker}>Browse by</p>
+        <h2 id="browse-heading">Find the solution for your industry.</h2>
+        <ul className={styles.browseCards}>
+          {sectors.map((sector) => (
+            <li key={sector.name}>
+              <a href={sector.href}>
+                <img src={sector.image} alt="" />
+                <span className={styles.browseGroup}>{sector.group}</span>
+                <strong>{sector.name}</strong>
+                <span>{sector.line}</span>
+                <span className={styles.browseLink}>
+                  Explore {sector.name.toLowerCase()} <span aria-hidden="true">→</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+        <div className={styles.modalities}>
+          <p>By data type</p>
+          <ul>
+            {modalities.map((item) => (
+              <li key={item.label}>
+                <a href={`/data-hub?category=${item.category}`}>{item.label}</a>
+              </li>
+            ))}
+          </ul>
+        </div>
       </section>
 
       <section className={styles.challenges} aria-labelledby="challenges-heading">
@@ -130,15 +226,15 @@ export function SolutionsPage() {
             })}
           </div>
           <div className={styles.challengeArt}>
-            <img src="/solutions/challenge.jpg" alt="" />
+            <img src="/security/practice-a.png" alt="" />
             <span>01</span>
           </div>
         </div>
       </section>
 
       <section className={styles.products} aria-labelledby="products-heading">
-        <Eyebrow>Use cases</Eyebrow>
-        <h2 id="products-heading">Challenges we solve</h2>
+        <Eyebrow>What we provide</Eyebrow>
+        <h2 id="products-heading">What CNTXT AI provides</h2>
         <div className={styles.productList}>
           {products.map((product) => (
             <article key={product.label} className={styles.product}>
@@ -152,11 +248,21 @@ export function SolutionsPage() {
               <p className={`${styles.productLabel} ${product.labelClass}`}>{product.label}</p>
               <div className={styles.productCopy}>
                 <h3>
-                  Stale context. Lost work.
+                  {product.title[0]}
                   <br />
-                  Governance rebuilt every time.
+                  {product.title[1]}
                 </h3>
-                <p>{lorem}</p>
+                <p>
+                  {product.body}
+                  {product.link ? (
+                    <>
+                      {" "}
+                      <a href={product.link.href} style={{ textDecoration: "underline" }}>
+                        {product.link.text}
+                      </a>
+                    </>
+                  ) : null}
+                </p>
               </div>
               <div className={styles.shot}>
                 {product.shots.map((shot) => (
@@ -177,23 +283,22 @@ export function SolutionsPage() {
         <Eyebrow>Use cases</Eyebrow>
         <h2 id="studies-heading">Case studies</h2>
         <ul>
-          {studies.map((src) => (
-            <li key={src}>
-              <img src={src} alt="" />
+          {studies.map((study) => (
+            <li key={study.title}>
+              <img src={study.image} alt="" />
               <p>
-                <strong>Complete</strong> It holds what the organisation actually knows,
-                not only the part that was once typed into a structured field. Documents,
-                correspondence, calls, records, decisions, and the reasoning behind those
-                decisions.
+                <strong>{study.title}</strong> {study.body}
               </p>
             </li>
           ))}
         </ul>
       </section>
 
+      <Faq items={faqs.solutions} topic="Custom AI solutions" />
+
       <section className={styles.band} aria-labelledby="enterprise-heading">
         <div className={styles.mapEdge} aria-hidden="true">
-          <img src="/security/map-left.svg" alt="" />
+          <img src="/security/map-left.webp" alt="" />
         </div>
         <div>
           <h2 id="enterprise-heading">
@@ -202,18 +307,18 @@ export function SolutionsPage() {
             your enterprise
           </h2>
           <p>
-            Get our SOC 2 report, pen test summary, and architecture overview in one
-            package — usually within one business day.
+            “The speed at which CNTXT AI operates is unmatched for a company of its
+            scale.” Youssef Salem, CFO, ADNOC Drilling
           </p>
-          <a href="/contact">
-            Talk to us
+          <a href="/contact?topic=Custom%20AI%20solutions">
+            Book a demo
             <span>
               <img src="/healthcare/caret.svg" alt="" width={23} height={23} />
             </span>
           </a>
         </div>
         <div className={styles.mapEdge} aria-hidden="true">
-          <img src="/security/map-right.svg" alt="" />
+          <img src="/security/map-right.webp" alt="" />
         </div>
       </section>
 

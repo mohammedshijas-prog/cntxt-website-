@@ -6,28 +6,28 @@ import styles from "./home.module.css";
 
 const posts: { category: string; title: string; image: string; href: string; body?: string }[] = [
   {
-    category: "Announcement",
-    title: "Introducing AI Lab",
-    image: "/blog/feature.png",
-    href: "/blog",
-  },
-  {
-    category: "Physical AI",
-    title: "Closing the 100× data gap in robotics",
-    image: "/security/practice-b.png",
-    href: "/blog",
+    category: "Arabic AI",
+    title: "The Arabic AI performance gap: why global models fail in MEA",
+    image: "/art/cover-2.svg",
+    href: "https://www.cntxt.tech/insight-hub/the-arabic-ai-performance-gap-why-global-models-fail-in-mea",
   },
   {
     category: "Munsit",
     title: "Why Arabic voice AI needs 25 dialects, not one",
-    image: "/blog/cover-traffic.png",
-    href: "/blog",
+    image: "/art/cover-1.svg",
+    href: "/blog/why-arabic-voice-ai-needs-25-dialects-not-one",
   },
   {
-    category: "Public sector",
-    title: "Sovereign AI: in-country data, regulator-aligned",
-    image: "/security/practice-a.png",
-    href: "/blog",
+    category: "Data",
+    title: "Human in the loop: data quality with human and machine collaboration",
+    image: "/art/cover-6.svg",
+    href: "https://www.cntxt.tech/insight-hub/human-in-the-loop-data-quality-with-human-and-machine-collaboration",
+  },
+  {
+    category: "Evaluation",
+    title: "6 steps to build a strong AI testing and validation framework",
+    image: "/art/cover-9.svg",
+    href: "https://www.cntxt.tech/insight-hub/6-steps-to-build-a-strong-ai-testing-and-validation-framework-",
   },
 ];
 
@@ -53,16 +53,21 @@ export function BlogRail({ eyebrow, title = "From the blog" }: { eyebrow: ReactN
 
     const carousel = window.matchMedia("(max-width: 1200px)");
     let frame = 0;
+    let lastProgress = -2;
 
     const update = () => {
       frame = 0;
       if (carousel.matches) {
-        cardRefs.current.forEach((card) => card?.removeAttribute("style"));
+        if (lastProgress !== -1) cardRefs.current.forEach((card) => card?.removeAttribute("style"));
+        lastProgress = -1;
         return;
       }
       const rect = section.getBoundingClientRect();
       const range = rect.height - sticky.getBoundingClientRect().height;
       const progress = range > 0 ? Math.min(1, Math.max(0, -rect.top / range)) : 0;
+      // Away from the section the rail rests at one end: nothing to move.
+      if (progress === lastProgress) return;
+      lastProgress = progress;
       const active = FIRST + progress * (LAST - FIRST);
 
       cardRefs.current.forEach((card, i) => {

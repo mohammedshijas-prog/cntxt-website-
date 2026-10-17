@@ -27,8 +27,10 @@ export function drawContours(
   const gw = GRID;
   const gh = Math.max(2, Math.round((GRID * height) / width));
   sampler ??= document.createElement("canvas");
-  sampler.width = gw;
-  sampler.height = gh;
+  if (sampler.width !== gw || sampler.height !== gh) {
+    sampler.width = gw;
+    sampler.height = gh;
+  }
   const sctx = sampler.getContext("2d", { willReadFrequently: true });
   if (!sctx) return;
 
@@ -48,7 +50,8 @@ export function drawContours(
   }
   lum = blur(blur(lum, gw, gh), gw, gh);
 
-  const sorted = Array.from(lum).sort((a, b) => a - b);
+  // Typed arrays sort numerically, without a comparator call per pair.
+  const sorted = Float32Array.from(lum).sort();
   const levels = LEVELS.map((q) => sorted[Math.floor(q * (sorted.length - 1))]);
 
   ctx.setTransform(ratio, 0, 0, ratio, 0, 0);

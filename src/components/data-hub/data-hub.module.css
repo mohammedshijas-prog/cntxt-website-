@@ -653,3 +653,52 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* Appears once a category is added: carries the selection to the contact form. */
+.requestBar {
+  position: sticky;
+  bottom: 24px;
+  z-index: 5;
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  order: 99;
+  width: fit-content;
+  max-width: 100%;
+  margin: 32px auto 0;
+  padding: 10px 10px 10px 22px;
+  border-radius: 14px;
+  background: #15111f;
+  box-shadow: 0 20px 44px rgba(76, 46, 170, 0.28);
+  color: #ffffff;
+  font-family: var(--font-heading);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+}
+
+.requestBar p {
+  margin: 0;
+}
+
+.requestBar a {
+  display: inline-flex;
+  align-items: center;
+  height: 44px;
+  padding: 0 18px;
+  border-radius: 10px;
+  background: #7d52f4;
+  color: #ffffff;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.requestBar .requestClear {
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: underline;
+}
+
+.requestBar a:focus-visible,
+.requestBar .requestClear:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 3px;
+}

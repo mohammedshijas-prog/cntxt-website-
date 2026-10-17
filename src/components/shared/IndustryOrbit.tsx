@@ -20,19 +20,19 @@ type Industry = {
 
 const industries: Industry[] = [
   // Left side
-  { label: "Artificial Intelligence", href: "/products", image: "/blog/cover-causes.png", x: 3, y: 6, size: 132, drift: 10, speed: 0.9, phase: 0 },
-  { label: "Government", href: "/solutions", image: "/industries/government.jpg", x: 19, y: 3, size: 116, drift: 10, speed: 1.05, phase: 1.7 },
-  { label: "Energy", href: "/solutions", image: "/healthcare/tile-energy.png", x: 13, y: 33, size: 128, drift: 11, speed: 0.85, phase: 3.1 },
-  { label: "Finance", href: "/solutions", image: "/healthcare/tile-chart.jpg", x: 2, y: 55, size: 112, drift: 10, speed: 1.1, phase: 0.8 },
-  { label: "Healthcare", href: "/healthcare", image: "/healthcare/tile-lab.jpg", x: 20, y: 64, size: 124, drift: 11, speed: 0.95, phase: 2.4 },
-  { label: "Sovereignty", href: "/security", image: "/security/practice-a.png", x: 6, y: 80, size: 108, drift: 10, speed: 1, phase: 4.6 },
+  { label: "AI labs", href: "/physical-ai", image: "/art/cover-12.svg", x: 3, y: 6, size: 132, drift: 10, speed: 0.9, phase: 0 },
+  { label: "Government", href: "/industries/public-sector", image: "/industries/government.jpg", x: 19, y: 3, size: 116, drift: 10, speed: 1.05, phase: 1.7 },
+  { label: "Energy", href: "/solutions", image: "/healthcare/tile-energy.webp", x: 13, y: 33, size: 128, drift: 11, speed: 0.85, phase: 3.1 },
+  { label: "Finance", href: "/industries/financial-services", image: "/healthcare/tile-chart.webp", x: 2, y: 55, size: 112, drift: 10, speed: 1.1, phase: 0.8 },
+  { label: "Healthcare", href: "/healthcare", image: "/healthcare/tile-lab.webp", x: 20, y: 64, size: 124, drift: 11, speed: 0.95, phase: 2.4 },
+  { label: "Insurance", href: "/industries/insurance", image: "/security/practice-a.png", x: 6, y: 80, size: 108, drift: 10, speed: 1, phase: 4.6 },
   // Right side
-  { label: "Logistics", href: "/solutions", image: "/healthcare/tile-ship.jpg", x: 72, y: 3, size: 120, drift: 10, speed: 1, phase: 4.4 },
+  { label: "Logistics", href: "/solutions", image: "/healthcare/tile-ship.webp", x: 72, y: 3, size: 120, drift: 10, speed: 1, phase: 4.4 },
   { label: "Hospitality", href: "/solutions", image: "/industries/hospitality.jpg", x: 88, y: 8, size: 128, drift: 11, speed: 0.95, phase: 2.2 },
-  { label: "Robotics", href: "/solutions", image: "/healthcare/tile-robot.jpg", x: 79, y: 36, size: 132, drift: 11, speed: 0.75, phase: 5.1 },
-  { label: "Research", href: "/about", image: "/solutions/study-4.png", x: 90, y: 56, size: 108, drift: 10, speed: 1.05, phase: 1.1 },
+  { label: "Robotics", href: "/physical-ai", image: "/healthcare/tile-robot.webp", x: 79, y: 36, size: 132, drift: 11, speed: 0.75, phase: 5.1 },
+  { label: "Real estate", href: "/industries/real-estate", image: "/solutions/study-4.webp", x: 90, y: 56, size: 108, drift: 10, speed: 1.05, phase: 1.1 },
   { label: "Retail", href: "/solutions", image: "/security/practice-b.png", x: 73, y: 66, size: 120, drift: 10, speed: 1.1, phase: 3.6 },
-  { label: "Operations", href: "/solutions", image: "/solutions/study-3.png", x: 87, y: 81, size: 108, drift: 10, speed: 0.9, phase: 0.4 },
+  { label: "Aviation", href: "/solutions", image: "/solutions/study-3.webp", x: 87, y: 81, size: 108, drift: 10, speed: 0.9, phase: 0.4 },
 ];
 
 /** Meeting points where the two sides join, above and below the copy (% of the section). */
@@ -98,14 +98,20 @@ export function IndustryOrbit() {
     });
     resize.observe(root);
 
+    // Off screen (or stacked on small screens) the loop stops entirely.
     const seen = new IntersectionObserver(([entry]) => {
       visible = entry.isIntersecting;
+      if (visible && !frame) frame = requestAnimationFrame(draw);
     });
     seen.observe(root);
+    const onStacked = () => {
+      if (!frame) frame = requestAnimationFrame(draw);
+    };
+    stacked.addEventListener("change", onStacked);
 
     const draw = (now: number) => {
-      frame = requestAnimationFrame(draw);
-      if (!visible || stacked.matches) return;
+      frame = visible && !stacked.matches ? requestAnimationFrame(draw) : 0;
+      if (!frame) return;
       if (!start) start = now;
       const t = (now - start) / 1000;
       const still = reduced.matches;
@@ -158,6 +164,7 @@ export function IndustryOrbit() {
     frame = requestAnimationFrame(draw);
     return () => {
       cancelAnimationFrame(frame);
+      stacked.removeEventListener("change", onStacked);
       resize.disconnect();
       seen.disconnect();
     };

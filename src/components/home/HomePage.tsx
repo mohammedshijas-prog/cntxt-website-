@@ -6,35 +6,26 @@ import { ScrollStory } from "./ScrollStory";
 import { SiteClose } from "../site/SiteClose";
 import { SiteNav } from "../site/SiteNav";
 import { IndustriesSection } from "../shared/IndustriesSection";
+import { ResultsBand } from "../shared/ResultsBand";
 import styles from "./home.module.css";
-
-/** Logo row under the Agents step; names without a logo file show as text. */
-const customerLogos: { name: string; logo?: string }[] = [
-  { name: "Emirates NBD", logo: "/customers/emirates-nbd.png" },
-  { name: "Mashreq", logo: "/customers/mashreq.png" },
-  { name: "DP World", logo: "/customers/dp-world.png" },
-  { name: "Burjeel" },
-  { name: "dnata", logo: "/customers/dnata.png" },
-  { name: "noon", logo: "/customers/noon.png" },
-];
 
 const proof = [
   {
     label: "Munsit ranks #1 for Arabic speech",
-    image: "/proven/munsit.png",
-    body: "Top of the Hugging Face Arabic ASR leaderboard. 76K+ hours, 25+ dialects, patent pending.",
-    href: "/products",
+    image: "/proven/munsit.webp",
+    body: "Top of the Hugging Face Open Universal Arabic ASR Leaderboard. Trained from 30,000+ hours across 25+ dialects, on a patented architecture.",
+    href: "https://munsit.com",
   },
   {
-    label: "One standard in every country",
-    image: "/proven/standard.png",
-    body: "Review floors in Abu Dhabi and Amman, with California opening in 2026, confirm every accepted hour through three layers. Aligned with ADGM and DIFC.",
+    label: "One standard for every hour",
+    image: "/art/standard.svg",
+    body: "A person reviews every recorded hour before it is accepted. CNTXT holds SOC 2 Type II and ISO 27001.",
     href: "/security",
   },
   {
     label: "Captures the data. Deploys the AI. Closes the loop.",
-    image: "/proven/loop.png",
-    body: "One company captures real work on signed sites, verifies it in-house, and deploys the AI back on the same floors.",
+    image: "/proven/loop.webp",
+    body: "One company captures real work with consent, verifies it with human review, trains models on it and deploys the AI.",
     href: "/about",
   },
 ];
@@ -68,13 +59,13 @@ export function HomePage() {
           {
             eyebrow: "Data",
             title: "Data captured from real work, verified by humans.",
-            body: "Text, speech, vision, computer-use and robotics data, captured from real work and confirmed by certified reviewers.",
+            body: "Text, speech, vision, computer-use and robotics data, captured from real work and checked by human reviewers.",
             stat: (
               <>
-                <strong>1000+</strong> data types, one verified pool.
+                <strong>98%</strong> labelling accuracy, checked by people.
               </>
             ),
-            cta: <Explore href="/products">Explore AI Lab</Explore>,
+            cta: <Explore href="/data-hub">Explore the Data Hub</Explore>,
           },
           {
             eyebrow: "Models",
@@ -86,27 +77,18 @@ export function HomePage() {
                 <img className={styles.statLogo} src="/customers/hugging-face.png" alt="Hugging Face" />
               </>
             ),
-            cta: <Explore href="/products">Explore Munsit</Explore>,
+            cta: <Explore href="https://munsit.com">Explore Munsit</Explore>,
           },
           {
             eyebrow: "Agents",
             title: "Agents that work where you work.",
-            body: "Agentix puts agents to work across the business. Built without code, deployed on-premise, live in minutes.",
+            body: "Agentix runs Arabic voice and chat agents on one platform, with workflow automation and GCC telephony, in the cloud or on-premises.",
             stat: (
               <>
-                <strong>250+</strong> government and enterprise organisations.
+                <strong>20+</strong> enterprise deployments.
               </>
             ),
-            cta: <Explore href="/products">Explore Agentix</Explore>,
-            extra: (
-              <ul className={styles.logoRow} aria-label="Customers">
-                {customerLogos.map(({ name, logo }) => (
-                  <li key={name}>
-                    {logo ? <img src={logo} alt={name} /> : <span>{name}</span>}
-                  </li>
-                ))}
-              </ul>
-            ),
+            cta: <Explore href="/agentix">Explore Agentix</Explore>,
           },
         ]}
       />
@@ -116,6 +98,8 @@ export function HomePage() {
       <IndustriesSection />
 
       <CustomerSpotlights eyebrow={<Eyebrow>Customer spotlights</Eyebrow>} />
+
+      <ResultsBand />
 
       <section className={styles.proven} aria-labelledby="proven-heading">
         <h2 id="proven-heading">Proven on the floor, in every industry.</h2>
@@ -149,20 +133,20 @@ export function HomePage() {
 
       <section className={styles.band} aria-labelledby="ready-heading">
         <div className={styles.mapEdge} aria-hidden="true">
-          <img src="/security/map-left.svg" alt="" />
+          <img src="/security/map-left.webp" alt="" />
         </div>
         <div>
           <h2 id="ready-heading">Your site. Your data. Your AI.</h2>
           <p>Book a demo and see how CNTXT builds real-world AI for your organisation.</p>
           <a href="/contact">
-            Get started
+            Book a demo
             <span>
               <img src="/healthcare/caret.svg" alt="" width={23} height={23} />
             </span>
           </a>
         </div>
         <div className={styles.mapEdge} aria-hidden="true">
-          <img src="/security/map-right.svg" alt="" />
+          <img src="/security/map-right.webp" alt="" />
         </div>
       </section>
       <SiteClose hideBand />

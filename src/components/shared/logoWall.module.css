@@ -1,0 +1,144 @@
+.wall {
+  position: relative;
+  margin: 0 24px;
+  padding: 72px 93px 80px;
+  overflow: hidden;
+  border-radius: 24px;
+  background:
+    radial-gradient(120% 90% at 100% 0%, rgba(125, 82, 244, 0.38) 0%, rgba(125, 82, 244, 0) 55%),
+    #15111f;
+  color: #ffffff;
+}
+
+/* Fine grid behind the marks, fading toward the bottom. */
+.wall::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: linear-gradient(180deg, #000 0%, transparent 85%);
+  pointer-events: none;
+}
+
+.wall header {
+  position: relative;
+  display: flex;
+  gap: 24px;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 48px;
+}
+
+.wall h2 {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: var(--fs-h2);
+  font-weight: 400;
+  line-height: var(--lh-h2);
+}
+
+.wall header p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.6);
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+}
+
+.wall ul {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+  border-left: 1px solid rgba(255, 255, 255, 0.14);
+  list-style: none;
+}
+
+.wall li {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+  justify-content: center;
+  min-height: 190px;
+  padding: 32px 20px 24px;
+  border-right: 1px solid rgba(255, 255, 255, 0.14);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+  transition: background-color 240ms ease;
+}
+
+.wall li:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.mark {
+  display: grid;
+  flex: 1;
+  place-items: center;
+}
+
+/* One colour for every mark, whatever the source file uses. */
+.mark img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  max-height: 64px;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+  opacity: 0.86;
+  transition: opacity 240ms ease, transform 240ms ease;
+}
+
+.wall li:hover .mark img {
+  opacity: 1;
+  transform: scale(1.03);
+}
+
+.role {
+  color: #b79cff;
+  font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  line-height: 16px;
+  text-transform: uppercase;
+}
+
+@media (max-width: 1200px) {
+  .wall {
+    padding: 56px 40px 60px;
+  }
+}
+
+@media (max-width: 900px) {
+  .wall {
+    margin: 0 12px;
+    padding: 40px 20px 44px;
+    border-radius: 18px;
+  }
+
+  .wall header {
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 28px;
+  }
+
+  .wall ul {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .wall li {
+    min-height: 140px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wall li,
+  .mark img {
+    transition: none;
+  }
+}

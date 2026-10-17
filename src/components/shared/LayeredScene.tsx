@@ -50,7 +50,7 @@ export function LayeredScene({
 
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const poster = new Image();
-    poster.src = "/hero-bg.png";
+    poster.src = "/hero-bg.webp";
     const tilt = { x: 0, y: 0, tx: 0, ty: 0, base: baseAngle(facingRef.current), spread: 1, hover: 0 };
     let visible = true;
     let frame = 0;
@@ -74,8 +74,11 @@ export function LayeredScene({
       tilt.hover = 0;
     };
 
+    let lastTransform = "";
+    let lastSpread = "";
+
     const tick = (now: number) => {
-      frame = requestAnimationFrame(tick);
+      frame = visible ? requestAnimationFrame(tick) : 0;
       if (!visible) return;
       // Slow easing toward the pointer, plus a gentle idle drift.
       tilt.x += (tilt.tx - tilt.x) * 0.05;
@@ -88,25 +91,51 @@ export function LayeredScene({
       const drift = reduced ? 0 : Math.sin(now / 2600) * 1.5;
       const ry = tilt.base + tilt.x * 14 + drift;
       const rx = 8 - tilt.y * 10;
-      scene.style.transform = `rotateY(${ry}deg) rotateX(${rx}deg) scale(${1 + tilt.hover * 0.03})`;
-      scene.style.setProperty("--spread", tilt.spread.toFixed(3));
-      if (now - lastTrace > 160) {
+      const transform = `rotateY(${ry.toFixed(2)}deg) rotateX(${rx.toFixed(2)}deg) scale(${(1 + tilt.hover * 0.03).toFixed(3)})`;
+      if (transform !== lastTransform) {
+        lastTransform = transform;
+        scene.style.transform = transform;
+      }
+      // --spread restyles every layer, so only touch it when it really moves.
+      const spread = tilt.spread.toFixed(3);
+      if (spread !== lastSpread) {
+        lastSpread = spread;
+        scene.style.setProperty("--spread", spread);
+      }
+      // Tracing reads the frame back and redraws the lines: a few times a
+      // second is plenty, and it waits out any scroll in progress.
+      if (now - lastTrace > 280 && now - lastScroll > 150) {
         lastTrace = now;
         trace();
       }
     };
 
+    let lastScroll = 0;
+    const onScroll = () => {
+      lastScroll = performance.now();
+    };
+
     poster.onload = trace;
+    // Off screen: stop the loop and the video so neither costs anything.
     const seen = new IntersectionObserver(([entry]) => {
       visible = entry.isIntersecting;
+      const video = videoRef.current;
+      if (visible) {
+        if (!reduced) video?.play().catch(() => {});
+        if (!frame) frame = requestAnimationFrame(tick);
+      } else {
+        video?.pause();
+      }
     });
     seen.observe(root);
     root.addEventListener("pointermove", onMove);
     root.addEventListener("pointerleave", onLeave);
+    window.addEventListener("scroll", onScroll, { passive: true });
     frame = requestAnimationFrame(tick);
     return () => {
       cancelAnimationFrame(frame);
       seen.disconnect();
+      window.removeEventListener("scroll", onScroll);
       root.removeEventListener("pointermove", onMove);
       root.removeEventListener("pointerleave", onLeave);
     };
@@ -125,7 +154,7 @@ export function LayeredScene({
           ))}
         </div>
         <div className={`${styles.layer} ${styles.photo}`}>
-          <video ref={videoRef} autoPlay muted loop playsInline preload="metadata" poster="/hero-bg.png">
+          <video ref={videoRef} autoPlay muted loop playsInline preload="metadata" poster="/hero-bg.webp">
             <source src="/home/hero-video.mp4" type="video/mp4" />
           </video>
         </div>

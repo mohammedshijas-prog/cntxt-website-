@@ -1,36 +1,36 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# CNTXT AI website
 
-## Getting Started
+Marketing site for CNTXT AI: data captured and verified from real work, models trained on it, and AI deployed on-premise.
 
-First, run the development server:
+Next.js 16 (App Router, Turbopack), React 19, TypeScript, CSS modules. No backend and no environment variables.
+
+## Run it
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Other scripts: `npm run build`, `npm run start`, `npm run lint`. Use Node 20.19+ or 22.12+.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+This Next.js version has breaking changes. Read the guides in `node_modules/next/dist/docs/` before changing framework code (see `AGENTS.md`).
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Where things are
 
-## Learn More
+- `src/app/` — one folder per route, each a thin `page.tsx` with metadata. Also `sitemap.ts`, `robots.ts`, `icon.svg`, `not-found.tsx`.
+- `src/components/<page>/` — the page component and its CSS module.
+- `src/components/site/` — header, menus and footer.
+- `src/components/shared/` — pieces used on several pages, including `graphics.tsx` (illustrations drawn in code).
+- `public/art/` — CNTXT's own illustration and cover files.
+- `next.config.ts` — redirects `/klkt` to klkt.app and `/munsit` to munsit.com.
 
-To learn more about Next.js, take a look at the following resources:
+## Content rules
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+The content brief (`docs/content-brief.md`, kept outside the repository; ask the CNTXT team for it) holds every verified fact about the company with its source, the benchmark notes and the wording standard. Copy on the site should come from that brief. Do not add customers, quotes, numbers, people or artwork that are not in it.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Known gaps
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- The contact and partner forms open the visitor's email app; there is no form backend yet.
+- Named customers on the home page still need sign-off (see the brief, section 2).
+- Leadership cards have no portraits yet.
+- The site is laid out on a 1733px frame and scaled with CSS `zoom` between 1201px and 1732px wide. Use `var(--screen-h)` instead of `100vh` for full-height sections.

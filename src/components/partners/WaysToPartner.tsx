@@ -7,22 +7,22 @@ const items = [
   {
     number: "01",
     title: "Technology & cloud partners",
-    body: "Run CNTXT on the infrastructure your customers already trust. We co-build reference architectures, certify deployments on your cloud or hardware, and go to market together in regulated industries.",
+    body: "We work with cloud and hardware providers so customers can run AI on infrastructure they control: on-premises, hybrid or cloud, with in-region hosting. Our technology partners today are Oracle, NVIDIA and AWS.",
   },
   {
     number: "02",
-    title: "Solution / integration partners",
-    body: "Deliver CNTXT inside your client engagements. We train your teams, share implementation playbooks and support you on delivery, so projects move from pilot to production faster.",
+    title: "Commercial & delivery partners",
+    body: "Bring CNTXT into your client engagements. We work alongside your team from discovery through build to sign-off, on custom AI integrated with enterprise and government systems.",
   },
   {
     number: "03",
-    title: "Data & annotation partners",
-    body: "Join the network that collects and labels real-world data. We provide the tooling, quality checks and steady volume; you bring domain experts and local reach.",
+    title: "Data partners",
+    body: "Help capture and label real-world data. Your teams record the work they already do, or annotate text, image, audio and video. Every submission is confirmed by human review.",
   },
   {
     number: "04",
-    title: "Research & academic partners",
-    body: "Work with us on open problems in evaluation, speech and physical AI. Partners get access to datasets, compute and co-authorship on published research.",
+    title: "Research partners",
+    body: "Joint research on Arabic speech, AI evaluation and physical AI data. Our research and ecosystem partners include the Technology Innovation Institute, AI71, Beam and Middlesex University Dubai.",
   },
 ];
 
@@ -37,8 +37,8 @@ export function WaysToPartner() {
           Ways to partner
         </p>
         <h2 id="ways-heading">
-          Three things have to be in place before a question{" "}
-          <span>can be answered properly.</span>
+          Four ways to work with us,{" "}
+          <span>from infrastructure to research.</span>
         </h2>
       </div>
       <div className={styles.waysGrid}>
@@ -62,7 +62,7 @@ export function WaysToPartner() {
         </div>
         <img
           className={styles.waysArt}
-          src="/partners/ways.png"
+          src="/art/partners.svg"
           alt="Product interface showing a company context check"
         />
       </div>

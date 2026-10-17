@@ -5,57 +5,77 @@ import { SiteClose } from "../site/SiteClose";
 import { SiteNav } from "../site/SiteNav";
 import { CaseCards, type CaseCard } from "../shared/CaseCards";
 import styles from "./product.module.css";
+import { IsoFloor, PanelArt } from "../shared/graphics";
+import { faqs } from "../shared/faqs";
+import { Faq } from "../shared/Faq";
+import { ProofBar } from "../shared/ProofBar";
 
 const steps = [
   {
-    title: "Connect your sources",
-    body: "Search exists because your knowledge is not readable. It indexes an estate on a schedule, answers from that snapshot, writes nothing back, and cannot tell you the scope of what it looked at. Once the knowledge itself is readable, current and attributable, much of what search was bought to solve stops being a problem.",
+    title: "Discovery and roadmap",
+    body: "We start with the problem, the systems it touches and the data behind it. AI projects fail on messy data, not on models, so the data foundation is examined first. Discovery ends in a roadmap that sets out what will be built and in what order.",
   },
   {
-    title: "Build the context layer",
-    body: "Documents, calls, tickets and records are read into one shared layer that stays current as work happens, so every answer starts from what the organisation actually knows today.",
+    title: "Kick-off and phase 1 build",
+    body: "The first phase is built: data sourced and prepared, models built and trained on proprietary and regional data, and the work integrated with your enterprise or government systems.",
   },
   {
-    title: "Set guardrails and permissions",
-    body: "Decide who and what can read, write and act. Policies apply everywhere at once, and every tool call is checked against them before it runs.",
+    title: "Review and iterate",
+    body: "Phase 1 goes to review with your team. We iterate on what the review finds before anything more is built.",
   },
   {
-    title: "Ship and measure",
-    body: "Put agents and apps in front of real users, then track accuracy, adoption and cost from one place, with a full audit trail of what happened and why.",
+    title: "Phase 2 build and sign-off",
+    body: "The second phase completes the build, deployed on-premises, hybrid or in the cloud. The work closes with your sign-off.",
   },
 ];
 
 const cases: CaseCard[] = [
   {
-    image: "/healthcare/case-1.png",
+    image: "/brand/product/label-image.webp",
     index: "01",
-    label: "The data warehouse.",
-    title: "Solved the numbers.\nNot the knowledge.",
-    body: "It made structured data queryable. Most of what your company knows was never in a table.",
+    label: "Data.",
+    title: "Four kinds of data.\nOne human check.",
+    body: "Audio transcription and speaker diarisation, image boxes and masks, text entities and moderation, video action labels and LiDAR.",
   },
   {
-    image: "/healthcare/case-2.png",
+    image: "/brand/product/label-audio.webp",
     index: "02",
-    label: "A license for everyone.",
-    title: "An assistant for everyone.\nA memory for no one.",
-    body: "The right first move. It gave every person an assistant and the company no shared memory.",
+    label: "Models.",
+    title: "Speech in, speech out.\nIn real time.",
+    body: "Munsit streams transcripts live with speaker labels and word-level timestamps, follows Arabic–English code-switching, and speaks back through Faseeh text-to-speech.",
   },
   {
-    image: "/healthcare/case-3.png",
+    image: "/healthcare/case-3.webp",
     index: "03",
-    label: "A knowledge graph.",
-    title: "Built once.\nTrue on the day it shipped.",
-    body: "It reads from a snapshot and never writes back, so it is out of date until someone rebuilds it.",
+    label: "Agents.",
+    title: "Built into your systems.\nRun on your terms.",
+    body: "Agents are integrated with the systems you already run and delivered in two build phases, with review and iteration between them.",
   },
 ];
 
-const logos = [
-  { src: "/healthcare/logo-zenzap.png", name: "ZenZap", width: 64, height: 20 },
-  { src: "/healthcare/logo-sparkle.png", name: "sparkle", width: 72, height: 20 },
-  { src: "/healthcare/logo-craftgram.png", name: "Craftgram", width: 98, height: 20 },
-  { src: "/healthcare/logo-pulse.png", name: "Pulse", width: 77, height: 20 },
-  { src: "/healthcare/logo-pulse.png", name: "Pulse", width: 77, height: 20 },
-  { src: "/healthcare/logo-pulse.png", name: "Pulse", width: 77, height: 20 },
+/** Published research from the lab (cntxt.tech/ai-product-lab and its insight hub). */
+const research = [
+  {
+    type: "Paper · Speech",
+    title: "Advancing Arabic speech recognition through large-scale weakly supervised learning",
+    body: "How Munsit was trained: a Conformer model learning from 30,000+ hours of real Arabic audio, filtered to a 15,000-hour high-quality set.",
+    href: "https://www.cntxt.tech/insight-hub/advancing-arabic-speech-recognition-through-large-scale-weakly-supervised-learning",
+    cta: "Read the paper",
+  },
+  {
+    type: "Shared task · Dialects",
+    title: "Munsit at NADI 2025: multidialectal Arabic ASR",
+    body: "Our entry to the NADI 2025 shared task on speech recognition across Arabic dialects.",
+    href: "https://www.cntxt.tech/insight-hub/munsit-at-nadi-2025-shared-task-2-pushing-the-boundaries-of-multidialectal-arabic-asr",
+    cta: "Read the entry",
+  },
+  {
+    type: "Open source · Evaluation",
+    title: "RAGMeter",
+    body: "A toolkit for evaluating retrieval-augmented generation systems, published on PyPI as rag-meter.",
+    href: "https://pypi.org/project/rag-meter/",
+    cta: "Get it on PyPI",
+  },
 ];
 
 function Eyebrow({ children }: { children: string }) {
@@ -69,7 +89,6 @@ function Eyebrow({ children }: { children: string }) {
 
 export function ProductPage() {
   const [open, setOpen] = useState(0);
-  const [logo, setLogo] = useState(0);
 
   return (
     <main className={styles.page}>
@@ -77,58 +96,70 @@ export function ProductPage() {
 
       <section className={styles.hero} aria-labelledby="product-heading">
         <div className={styles.heroCopy}>
+          <p className={styles.labEyebrow}>AI Lab</p>
           <h1 id="product-heading">Build AI that survives contact with the real world.</h1>
           <p>
-            Klkt is a visual builder for internal tools — assemble forms, prompts, and logic into a working app in an afternoon. Built for ops and product teams who need something running{" "}
+            CNTXT is a full stack for AI in three layers: data captured and verified from real work, models trained on that data, and agents deployed on-premises, hybrid or in the cloud.
           </p>
-          <a className={styles.cta} href="/contact">
-            Get started
-            <span>
-              <img src="/healthcare/caret.svg" alt="" width={23} height={23} />
-            </span>
-          </a>
+          <div className={styles.heroActions}>
+            <a className={styles.cta} href="/contact?topic=Custom%20AI%20solutions">
+              Book a demo
+              <span>
+                <img src="/healthcare/caret.svg" alt="" width={23} height={23} />
+              </span>
+            </a>
+            <a className={styles.ghostCta} href="#research">
+              Explore our research
+            </a>
+          </div>
         </div>
         <div className={styles.heroArt}>
-          <img src="/products/hero.png" alt="" />
+          <img src="/art/labels.svg" alt="" />
         </div>
       </section>
 
+      <ProofBar />
+
       <section className={styles.tour} aria-labelledby="tour-heading">
         <div className={styles.tourIntro}>
-          <Eyebrow>product tour</Eyebrow>
-          <h2 id="tour-heading">What’s inside Build AI</h2>
+          <Eyebrow>Product tour</Eyebrow>
+          <h2 id="tour-heading">What’s inside AI Lab</h2>
           <p>
-            Independent evaluation for teams shipping language models — benchmarks, human review, and adversarial testing that catches
+            Three layers that build on each other. Data comes first, models are trained on it, and agents put those models to work inside your systems. <a href="/evaluate-ai">TestAI</a> checks each model before it reaches production.
           </p>
         </div>
         <article className={styles.feature}>
           <div>
-            <h3>Physical AI</h3>
+            <h3>Data</h3>
             <p>
-              Ramp supports 30+ ERPs and complex setups —multi-entity, multi-currency, custom fields, and custom dimensions—so you can scale without manual work or messy reconciliations.
+              AI Lab sources, labels and verifies text, image, video and audio data at 98% accuracy, with human-in-the-loop quality assurance and native Arabic annotators across 25+ dialects. Physical-AI data is captured from real work through <a href="https://klkt.app">KLKT</a>, where every accepted hour is confirmed by human review.
             </p>
           </div>
           <div className={styles.featureShot}>
-            <img src="/solutions/panel-guard.png" alt="" />
+            <img src="/art/annotation.svg" alt="" />
           </div>
         </article>
         <div className={styles.split}>
           <article>
-            <h3>Data Engine</h3>
-            <p>The right first move. It gave every person an assistant and the company no shared memory.</p>
-            <img src="/products/policy.png" alt="" />
+            <h3>Models</h3>
+            <p>
+              <a href="https://munsit.com">Munsit</a> is Arabic voice AI: speech-to-text and text-to-speech across 25+ dialects, ranked #1 on the Hugging Face Open Universal Arabic ASR Leaderboard. We also train models on the data we capture.
+            </p>
+            <img src="/brand/product/munsit-platform.webp" alt="Munsit, the Arabic voice AI platform" />
           </article>
           <article>
-            <h3>For Governments</h3>
-            <p>The right first move. It gave every person an assistant and the company no shared memory.</p>
-            <img src="/products/policy.png" alt="" />
+            <h3>Agents</h3>
+            <p>
+              <a href="/agentix">Agentix</a> is our conversational AI platform: Arabic voice and chat agents, workflow automation and GCC telephony, alongside custom AI built into enterprise and government systems.
+            </p>
+            <img src="/art/deploy.svg" alt="" />
           </article>
         </div>
       </section>
 
       <section className={styles.steps} aria-labelledby="steps-heading">
         <Eyebrow>How it works</Eyebrow>
-        <h2 id="steps-heading">How it works</h2>
+        <h2 id="steps-heading">How we deliver</h2>
         <div className={styles.stepGrid}>
           <div>
             {steps.map((step, index) => {
@@ -148,79 +179,99 @@ export function ProductPage() {
               );
             })}
           </div>
-          <img src="/products/steps.png" alt="" />
+          <img src="/art/delivery.svg" alt="" />
         </div>
       </section>
 
       <section className={styles.cases} aria-labelledby="capabilities-heading">
-        <Eyebrow>Use cases</Eyebrow>
-        <h2 id="capabilities-heading">Capabilities</h2>
+        <Eyebrow>Capabilities</Eyebrow>
+        <h2 id="capabilities-heading">What each layer does</h2>
         <CaseCards cases={cases} />
       </section>
 
       <section className={styles.customers} aria-labelledby="customers-heading">
         <Eyebrow>Customers & results</Eyebrow>
         <h2 id="customers-heading">
-          Stale context. Lost work.
+          250+ organisations served.
           <br />
-          Governance rebuilt every time.
+          30M+ data points annotated.
         </h2>
-        <div className={styles.logoBar} role="tablist" aria-label="Customers">
-          {logos.map((item, index) => (
-            <button
-              key={`${item.name}-${index}`}
-              type="button"
-              role="tab"
-              aria-selected={logo === index}
-              aria-label={item.name}
-              onClick={() => setLogo(index)}
-            >
-              <img src={item.src} alt="" width={item.width} height={item.height} />
-            </button>
-          ))}
-        </div>
         <div className={styles.result}>
           <div className={styles.brand}>
-            <img className={styles.brandBg} src="/healthcare/brand-bg.png" alt="" />
-            <img className={styles.brandMark} src="/healthcare/brand-mark.svg" alt="" width={138} height={138} />
-            <img className={styles.brandWord} src="/healthcare/brand-word.svg" alt="Craftgram" width={312} height={66} />
+            <img className={styles.brandBg} src="/healthcare/brand-bg.webp" alt="" />
+            <PanelArt>
+              <IsoFloor />
+            </PanelArt>
           </div>
           <div className={styles.metric}>
-            <p>The orchestration layer simplifies complex workflows and makes easier to manage.</p>
+            <p>Munsit, our Arabic voice platform, is used by more than 250 government and enterprise organisations and 150,000 app users.</p>
             <div>
-              <strong>85%</strong>
-              <span>Reduction in manual work</span>
+              <strong>1M+</strong>
+              <span>Minutes of Arabic speech processed</span>
             </div>
           </div>
           <figure>
-            <img src="/healthcare/portrait.png" alt="" width={144} height={144} />
             <blockquote>
-              AgentLab brings much-needed structure to AI automation workflows. The orchestration layer makes complex systems easier to understand, manage efficiently, and scale without breaking.”
+              “Working with CNTXT AI has been an incredibly rewarding experience.”
             </blockquote>
             <figcaption>
-              <strong>Colton Pond</strong>
-              <span>Head of Partnership</span>
+              <img
+                src="/brand/people/ameen-al-qudsi.webp"
+                alt=""
+                width={56}
+                height={56}
+                style={{ display: "block", width: 56, height: 56, marginBottom: 14, borderRadius: "50%", objectFit: "cover" }}
+              />
+              <strong>Ameen Al Qudsi</strong>
+              <span>CEO, Nationwide Middle East Properties</span>
             </figcaption>
           </figure>
         </div>
       </section>
 
+      <section className={styles.research} id="research" aria-labelledby="research-heading">
+        <div className={styles.researchIntro}>
+          <Eyebrow>Research</Eyebrow>
+          <h2 id="research-heading">Regional-first models, shaped by regional data.</h2>
+          <p>
+            We design for context, stress-test prototypes on real data, and validate in production.
+            What we learn, we publish.
+          </p>
+        </div>
+        <ol className={styles.papers}>
+          {research.map((paper) => (
+            <li key={paper.title}>
+              <a href={paper.href}>
+                <span className={styles.paperType}>{paper.type}</span>
+                <strong>{paper.title}</strong>
+                <span>{paper.body}</span>
+                <span className={styles.paperLink}>
+                  {paper.cta} <span aria-hidden="true">→</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      <Faq items={faqs.products} topic="Custom AI solutions" />
+
       <section className={styles.band} aria-labelledby="ready-heading">
         <div className={styles.mapEdge} aria-hidden="true">
-          <img src="/security/map-left.svg" alt="" />
+          <img src="/security/map-left.webp" alt="" />
         </div>
         <div>
           <h2 id="ready-heading">Ready to build?</h2>
-          <p>One line of supporting copy.</p>
-          <a href="/contact">
-            Get started
+          <p>Tell us about your data, your models or the agent you want to deploy.</p>
+          <a href="/contact?topic=Custom%20AI%20solutions">
+            Book a demo
             <span>
               <img src="/healthcare/caret.svg" alt="" width={23} height={23} />
             </span>
           </a>
         </div>
         <div className={styles.mapEdge} aria-hidden="true">
-          <img src="/security/map-right.svg" alt="" />
+          <img src="/security/map-right.webp" alt="" />
         </div>
       </section>
       <SiteClose current="Build AI" hideBand />

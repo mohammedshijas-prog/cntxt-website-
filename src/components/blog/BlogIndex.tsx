@@ -5,6 +5,7 @@ import { SiteClose } from "../site/SiteClose";
 import { SiteNav } from "../site/SiteNav";
 import { cards, categories, featured, type Category } from "./posts";
 import styles from "./blog.module.css";
+import { CtaBand } from "../shared/CtaBand";
 
 export function BlogIndex() {
   const [category, setCategory] = useState<Category>("All");
@@ -23,8 +24,8 @@ export function BlogIndex() {
           From the <span>CNTXT</span> team
         </h1>
         <p className={styles.dek}>
-          Product updates, engineering deep-dives, and how teams are turning their context
-          into software that runs itself.
+          Research notes and practical guides on Arabic AI, training data, evaluation and
+          putting AI to work in regulated industries.
         </p>
 
         <div className={styles.chips} role="tablist" aria-label="Categories">
@@ -47,9 +48,9 @@ export function BlogIndex() {
             <div>
               <p className={styles.kicker}>{featured.kicker}</p>
               <h2>
-                Five Hundred Licences.
+                {featured.title[0]}
                 <br />
-                Almost No One Uses Them.
+                {featured.title[1]}
               </h2>
               <p>{featured.blurb}</p>
               <footer>
@@ -66,9 +67,9 @@ export function BlogIndex() {
           <ul className={styles.grid}>
             {visible.map((card) => (
               <li key={card.id}>
-                <a href={`/blog/${card.slug}`}>
+                <a href={card.href} target="_blank" rel="noopener noreferrer">
                   <div className={styles.cover}>
-                    <img src="/blog/card-base.png" alt="" />
+                    <img src="/art/cover-13.svg" alt="" />
                     <img src={card.image} alt="" />
                   </div>
                   <p className={styles.kicker}>{card.kicker}</p>
@@ -84,6 +85,13 @@ export function BlogIndex() {
           </ul>
         )}
       </section>
+      <CtaBand
+        id="blog-cta"
+        title="Put the research to work."
+        body="Arabic voice AI, physical-AI data and evaluation, deployed where your data has to stay."
+        secondary={{ label: "Explore the stack", href: "/products" }}
+      />
+
       <SiteClose current="Blog" hideBand />
     </main>
   );

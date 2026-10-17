@@ -9,7 +9,7 @@ import styles from "./siteNav.module.css";
 type Current = "products" | "solutions" | "data-hub";
 
 // Older page ids map onto the new top-level menus.
-const currentMenu: Record<Current, MenuId> = { products: "models", solutions: "industries", "data-hub": "data" };
+const currentMenu: Record<Current, MenuId> = { products: "lab", solutions: "industries", "data-hub": "lab" };
 
 
 export function SiteNav({
@@ -33,12 +33,22 @@ export function SiteNav({
       }
       setDark(y > 8);
     };
+    let frame = 0;
+    const request = () => {
+      if (!frame) {
+        frame = requestAnimationFrame(() => {
+          frame = 0;
+          onScroll();
+        });
+      }
+    };
     onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
+    window.addEventListener("scroll", request, { passive: true });
+    window.addEventListener("resize", request);
     return () => {
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
+      cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", request);
+      window.removeEventListener("resize", request);
     };
   }, [pinAfterHero]);
 
@@ -67,6 +77,12 @@ export function SiteNav({
           ))}
         </nav>
         <div className={styles.actions}>
+          <a className={styles.talk} href="/contact">
+            Book a demo
+            <span>
+              <img src="/partners/caret-right.svg" alt="" width={14} height={14} />
+            </span>
+          </a>
           <MobileMenu dark={dark} />
         </div>
       </div>

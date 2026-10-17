@@ -3,34 +3,34 @@ import styles from "../security/security.module.css";
 
 const footerColumns = [
   { title: "Products", links: ["AI Lab", "Agentix", "Munsit", "KLKT"] },
-  {
-    title: "Solutions",
-    links: ["Enterprise", "Healthcare", "Logistics", "Finance", "Public Sector", "Robotics"],
-  },
-  { title: "Company", links: ["About", "Careers", "Security", "Terms", "Privacy"] },
-  {
-    title: "Resources",
-    links: ["Blog", "Contact us", "Events", "Documentation", "Data partnerships"],
-  },
-  {
-    title: "Guides",
-    links: ["Data labelling", "Physical AI data", "Arabic speech AI", "Enterprise agents"],
-  },
+  { title: "Industries", links: ["Financial services", "Public sector", "Healthcare", "Real estate", "Insurance"] },
+  { title: "Solutions", links: ["Enterprise", "Physical AI data", "Evaluate AI", "Data Hub"] },
+  { title: "Company", links: ["About", "Careers", "Security", "Contact us"] },
+  { title: "Resources", links: ["Blog", "Documentation", "Partners"] },
 ];
 
-const legalLinks = ["Terms of use", "Privacy policy", "Cookie preferences"];
+const legalLinks = ["Terms of use", "Privacy policy", "Cookie policy"];
 
 const hrefs: Record<string, string> = {
+  "Financial services": "/industries/financial-services",
+  "Public sector": "/industries/public-sector",
+  "Real estate": "/industries/real-estate",
+  Insurance: "/industries/insurance",
+  Terms: "https://www.cntxt.tech/terms-conditions",
+  Privacy: "https://www.cntxt.tech/privacy-policy",
+  "Terms of use": "https://www.cntxt.tech/terms-conditions",
+  "Privacy policy": "https://www.cntxt.tech/privacy-policy",
+  "Cookie policy": "https://www.cntxt.tech/cookie-policy",
   "AI Lab": "/products",
-  Agentix: "/products",
-  Munsit: "/products",
-  KLKT: "/klkt",
+  Agentix: "/agentix",
+  Munsit: "https://munsit.com",
+  KLKT: "https://klkt.app",
   Enterprise: "/solutions",
   Healthcare: "/healthcare",
   Logistics: "/solutions",
   Finance: "/solutions",
   "Public Sector": "/solutions",
-  Robotics: "/solutions",
+  Robotics: "/physical-ai",
   About: "/about",
   Careers: "/careers",
   Security: "/security",
@@ -38,10 +38,12 @@ const hrefs: Record<string, string> = {
   "Contact us": "/contact",
   Events: "/blog",
   Documentation: "/documentation",
-  "Data partnerships": "/partners",
+  Partners: "/partners",
+  "Data Hub": "/data-hub",
+  "Evaluate AI": "/evaluate-ai",
   "Data labelling": "/data-hub",
-  "Physical AI data": "/products",
-  "Arabic speech AI": "/products",
+  "Physical AI data": "/physical-ai",
+  "Arabic speech AI": "https://munsit.com",
   "Enterprise agents": "/solutions",
 };
 
@@ -52,7 +54,8 @@ function hrefFor(label: string) {
 /** Page ids used by the pages, mapped to the footer link they highlight. */
 const currentLink: Record<string, string> = {
   Contact: "Contact us",
-  Partnerships: "Data partnerships",
+  Partnerships: "Partners",
+  "Browse datasets": "Data Hub",
   Enterprises: "Enterprise",
   "Build AI": "AI Lab",
 };
@@ -75,8 +78,7 @@ export function SiteClose({
     | "Healthcare"
     | "Enterprises"
     | "Evaluate AI"
-    | "Build AI"
-    | "KLKT";
+    | "Build AI";
   packHref?: string;
   procurementId?: string;
   hideBand?: boolean;
@@ -90,7 +92,7 @@ export function SiteClose({
         aria-labelledby="procurement-heading"
       >
         <div className={styles.mapEdge} aria-hidden="true">
-          <img src="/security/map-left.svg" alt="" />
+          <img src="/security/map-left.webp" alt="" />
         </div>
         <div className={styles.procurementCopy}>
           <h2 id="procurement-heading">
@@ -99,16 +101,16 @@ export function SiteClose({
             procurement?
           </h2>
           <p>
-            Get our SOC 2 report, pen test summary, and architecture overview
-            in one package — usually within one business day.
+            Our certifications and policies are published in the trust centre,
+            and the team can share the security documentation procurement needs.
           </p>
-          <a className={styles.packButton} href={packHref ?? "#procurement"}>
+          <a className={styles.packButton} href={packHref ?? "https://cntxt.trust.site"}>
             <i />
-            Request our security pack
+            See our security documentation
           </a>
         </div>
         <div className={styles.mapEdge} aria-hidden="true">
-          <img src="/security/map-right.svg" alt="" />
+          <img src="/security/map-right.webp" alt="" />
         </div>
       </section>
       )}
@@ -123,11 +125,8 @@ export function SiteClose({
               <p className={styles.tagline}>Arabic-first, on-prem AI, verified where the work happens.</p>
             </div>
             <div className={styles.social}>
-              <a href="https://www.linkedin.com" aria-label="LinkedIn">
+              <a href="https://www.linkedin.com/company/cntxtai" aria-label="LinkedIn">
                 <img src="/security/linkedin.svg" alt="" />
-              </a>
-              <a href="https://x.com" aria-label="X">
-                <img src="/security/x.svg" alt="" />
               </a>
             </div>
           </div>
@@ -152,17 +151,12 @@ export function SiteClose({
           </nav>
         </div>
         <div className={styles.legal}>
-          <p>© 2026 CNTXT AI. All rights reserved.</p>
           <ul>
             {legalLinks.map((link) => (
               <li key={link}>
-                {link === "Cookie preferences" ? (
-                  <button type="button">{link}</button>
-                ) : (
-                  <a id={hrefFor(link).slice(1)} href={hrefFor(link)}>
+                <a href={hrefFor(link)}>
                     {link}
                   </a>
-                )}
               </li>
             ))}
           </ul>

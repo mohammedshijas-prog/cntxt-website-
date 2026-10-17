@@ -8,83 +8,133 @@ type Column = {
   items: { title: string; href: string; icon?: string; desc?: string }[];
 };
 
-export const menus: Record<MenuId, { label: string; href: string; columns: Column[]; rich?: boolean }> = {
-  data: {
-    label: "Data",
-    href: "/data-hub",
-    columns: [
-      {
-        heading: "Data",
-        items: [
-          { title: "AI Lab", href: "/products" },
-          { title: "Data Hub", href: "/data-hub" },
-          { title: "Evaluate AI", href: "/evaluate-ai" },
-        ],
-      },
-      {
-        heading: "Guides",
-        items: [
-          { title: "Data labelling", href: "/data-hub" },
-          { title: "Physical AI data", href: "/products" },
-          { title: "Data partnerships", href: "/partners" },
-        ],
-      },
-    ],
-  },
-  models: {
-    label: "Models",
+type Feature = { eyebrow: string; title: string; cta: string; href: string; image?: string; stat?: string; statLabel?: string };
+
+/** A "browse by" tab: its label and hint in the left rail, its links on the right. */
+type Browse = { title: string; hint: string; heading: string; items: { title: string; href: string }[] };
+
+type Menu = {
+  label: string;
+  href: string;
+  columns: Column[];
+  /** Single column with icons. */
+  rich?: boolean;
+  /** Category panel: products on the left, services and platform stacked beside it, a featured card on the right. */
+  mega?: boolean;
+  feature?: Feature;
+  /** Left rail of categories that switch the list beside it. */
+  browse?: Browse[];
+};
+
+export const menus: Record<MenuId, Menu> = {
+  lab: {
+    label: "AI Lab",
     href: "/products",
-    rich: true,
+    mega: true,
     columns: [
       {
-        heading: "Models",
+        heading: "Products",
         items: [
-          {
-            title: "Munsit",
-            href: "/products",
-            icon: "/nav/munsit-icon.svg",
-            desc: "Arabic speech-to-text and text-to-speech",
-          },
-          { title: "Physical AI models", href: "/products", desc: "Foundation models for robotics" },
+          { title: "Munsit", href: "https://munsit.com", desc: "Arabic speech-to-text and text-to-speech across 25+ dialects" },
+          { title: "Agentix", href: "/agentix", desc: "Arabic voice and chat agents with GCC telephony" },
+          { title: "TestAI", href: "/evaluate-ai", desc: "Test and audit AI for bias, reliability and compliance" },
+          { title: "KLKT", href: "https://klkt.app", desc: "Record everyday work and get paid for accepted hours" },
+        ],
+      },
+      {
+        heading: "Data-as-a-service",
+        items: [
+          { title: "Data annotation", href: "/data-hub" },
+          { title: "Physical AI data", href: "/physical-ai" },
+          { title: "Custom AI solutions", href: "/solutions" },
+        ],
+      },
+      {
+        heading: "Platform",
+        items: [
+          { title: "AI Lab overview", href: "/products" },
+          { title: "Security", href: "/security" },
+          { title: "Documentation", href: "/documentation" },
         ],
       },
     ],
-  },
-  agents: {
-    label: "Agents",
-    href: "/products",
-    rich: true,
-    columns: [
-      {
-        heading: "Agents",
-        items: [
-          { title: "Agentix", href: "/products", desc: "Agents built without code, deployed on-premise" },
-          { title: "KLKT", href: "/klkt", icon: "/nav/klkt-icon.svg", desc: "Turn any workflow into an AI app" },
-          { title: "Enterprise agents", href: "/solutions", desc: "Customer service and operations" },
-        ],
-      },
-    ],
+    feature: {
+      eyebrow: "Inside the lab",
+      title: "Data, models and agents in one stack",
+      cta: "Explore the AI Lab",
+      href: "/products",
+      image: "/art/agentix-ops.svg",
+    },
   },
   industries: {
-    label: "Industries",
+    label: "Solutions",
     href: "/solutions",
-    columns: [
+    columns: [],
+    browse: [
       {
+        title: "Industries",
+        hint: "By sector and use case",
         heading: "Industries",
         items: [
-          { title: "Enterprise", href: "/solutions" },
+          { title: "Financial services", href: "/industries/financial-services" },
+          { title: "Public sector", href: "/industries/public-sector" },
           { title: "Healthcare", href: "/healthcare" },
-          { title: "Logistics", href: "/solutions" },
-          { title: "Finance", href: "/solutions" },
+          { title: "Real estate", href: "/industries/real-estate" },
+          { title: "Insurance", href: "/industries/insurance" },
+          { title: "All solutions", href: "/solutions" },
         ],
       },
       {
-        heading: "More",
+        title: "Physical AI",
+        hint: "Robotics and embodied AI",
+        heading: "Physical AI",
         items: [
-          { title: "Public Sector", href: "/solutions" },
-          { title: "Robotics", href: "/solutions" },
-          { title: "Retail", href: "/solutions" },
-          { title: "Energy", href: "/solutions" },
+          { title: "Physical AI data", href: "/physical-ai" },
+          { title: "Video annotation for robotics", href: "/data-hub?category=Video" },
+          { title: "3D and LiDAR annotation", href: "/data-hub?category=3D" },
+          { title: "Robotics case study", href: "/physical-ai#case-heading" },
+        ],
+      },
+      {
+        title: "Modalities",
+        hint: "Every data type",
+        heading: "Modalities",
+        items: [
+          { title: "Audio and speech", href: "/data-hub?category=Audio" },
+          { title: "Text", href: "/data-hub?category=Text" },
+          { title: "Documents", href: "/data-hub?category=Document" },
+          { title: "Image", href: "/data-hub?category=Image" },
+          { title: "Video", href: "/data-hub?category=Video" },
+          { title: "Model evaluation", href: "/data-hub?category=Evaluation" },
+        ],
+      },
+    ],
+    feature: {
+      eyebrow: "Customer story",
+      title: "Judicial claims for a financial jurisdiction",
+      cta: "Read case study",
+      href: "/industries/financial-services",
+      stat: "83%",
+      statLabel: "less processing time",
+    },
+  },
+  company: {
+    label: "Company",
+    href: "/about",
+    columns: [
+      {
+        heading: "Company",
+        items: [
+          { title: "About", href: "/about" },
+          { title: "Careers", href: "/careers" },
+          { title: "Partners", href: "/partners" },
+        ],
+      },
+      {
+        heading: "Get in touch",
+        items: [
+          { title: "Contact us", href: "/contact" },
+          { title: "Security", href: "/security" },
         ],
       },
     ],
@@ -94,31 +144,27 @@ export const menus: Record<MenuId, { label: string; href: string; columns: Colum
     href: "/blog",
     columns: [
       {
-        heading: "Resources",
+        heading: "Learn",
         items: [
           { title: "Blog", href: "/blog" },
-          { title: "Events", href: "/blog" },
           { title: "Documentation", href: "/documentation" },
-          { title: "Data partnerships", href: "/partners" },
         ],
       },
       {
-        heading: "Company",
+        heading: "Research",
         items: [
-          { title: "About", href: "/about" },
-          { title: "Careers", href: "/careers" },
-          { title: "Contact us", href: "/contact" },
-          { title: "Security", href: "/security" },
+          { title: "Our research", href: "/products#research" },
+          { title: "RAGMeter on PyPI", href: "https://pypi.org/project/rag-meter/" },
         ],
       },
     ],
   },
 };
 
-export type MenuId = "data" | "models" | "agents" | "industries" | "resources";
+export type MenuId = "lab" | "industries" | "company" | "resources";
 
 /** Header order, shared by the desktop header, the hero header and the mobile menu. */
-export const menuOrder: MenuId[] = ["data", "models", "agents", "industries", "resources"];
+export const menuOrder: MenuId[] = ["lab", "industries", "company", "resources"];
 
 
 /**
@@ -139,7 +185,8 @@ export function NavMenu({
   placement?: "below" | "side";
   children: ReactNode;
 }) {
-  const { href, columns, rich } = menus[menu];
+  const { href, columns, rich, mega, feature, browse } = menus[menu];
+  const [tab, setTab] = useState(0);
   const [open, setOpen] = useState(false);
   const closeTimer = useRef<number | undefined>(undefined);
   const rootRef = useRef<HTMLDivElement>(null);
@@ -183,7 +230,7 @@ export function NavMenu({
         {children}
       </a>
       <div
-        className={`${styles.panel} ${rich ? styles.single : styles.simple}`}
+        className={`${styles.panel} ${browse ? styles.browse : mega ? styles.mega : rich ? styles.single : styles.simple}`}
         data-open={open}
         data-placement={placement}
       >
@@ -194,7 +241,12 @@ export function NavMenu({
               {column.items.map((item) => (
                 <li key={item.title}>
                   <a className={styles.item} href={item.href} tabIndex={open ? 0 : -1}>
-                    {rich ? (
+                    {mega ? (
+                      <span>
+                        <strong>{item.title}</strong>
+                        {item.desc ? <small>{item.desc}</small> : null}
+                      </span>
+                    ) : rich ? (
                       <>
                         <span className={`${styles.icon} ${item.icon ? styles.brandIcon : ""}`} aria-hidden="true">
                           {item.icon ? <img src={item.icon} alt="" width={54} height={54} /> : <CubeIcon />}
@@ -213,6 +265,59 @@ export function NavMenu({
             </ul>
           </div>
         ))}
+        {browse ? (
+          <>
+            <div className={styles.rail}>
+              <p className={styles.heading}>Browse by</p>
+              <ul>
+                {browse.map((item, index) => (
+                  <li key={item.title}>
+                    <button
+                      type="button"
+                      className={styles.railItem}
+                      data-active={tab === index}
+                      tabIndex={open ? 0 : -1}
+                      onMouseEnter={() => setTab(index)}
+                      onFocus={() => setTab(index)}
+                      onClick={() => setTab(index)}
+                    >
+                      <strong>{item.title}</strong>
+                      <small>{item.hint}</small>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className={styles.column}>
+              <p className={styles.heading}>{browse[tab].heading}</p>
+              <ul>
+                {browse[tab].items.map((item) => (
+                  <li key={item.title}>
+                    <a className={styles.item} href={item.href} tabIndex={open ? 0 : -1}>
+                      <strong>{item.title}</strong>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </>
+        ) : null}
+        {feature ? (
+          <a className={styles.feature} href={feature.href} tabIndex={open ? 0 : -1}>
+            <span className={styles.featureEyebrow}>{feature.eyebrow}</span>
+            <strong>{feature.title}</strong>
+            <span className={styles.featureCta}>
+              {feature.cta} <span aria-hidden="true">→</span>
+            </span>
+            {feature.stat ? (
+              <span className={styles.featureStat}>
+                {feature.stat}
+                {feature.statLabel ? <small>{feature.statLabel}</small> : null}
+              </span>
+            ) : null}
+            {feature.image ? <img src={feature.image} alt="" /> : null}
+          </a>
+        ) : null}
       </div>
     </div>
   );

@@ -486,3 +486,27 @@
     padding: 16px 24px;
   }
 }
+
+/* Leader without a full portrait: a round thumbnail, or their initials. */
+.monogram {
+  position: absolute;
+  inset: 0 0 96px;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(80% 70% at 50% 40%, #ffffff 0%, #efe8ff 70%);
+  color: #cbbaf7;
+  font-family: var(--font-heading);
+  font-size: 148px;
+  font-weight: 400;
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+
+.leaders .monogram img {
+  width: 168px;
+  height: 168px;
+  border: 6px solid #ffffff;
+  border-radius: 50%;
+  box-shadow: 0 20px 44px rgba(76, 46, 170, 0.18);
+  object-fit: cover;
+}

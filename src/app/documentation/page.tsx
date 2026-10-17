@@ -9,9 +9,10 @@ const sourceCode = Source_Code_Pro({
 });
 
 export const metadata: Metadata = {
-  title: "Documentation | CNTXT AI",
+  title: "Documentation",
+  alternates: { canonical: "/documentation" },
   description:
-    "Customizations for setting the width and height of an element at the same time.",
+    "Integrate Munsit Arabic speech-to-text and text-to-speech: API keys, REST and streaming endpoints, voice-agent integrations and on-premises deployment.",
 };
 
 export default function Documentation() {
