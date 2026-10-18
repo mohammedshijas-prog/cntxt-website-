@@ -4,34 +4,98 @@
   --font-heading: var(--font-host), "Host Grotesk", sans-serif;
   --font-body: var(--font-manrope), Manrope, sans-serif;
 
-  /* Type scale, shared by every page. Titles use --font-heading,
+  /*
+   * Design tokens, modelled on Apple's web system (apple.com stylesheets and
+   * the Human Interface Guidelines) and filled with CNTXT's colours.
+   */
+
+  /* Type scale: Apple's sizes and line heights. Titles use --font-heading,
      descriptions use --font-body. */
-  --fs-display: 56px; /* page titles (h1) */
-  --lh-display: 64px;
-  --fs-h2: 44px; /* section titles */
-  --lh-h2: 52px;
-  --fs-h3: 28px; /* large card / sub-section titles */
-  --lh-h3: 36px;
-  --fs-h4: 22px; /* card titles */
-  --lh-h4: 30px;
-  --fs-h5: 18px; /* small titles, labels on images */
-  --lh-h5: 26px;
-  --fs-lead: 18px; /* intro paragraphs */
-  --lh-lead: 28px;
-  --fs-body: 16px; /* descriptions */
-  --lh-body: 24px;
+  --fs-display: 80px; /* page titles (h1) */
+  --lh-display: 1.05;
+  --ls-display: -0.015em;
+  --fs-h2: 56px; /* section headlines */
+  --lh-h2: 1.07;
+  --ls-h2: -0.005em;
+  --fs-h3: 28px; /* card headlines */
+  --lh-h3: 1.14;
+  --ls-h3: 0;
+  --fs-h4: 21px; /* small card titles */
+  --lh-h4: 1.19;
+  --fs-h5: 17px; /* labels on images */
+  --lh-h5: 1.24;
+  --fs-lead: 21px; /* intro paragraphs */
+  --lh-lead: 1.38;
+  --fs-body: 17px; /* descriptions */
+  --lh-body: 1.47;
   --fs-small: 14px; /* meta text, eyebrows, chips */
-  --lh-small: 20px;
-  --fs-xs: 12px; /* legal, tiny labels */
-  --lh-xs: 16px;
-  --fs-button: 16px;
+  --lh-small: 1.43;
+  --fs-xs: 12px; /* legal, captions */
+  --lh-xs: 1.33;
+  --fs-button: 17px;
 
-  /* Text colours on light backgrounds. */
-  --text-strong: #0f0c0b;
-  --text-muted: rgba(15, 12, 11, 0.62);
+  /* Colour, by role (Apple's semantic colours, CNTXT's palette). */
+  --bg: #ffffff; /* page */
+  --bg-2: #f5f4f8; /* alternate sections (Apple #f5f5f7, tinted violet) */
+  --bg-3: #ebe8f1; /* fills, chips (Apple #e8e8ed) */
+  --label: #15111f; /* primary text (Apple #1d1d1f) */
+  --label-2: #6e6a7c; /* secondary text (Apple #6e6e73) */
+  --label-3: #8c889a; /* tertiary text (Apple #86868b) */
+  --separator: #dcd8e4; /* hairlines (Apple #d2d2d7) */
+  --ink: #0e0a18; /* dark sections (Apple #000) */
+  --ink-2: #1a1428; /* raised surfaces on dark (Apple #1d1d1f) */
+  --label-dark: #f5f3fa; /* text on dark (Apple #f5f5f7) */
+  --label-dark-2: #a39fb2; /* secondary text on dark (Apple #86868b) */
+  --accent: #7d52f4; /* primary actions only (Apple #0071e3) */
+  --accent-hover: #6b40e6;
+  --accent-text: #6b40e6; /* links on light (Apple #0066cc) */
+  --accent-on-dark: #b79cff; /* links on dark (Apple #2997ff) */
+  --accent-tint: #efe9fd;
 
-  /* Height of the screen for full-height sections. Use this instead of 100vh:
-     it stays correct when the page is scaled (see the zoom rule below). */
+  /* The dark surface used by every ink panel: near-black that leans violet,
+     lit by one soft spotlight from above and a faint lift from below, like a
+     product shot. Fine grain stops the gradient banding. */
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  --grad-ink:
+    var(--grain),
+    radial-gradient(85% 65% at 50% -12%, rgba(125, 82, 244, 0.32) 0%, rgba(125, 82, 244, 0) 62%),
+    radial-gradient(70% 45% at 50% 112%, rgba(91, 52, 214, 0.14) 0%, rgba(91, 52, 214, 0) 70%),
+    #0d0a17;
+
+  /* Older names, kept so existing styles follow the new palette. */
+  --text-strong: var(--label);
+  --text-muted: var(--label-2);
+
+  /* Spacing on Apple's 4/8 grid. */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-7: 32px;
+  --space-8: 40px;
+  --space-9: 48px;
+  --space-10: 64px;
+  --space-11: 80px;
+  --space-12: 96px;
+
+  /* Layout: content is 87.5% of the window, up to 1260px (Apple). */
+  --content-max: 1260px;
+  --content: min(var(--content-max), 87.5%);
+  /* Side padding that produces the same content width on full-bleed sections. */
+  --pad-x: max(6.25vw, calc((100vw - var(--content-max)) / 2));
+  --section-y: 160px; /* space above each section */
+  --section-head-gap: 80px; /* section header to its content */
+
+  /* Corners. */
+  --radius-card: 28px;
+  --radius-tile: 18px;
+  --radius-control: 12px;
+  --radius-pill: 980px;
+
+  /* Height of the screen for full-height sections (dynamic viewport where
+     supported, so mobile browser bars don't cause jumps). */
   --screen-h: 100vh;
 }
 
@@ -41,29 +105,41 @@
   }
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 1068px) {
   :root {
-    --fs-display: 44px;
-    --lh-display: 52px;
-    --fs-h2: 36px;
-    --lh-h2: 44px;
+    --fs-display: 64px;
+    --lh-display: 1.06;
+    --ls-display: -0.009em;
+    --fs-h2: 48px;
+    --lh-h2: 1.08;
+    --ls-h2: -0.003em;
     --fs-h3: 24px;
-    --lh-h3: 32px;
+    --lh-h3: 1.17;
+    --fs-h4: 19px;
+    --lh-h4: 1.21;
+    --section-y: 128px;
+    --section-head-gap: 64px;
   }
 }
 
-@media (max-width: 720px) {
+@media (max-width: 734px) {
   :root {
-    --fs-display: 36px;
-    --lh-display: 44px;
-    --fs-h2: 30px;
-    --lh-h2: 38px;
-    --fs-h3: 22px;
-    --lh-h3: 30px;
-    --fs-h4: 20px;
-    --lh-h4: 28px;
-    --fs-lead: 17px;
-    --lh-lead: 26px;
+    --fs-display: 44px;
+    --lh-display: 1.08;
+    --ls-display: -0.003em;
+    --fs-h2: 34px;
+    --lh-h2: 1.12;
+    --ls-h2: 0;
+    --fs-h3: 21px;
+    --lh-h3: 1.19;
+    --fs-h4: 19px;
+    --fs-lead: 19px;
+    --lh-lead: 1.42;
+    --fs-body: 16px;
+    --fs-button: 16px;
+    --section-y: 96px;
+    --section-head-gap: 48px;
+    --radius-card: 20px;
   }
 }
 
@@ -83,26 +159,6 @@ body {
   font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-/* Pages are built on a 1733px frame. On smaller desktop windows, lay the
-   page out at that width and scale it so type and spacing stay consistent. */
-@media (min-width: 1201px) and (max-width: 1732px) {
-  :root {
-    /* Zooming the body shrinks viewport units with it; scale them back up. */
-    --screen-h: calc(100vh / (100vw / 1733px));
-  }
-
-  html {
-    max-width: none;
-    overflow-x: hidden;
-  }
-
-  body {
-    width: 1733px;
-    max-width: none;
-    zoom: calc(100vw / 1733px);
-  }
 }
 
 * {
@@ -131,4 +187,52 @@ button {
   background: none;
   border: 0;
   cursor: pointer;
+}
+
+/* Page-to-page transition: the old page sinks back and fades, the new one
+   rises into place (cross-document view transitions; ignored where unsupported). */
+@view-transition {
+  navigation: auto;
+}
+
+::view-transition-old(root) {
+  animation: 320ms cubic-bezier(0.7, 0, 0.84, 0) both page-out;
+}
+
+::view-transition-new(root) {
+  animation: 620ms cubic-bezier(0.16, 1, 0.3, 1) both page-in;
+}
+
+@keyframes page-out {
+  to {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+}
+
+@keyframes page-in {
+  from {
+    opacity: 0;
+    transform: translateY(48px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+  }
+}
+
+/* One focus ring everywhere: visible on light and dark surfaces. */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* Headlines break into balanced lines instead of leaving one word alone. */
+h1,
+h2,
+h3 {
+  text-wrap: balance;
 }

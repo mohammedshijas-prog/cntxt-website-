@@ -5,11 +5,26 @@ import { SiteClose } from "../site/SiteClose";
 import { SiteNav } from "../site/SiteNav";
 import { CaseCards, type CaseCard } from "../shared/CaseCards";
 import { IndustriesSection } from "../shared/IndustriesSection";
+import { IconChip } from "../shared/graphics";
 import styles from "./healthcare.module.css";
 import { KitArt, PanelArt } from "../shared/graphics";
 import { faqs } from "../shared/faqs";
 import { Faq } from "../shared/Faq";
-import { ProofBar } from "../shared/ProofBar";
+
+const glyphs: Record<string, "wave" | "text" | "image" | "camera" | "lidar" | "check" | "consent" | "floor"> = {
+  Audio: "wave",
+  "3D": "lidar",
+  Document: "text",
+  Text: "text",
+  Image: "image",
+  Video: "camera",
+  LiDAR: "lidar",
+  Evaluation: "check",
+  "Data services": "image",
+  "AI evaluation": "check",
+  "Arabic voice AI": "wave",
+  "Physical AI data": "camera",
+};
 
 const cases: CaseCard[] = [
   {
@@ -36,7 +51,6 @@ const cases: CaseCard[] = [
 ];
 
 type Offer = {
-  image: string;
   tag: string;
   title: string;
   body: string;
@@ -46,21 +60,18 @@ type Offer = {
 
 const offers: Offer[] = [
   {
-    image: "/data-hub/orb-pink.jpg",
     tag: "Data services",
     title: "Healthcare annotation",
     body: "Healthcare domain annotators label text, audio, image and video, with human-in-the-loop quality assurance.",
     points: ["98% accuracy", "In-region"],
   },
   {
-    image: "/data-hub/orb-blue.png",
     tag: "AI evaluation",
     title: "Medical AI evaluators",
     body: "Evaluators with medical and biology expertise test and audit models before they are deployed.",
     points: ["Bias", "Reliability"],
   },
   {
-    image: "/data-hub/orb-red.jpg",
     tag: "Arabic voice AI",
     title: "Munsit",
     body: "Speech-to-text and text-to-speech across 25+ Arabic dialects, via API or on-premises.",
@@ -68,7 +79,6 @@ const offers: Offer[] = [
     points: ["25+ dialects", "On-premises"],
   },
   {
-    image: "/data-hub/orb-pink.jpg",
     tag: "Physical AI data",
     title: "Real work capture",
     body: "Teams record everyday support work, such as hospital portering, through KLKT, with worker consent.",
@@ -109,7 +119,7 @@ export function HealthcarePage() {
           <h1 id="healthcare-heading">Real-world AI for healthcare.</h1>
           <p>
             Data, evaluation and Arabic voice AI for healthcare organisations.
-            HIPAA compliant, hosted in region or deployed on-premises.
+            Hosted in region or deployed on-premises, with HIPAA listed in our trust centre.
           </p>
           <a className={styles.partner} href="/contact">
             Book a demo
@@ -121,7 +131,6 @@ export function HealthcarePage() {
         <img className={styles.heroArt} src="/healthcare/hero.webp" alt="" />
       </section>
 
-      <ProofBar />
 
       <section className={styles.cases} aria-labelledby="cases-heading">
         <Eyebrow>Use cases</Eyebrow>
@@ -144,9 +153,7 @@ export function HealthcarePage() {
                   <img src="/data-hub/dot.svg" alt="" width={8} height={8} />
                   {offer.tag}
                 </p>
-                <span className={styles.orb}>
-                  <img src={offer.image} alt="" />
-                </span>
+                <IconChip name={glyphs[offer.tag] ?? "floor"} />
                 <div>
                   <h3>{offer.title}</h3>
                   <p>
@@ -171,7 +178,7 @@ export function HealthcarePage() {
                       router.push(`/contact?${params}`);
                     }}
                   >
-                    Ask about this →
+                    Speak to an expert →
                   </button>
                 </div>
               </li>
@@ -243,7 +250,7 @@ export function HealthcarePage() {
           <img src="/security/map-left.webp" alt="" />
         </div>
         <div>
-          <h2 id="healthcare-cta">Talk to us about healthcare AI</h2>
+          <h2 id="healthcare-cta">Bring AI to your healthcare operations.</h2>
           <p>
             Tell us what you are building and where the data has to stay. We
             will show how data, evaluation and deployment would work.

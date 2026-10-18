@@ -89,7 +89,7 @@ export function BlogIndex() {
         id="blog-cta"
         title="Put the research to work."
         body="Arabic voice AI, physical-AI data and evaluation, deployed where your data has to stay."
-        secondary={{ label: "Explore the stack", href: "/products" }}
+        secondary={{ label: "Explore the AI Lab", href: "/products" }}
       />
 
       <SiteClose current="Blog" hideBand />

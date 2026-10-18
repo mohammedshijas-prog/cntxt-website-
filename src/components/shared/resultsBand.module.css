@@ -1,82 +1,78 @@
+/* Published results: a light, hairline-ruled row of figures (one dark moment
+   per page is enough; this sits on the page background). */
 .band {
   position: relative;
-  margin: 0 24px;
-  padding: 80px 93px 72px;
-  overflow: hidden;
-  border-radius: 24px;
-  background:
-    radial-gradient(100% 90% at 0% 0%, rgba(125, 82, 244, 0.45) 0%, rgba(125, 82, 244, 0) 55%),
-    #15111f;
-  color: #ffffff;
+  width: var(--content);
+  margin: var(--section-y) auto 0;
+  color: var(--label);
 }
 
 .band header p {
-  margin: 0 0 16px;
-  color: #b79cff;
-  font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
-  font-size: 13px;
-  letter-spacing: 0.14em;
-  line-height: 18px;
-  text-transform: uppercase;
+  margin: 0 0 var(--space-3);
+  color: var(--accent-text);
+  font-family: var(--font-heading);
+  font-size: var(--fs-small);
+  font-weight: 600;
+  line-height: var(--lh-small);
 }
 
 .band h2 {
   margin: 0;
   font-family: var(--font-heading);
   font-size: var(--fs-h2);
-  font-weight: 400;
+  font-weight: 500;
+  letter-spacing: var(--ls-h2);
   line-height: var(--lh-h2);
 }
 
 .band ul {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  margin: 56px 0 0;
+  margin: var(--section-head-gap) 0 0;
   padding: 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.16);
+  border-top: 1px solid var(--separator);
   list-style: none;
 }
 
 .band li + li {
-  border-left: 1px solid rgba(255, 255, 255, 0.16);
+  border-left: 1px solid var(--separator);
 }
 
 .band a {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: var(--space-2);
   height: 100%;
-  padding: 32px 28px 8px;
+  padding: var(--space-7) var(--space-6) var(--space-2);
   color: inherit;
-  transition: background-color 240ms ease;
+  transition: background-color 200ms ease;
+}
+
+.band li:first-child a {
+  padding-left: 0;
 }
 
 .band a:hover {
-  background: rgba(255, 255, 255, 0.04);
-}
-
-.band a:focus-visible {
-  outline: 2px solid #b79cff;
-  outline-offset: -2px;
+  background: var(--bg-2);
 }
 
 .band strong {
   font-family: var(--font-heading);
-  font-size: clamp(48px, 4.4vw, 76px);
-  font-weight: 400;
-  letter-spacing: -0.03em;
+  font-size: var(--fs-h2);
+  font-weight: 500;
+  letter-spacing: -0.02em;
   line-height: 1;
 }
 
 .label {
-  margin-top: 8px;
+  margin-top: var(--space-2);
   font-family: var(--font-heading);
   font-size: var(--fs-h5);
   line-height: var(--lh-h5);
 }
 
 .context {
-  color: rgba(255, 255, 255, 0.62);
+  color: var(--label-2);
   font-family: var(--font-body);
   font-size: var(--fs-small);
   line-height: var(--lh-small);
@@ -84,18 +80,15 @@
 
 .more {
   margin-top: auto;
-  padding-top: 20px;
-  color: #b79cff;
+  padding-top: var(--space-5);
+  color: var(--accent-text);
   font-family: var(--font-heading);
   font-size: var(--fs-small);
+  font-weight: 500;
   line-height: var(--lh-small);
 }
 
-@media (max-width: 1200px) {
-  .band {
-    padding: 56px 40px;
-  }
-
+@media (max-width: 1068px) {
   .band ul {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -104,28 +97,27 @@
     border-left: 0;
   }
 
+  .band li:nth-child(3) a {
+    padding-left: 0;
+  }
+
   .band li:nth-child(n + 3) {
-    border-top: 1px solid rgba(255, 255, 255, 0.16);
+    border-top: 1px solid var(--separator);
   }
 }
 
-@media (max-width: 720px) {
-  .band {
-    margin: 0 12px;
-    padding: 40px 20px;
-    border-radius: 18px;
-  }
-
+@media (max-width: 734px) {
   .band ul {
     grid-template-columns: 1fr;
   }
 
   .band li + li {
-    border-top: 1px solid rgba(255, 255, 255, 0.16);
     border-left: 0;
+    border-top: 1px solid var(--separator);
   }
 
-  .band a {
-    padding: 24px 0 8px;
+  .band a,
+  .band li:first-child a {
+    padding: var(--space-6) 0;
   }
 }

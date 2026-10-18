@@ -175,8 +175,8 @@ export const industries: Industry[] = [
       solution:
         "We implemented a centralised data system and deployed custom AI tools for decisions across sales, finance, HR and marketing.",
       stats: [
-        { value: "1", label: "Central data system in place of scattered tools" },
-        { value: "4", label: "Functions covered: sales, finance, HR and marketing" },
+        { value: "22%", label: "Faster reviews" },
+        { value: "28%", label: "Less legal workload" },
       ],
     },
     quote: {
@@ -223,7 +223,8 @@ export const industries: Industry[] = [
         "A user-friendly interface with real-time AI validation, integrated chat and automated review.",
       stats: [
         { value: "70%+", label: "Of claims were rejected before the project" },
-        { value: "3", label: "Parts to the fix: validation, chat and automated review" },
+        { value: "72%", label: "Estimated cut in the rejection rate" },
+        { value: "60%", label: "Less processing time" },
       ],
     },
   },

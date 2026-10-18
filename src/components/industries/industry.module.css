@@ -1,7 +1,7 @@
 .page {
   position: relative;
-  background: #fafaf8;
-  color: #0f0c0b;
+  background: var(--bg);
+  color: var(--label);
 }
 
 .page h1,
@@ -57,7 +57,7 @@
   content: "";
   position: absolute;
   height: 4px;
-  background: linear-gradient(to left, #7d52f4, #d6c7ff);
+  background: var(--accent);
 }
 
 .tag::before {
@@ -82,13 +82,10 @@
   align-items: end;
   min-height: calc(var(--screen-h) - 48px);
   margin: 24px 24px 0;
-  padding: 160px 93px 88px;
+  padding: var(--section-y) var(--pad-x) 88px;
   overflow: hidden;
   border-radius: 24px;
-  background:
-    radial-gradient(90% 80% at 100% 0%, rgba(125, 82, 244, 0.55) 0%, rgba(125, 82, 244, 0) 60%),
-    radial-gradient(60% 60% at 0% 100%, rgba(125, 82, 244, 0.22) 0%, rgba(125, 82, 244, 0) 70%),
-    #15111f;
+  background: var(--grad-ink);
   color: #ffffff;
 }
 
@@ -145,10 +142,8 @@
   height: 48px;
   margin-top: 36px;
   padding: 5px 16px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 10px;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0)), #7d52f4;
-  box-shadow: 0 1px 2px rgba(14, 18, 27, 0.24);
+  background: var(--accent);
   color: #ffffff;
   font-family: var(--font-heading);
   font-size: var(--fs-button);
@@ -158,7 +153,7 @@
 }
 
 .primary:hover {
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.26), rgba(255, 255, 255, 0)), #7d52f4;
+  background: var(--accent-hover);
 }
 
 .primary:focus-visible,
@@ -213,9 +208,9 @@
 .solutions,
 .trust,
 .more {
-  width: min(1499px, 100%);
+  width: 100%;
   margin: 0 auto;
-  padding: 117px 117px 0;
+  padding: var(--section-y) var(--pad-x) 0;
 }
 
 /* Problems: heading left, a ruled, numbered list right. */
@@ -227,7 +222,7 @@
 }
 
 .problems ol {
-  border-top: 1px solid rgba(15, 12, 11, 0.14);
+  border-top: 1px solid var(--separator);
 }
 
 .problems li {
@@ -236,14 +231,14 @@
   gap: 16px;
   align-items: baseline;
   padding: 24px 0;
-  border-bottom: 1px solid rgba(15, 12, 11, 0.14);
+  border-bottom: 1px solid var(--separator);
   font-family: var(--font-heading);
   font-size: var(--fs-h4);
   line-height: var(--lh-h4);
 }
 
 .problems li span {
-  color: #7d52f4;
+  color: var(--accent);
   font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
   font-size: 13px;
   letter-spacing: 0.08em;
@@ -263,7 +258,7 @@
 
 .solutions li {
   padding: 28px;
-  border: 1px solid rgba(15, 12, 11, 0.08);
+  border: 1px solid var(--separator);
   border-radius: 18px;
   background: #ffffff;
   transition: transform 320ms cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 320ms ease;
@@ -297,9 +292,9 @@
   gap: 64px;
   align-items: stretch;
   margin: 117px 24px 0;
-  padding: 88px 93px;
+  padding: var(--space-11) var(--pad-x);
   border-radius: 24px;
-  background: linear-gradient(180deg, #efe8ff 0%, #d6caf6 100%);
+  background: var(--accent-tint);
 }
 
 .studyEyebrow {
@@ -332,7 +327,7 @@
 }
 
 .study dd {
-  color: rgba(15, 12, 11, 0.72);
+  color: var(--label-2);
   font-family: var(--font-body);
   font-size: var(--fs-body);
   line-height: var(--lh-body);
@@ -340,7 +335,7 @@
 
 .note {
   margin-top: 32px;
-  color: rgba(15, 12, 11, 0.55);
+  color: var(--label-3);
   font-family: var(--font-body);
   font-size: var(--fs-small);
   line-height: var(--lh-small);
@@ -364,11 +359,11 @@
 }
 
 .studyStats li + li {
-  border-top: 1px solid rgba(15, 12, 11, 0.1);
+  border-top: 1px solid var(--separator);
 }
 
 .studyStats strong {
-  color: #7d52f4;
+  color: var(--accent);
   font-family: var(--font-heading);
   font-size: 64px;
   font-weight: 400;
@@ -401,7 +396,7 @@
 }
 
 .trust a {
-  color: #7d52f4;
+  color: var(--accent);
   text-decoration: underline;
 }
 
@@ -419,7 +414,7 @@
   width: 104px;
   height: 104px;
   border-radius: 50%;
-  background: #15111f;
+  background: var(--ink);
 }
 
 .marks img {
@@ -435,7 +430,7 @@
   justify-content: space-between;
   min-height: 320px;
   padding: 36px;
-  border-left: 3px solid #7d52f4;
+  border-left: 3px solid var(--accent);
   background: #ffffff;
 }
 
@@ -485,7 +480,7 @@
   align-items: center;
   height: 52px;
   padding: 0 22px;
-  border: 1px solid rgba(15, 12, 11, 0.14);
+  border: 1px solid var(--separator);
   border-radius: 26px;
   font-family: var(--font-heading);
   font-size: var(--fs-body);
@@ -494,8 +489,8 @@
 }
 
 .more a:hover {
-  border-color: #15111f;
-  background: #15111f;
+  border-color: var(--ink);
+  background: var(--ink);
   color: #ffffff;
 }
 
@@ -505,15 +500,17 @@
   flex-direction: column;
   gap: 12px;
   align-items: center;
-  margin: 117px 24px 24px;
-  padding: 96px 24px;
-  border-radius: 24px;
-  background: linear-gradient(180deg, #d6caf6 0%, #bca6f6 46%, #9a79f4 100%);
+  margin: var(--section-y) var(--pad-x) var(--space-6);
+  padding: var(--space-12) var(--space-6);
+  border-radius: var(--radius-card);
+  /* The owner's closing band: solid brand purple, white type. */
+  background: var(--accent);
+  color: #ffffff;
   text-align: center;
 }
 
 .band p {
-  color: rgba(15, 12, 11, 0.7);
+  color: rgba(255, 255, 255, 0.88);
   font-family: var(--font-body);
   font-size: var(--fs-lead);
   line-height: var(--lh-lead);
@@ -521,6 +518,18 @@
 
 .band .primary {
   margin-top: 20px;
+  border: 0;
+  background: #ffffff;
+  box-shadow: none;
+  color: var(--label);
+}
+
+.band .primary img {
+  filter: brightness(0);
+}
+
+.band .primary:hover {
+  background: #f1ecff;
 }
 
 @media (max-width: 1200px) {
@@ -528,14 +537,14 @@
     grid-template-columns: 1fr;
     gap: 48px;
     min-height: 0;
-    padding: 140px 40px 56px;
+    padding: var(--section-y) var(--pad-x) 56px;
   }
 
   .problems,
   .solutions,
   .trust,
   .more {
-    padding: 80px 40px 0;
+    padding: var(--section-y) var(--pad-x) 0;
   }
 
   .problems,
@@ -559,7 +568,7 @@
 @media (max-width: 720px) {
   .hero {
     margin: 12px 12px 0;
-    padding: 120px 20px 40px;
+    padding: var(--section-y) var(--pad-x) 40px;
     border-radius: 18px;
   }
 
@@ -571,7 +580,7 @@
   .solutions,
   .trust,
   .more {
-    padding: 64px 20px 0;
+    padding: var(--section-y) var(--pad-x) 0;
   }
 
   .study {

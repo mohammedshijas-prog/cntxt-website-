@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Host_Grotesk, Manrope } from "next/font/google";
+import "lenis/dist/lenis.css";
 import "./globals.css";
+import { MotionProvider } from "../components/motion/MotionProvider";
 
 // Site-wide type: Host Grotesk for titles and UI, Manrope for descriptions.
 const host = Host_Grotesk({
@@ -41,7 +43,10 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`${host.variable} ${manrope.variable}`}>
-      <body>{children}</body>
+      <body>
+        {children}
+        <MotionProvider />
+      </body>
     </html>
   );
 }

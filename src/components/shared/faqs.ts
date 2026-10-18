@@ -24,7 +24,7 @@ export const faqs = {
   products: [
     {
       q: "Can we use one layer on its own?",
-      a: "Yes. Data services, Munsit, Agentix and TestAI are each available separately.",
+      a: "Yes. Data services, Munsit and Agentix are each available separately.",
     },
     {
       q: "What does the data layer cover?",
@@ -106,25 +106,6 @@ export const faqs = {
       q: "Where is the data stored?",
       a: "Hosting and processing can be kept in region to meet data-residency requirements.",
     },
-  ],
-  evaluate: [
-    {
-      q: "What does an evaluation test?",
-      a: "TestAI tests, evaluates and audits an AI system for bias, reliability and compliance before it is deployed.",
-    },
-    {
-      q: "Who reviews the outputs?",
-      a: "Human evaluators with expertise in biology, medicine, finance and coding, bilingual reviewers, and native Arabic reviewers across more than 25 dialects.",
-    },
-    {
-      q: "Can you audit a model we are thinking of buying?",
-      a: "Yes. We audit the system on the work you need it to do, before you put it in front of your users.",
-    },
-    {
-      q: "Can we evaluate our own RAG pipeline?",
-      a: "Yes. RAGMeter, our open-source RAG evaluation toolkit, is on PyPI as rag-meter.",
-    },
-    certifications,
   ],
   security: [
     certifications,

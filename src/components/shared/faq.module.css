@@ -3,10 +3,10 @@
   grid-template-columns: minmax(0, 0.7fr) minmax(0, 1fr);
   gap: 64px;
   align-items: start;
-  width: min(1499px, 100%);
+  width: 100%;
   margin: 0 auto;
-  padding: 117px 117px 117px;
-  color: #0f0c0b;
+  padding: var(--section-y) var(--pad-x);
+  color: var(--label);
 }
 
 .intro {
@@ -16,7 +16,7 @@
 
 .kicker {
   margin: 0 0 16px;
-  color: #7d52f4;
+  color: var(--accent);
   font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
   font-size: 13px;
   letter-spacing: 0.14em;
@@ -33,23 +33,23 @@
 
 .intro h2 + p {
   margin: 16px 0 0;
-  color: rgba(15, 12, 11, 0.62);
+  color: var(--label-2);
   font-family: var(--font-body);
   font-size: var(--fs-body);
   line-height: var(--lh-body);
 }
 
 .intro a {
-  color: #7d52f4;
+  color: var(--accent);
   text-decoration: underline;
 }
 
 .list {
-  border-top: 1px solid rgba(15, 12, 11, 0.14);
+  border-top: 1px solid var(--separator);
 }
 
 .list details {
-  border-bottom: 1px solid rgba(15, 12, 11, 0.14);
+  border-bottom: 1px solid var(--separator);
 }
 
 .list summary {
@@ -74,7 +74,7 @@
 }
 
 .list summary:focus-visible {
-  outline: 2px solid #7d52f4;
+  outline: 2px solid var(--accent);
   outline-offset: 4px;
 }
 
@@ -85,7 +85,7 @@
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  background: #efe8ff;
+  background: var(--accent-tint);
 }
 
 .list summary span::before,
@@ -114,7 +114,7 @@
   max-width: 720px;
   margin: 0;
   padding: 0 52px 26px 0;
-  color: rgba(15, 12, 11, 0.7);
+  color: var(--label-2);
   font-family: var(--font-body);
   font-size: var(--fs-body);
   line-height: var(--lh-body);

@@ -16,8 +16,8 @@
   justify-content: space-between;
   gap: 48px;
   min-height: 984px;
-  padding: 80px 136px 80px 125px;
-  background: #7d52f4;
+  padding: var(--space-11) var(--pad-x);
+  background: var(--grad-ink);
   color: #ffffff;
 }
 
@@ -67,16 +67,14 @@
   line-height: 20px;
   letter-spacing: -0.12px;
   white-space: nowrap;
-  box-shadow: 0 1px 2px rgba(14, 18, 27, 0.24);
 }
 
 .primary {
   padding: 5px 10px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
   background-image:
     linear-gradient(180deg, rgba(193, 193, 193, 0.16) 0%, rgba(255, 255, 255, 0) 100%),
     linear-gradient(90deg, #ffffff 0%, #ffffff 100%);
-  color: #7d52f4;
+  color: var(--accent);
   font-family: var(--font-heading);
 }
 
@@ -230,7 +228,7 @@
 .compliance {
   display: flex;
   justify-content: center;
-  padding: 57px 117px;
+  padding: var(--space-10) var(--pad-x);
   background: #ffffff;
 }
 
@@ -239,10 +237,10 @@
   flex-direction: column;
   align-items: center;
   gap: 32px;
-  width: min(1499px, 100%);
+  width: 100%;
   padding: 60px 50px;
   overflow: hidden;
-  background: #000000;
+  background: var(--grad-ink);
   border-radius: 27px;
 }
 
@@ -304,7 +302,7 @@
   align-items: center;
   gap: 32px;
   padding: 57px 0 72px;
-  background: #f5f1ff;
+  background: var(--bg-2);
 }
 
 .practicesIntro,
@@ -342,7 +340,7 @@
 .tagBarFlipped {
   position: absolute;
   height: 4px;
-  background: linear-gradient(to left, #7d52f4, #d6c7ff);
+  background: var(--accent);
 }
 
 .tagBar {
@@ -381,7 +379,7 @@
 }
 
 .carousel:focus-visible {
-  outline: 2px solid #7d52f4;
+  outline: 2px solid var(--accent);
   outline-offset: -2px;
 }
 
@@ -417,7 +415,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  height: 36px;
+  height: 44px;
   color: var(--text-strong);
   font-family: var(--font-heading);
   font-size: var(--fs-small);
@@ -497,7 +495,7 @@
 
 .dots button[aria-current="true"] {
   width: 24px;
-  background: #7d52f4;
+  background: var(--accent);
 }
 
 .infrastructure {
@@ -505,7 +503,7 @@
   flex-direction: column;
   align-items: center;
   gap: 32px;
-  padding: 120px 117px;
+  padding: var(--section-y) var(--pad-x);
   background: #ffffff;
 }
 
@@ -521,12 +519,12 @@
 
 .infraPanel {
   position: relative;
-  width: min(1499px, 100%);
+  width: 100%;
   height: 558px;
   overflow: hidden;
   background:
-    linear-gradient(#d2cec2, #d2cec2) center / 1px 100% no-repeat,
-    #f5f1ff;
+    linear-gradient(var(--separator), var(--separator)) center / 1px 100% no-repeat,
+    var(--bg-2);
   border-radius: 10px;
 }
 
@@ -536,7 +534,7 @@
   position: absolute;
   top: 0;
   bottom: 0;
-  border-left: 1px dashed #d2cec2;
+  border-left: 1px dashed var(--separator);
 }
 
 .infraPanel::before {
@@ -547,221 +545,8 @@
   left: 66.6%;
 }
 
-.flow {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  width: min(354px, calc(100% - 48px));
-  margin: 40px auto 0;
-}
-
-.flow strong,
-.flow em {
-  display: block;
-  font-style: normal;
-}
-
-.flow strong {
-  color: var(--text-strong);
-  font-family: var(--font-heading);
-  font-size: var(--fs-small);
-  font-weight: 500;
-  line-height: var(--lh-small);
-}
-
-.flow em {
-  color: var(--text-muted);
-  font-family: var(--font-body);
-  font-size: var(--fs-xs);
-  font-weight: 400;
-  line-height: var(--lh-xs);
-  letter-spacing: 0.1px;
-}
-
-.requestRow,
-.toolCard,
-.logCard,
-.govCard {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  padding: 10px;
-  background: #ffffff;
-  border-radius: 14px;
-}
-
-.requestRow {
-  justify-content: space-between;
-}
-
-.flowLead,
-.policyRow {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-}
-
-.iconWell,
-.iconWellTeal,
-.iconWellGreen {
-  display: flex;
-  flex: 0 0 36px;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;
-}
-
-.iconWell {
-  background: #ecebe5;
-}
-
-.iconWellTeal {
-  background: #3990a1;
-}
-
-.iconWellGreen {
-  background: #cae8cd;
-}
-
-.appRow {
-  display: flex;
-  gap: 3px;
-  align-items: center;
-  padding: 3px;
-  background: rgba(0, 0, 0, 0.05);
-  border-radius: 10px;
-}
-
-.appIcon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 29px;
-  height: 29px;
-  background: #ffffff;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  border-radius: 5px;
-}
-
-.governance {
-  display: flex;
-  flex-direction: column;
-  padding: 11px;
-  background: #dbf0f2;
-  border: 1px solid #a3d7de;
-  border-radius: 14px;
-}
-
-.governance > p {
-  padding: 4px 7px 12px;
-  color: #327688;
-  font-family: var(--font-heading);
-  font-size: var(--fs-xs);
-  font-weight: 400;
-  line-height: var(--lh-xs);
-  letter-spacing: 0.2px;
-  text-transform: uppercase;
-}
-
-.governance .govCard {
-  width: 100%;
-  border-radius: 7px;
-}
-
-.governance .govCard + .govCard {
-  margin-top: 8px;
-}
-
-.govCard {
-  align-items: flex-start;
-  flex-wrap: wrap;
-}
-
-.pills {
-  display: flex;
-  gap: 7px;
-  width: 100%;
-  padding-left: 48px;
-}
-
-.pills span,
-.actionRow span {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 999px;
-  font-family: var(--font-heading);
-  font-size: var(--fs-xs);
-  font-weight: 500;
-  line-height: var(--lh-xs);
-  letter-spacing: 0.1px;
-}
-
-.allow,
-.escalate,
-.block {
-  padding: 4px 11px;
-}
-
-.allow {
-  background: #cae8cd;
-  color: #2f6636;
-}
-
-.escalate {
-  background: #ffdf88;
-  color: #dd6802;
-}
-
-.block {
-  background: #ffd1a8;
-  color: #c73307;
-}
-
-.toolCard {
-  flex-direction: column;
-  align-items: stretch;
-}
-
-.actionRow {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 4px;
-}
-
-.actionRow span {
-  height: 26px;
-  padding: 0 8px;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  border-radius: 10px;
-  color: var(--text-strong);
-  font-family: var(--font-heading);
-  font-size: var(--fs-xs);
-  font-weight: 500;
-  line-height: var(--lh-xs);
-  letter-spacing: 0;
-  text-transform: uppercase;
-}
-
-.more {
-  width: 26px;
-  padding: 0;
-  background: rgba(0, 0, 0, 0.05);
-  border: 0;
-  opacity: 0.6;
-}
-
-.logCard {
-  align-items: center;
-}
-
 .disclosure {
-  padding: 96px 117px;
+  padding: var(--space-12) var(--pad-x);
   background: #ffffff;
 }
 
@@ -784,9 +569,9 @@
   margin: 0;
   padding: 0 0 0 40px;
   border-radius: 20px 0 0 0;
-  background: #efe9ff;
+  background: var(--accent-tint);
   clip-path: polygon(0 0, 280px 0, 340px 100%, 0 100%);
-  color: #7d52f4;
+  color: var(--accent);
   font-family: var(--font-heading);
   font-size: var(--fs-small);
   font-weight: 500;
@@ -802,7 +587,7 @@
   align-items: center;
   padding: 40px 56px 56px 40px;
   border-radius: 0 20px 20px 20px;
-  background: #efe9ff;
+  background: var(--accent-tint);
 }
 
 .folderCopy {
@@ -837,13 +622,13 @@
 .lightButton {
   padding: 5px 21px;
   border: 0;
-  background: #7d52f4;
+  background: var(--accent);
   color: #ffffff;
   font-family: var(--font-heading);
 }
 
 .lightButton:focus-visible {
-  outline: 2px solid #7d52f4;
+  outline: 2px solid var(--accent);
   outline-offset: 3px;
 }
 
@@ -859,7 +644,7 @@
   align-items: stretch;
   height: 400px;
   overflow: hidden;
-  background: #7d52f4;
+  background: var(--grad-ink);
 }
 
 .mapEdge {
@@ -929,15 +714,15 @@
 .packButton i {
   width: 7px;
   height: 7px;
-  background: #7d52f4;
+  background: var(--accent);
 }
 
 .footer {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 56px 87px 28px;
-  background: #7d52f4;
+  padding: var(--space-9) var(--space-11) var(--space-6);
+  background: var(--accent);
   border-top: 1px solid #ffffff;
 }
 
@@ -1012,7 +797,7 @@
 }
 
 .footerNav a {
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(255, 255, 255, 0.92);
   font-family: var(--font-heading);
   font-size: var(--fs-small);
   font-weight: 400;
@@ -1181,9 +966,20 @@
   .secondary {
     width: auto;
   }
+}
 
+/* Phones: footer links become full 44pt rows. */
+@media (max-width: 734px) {
+  .footerNav a {
+    display: block;
+    padding: 12px 0;
+    color: #ffffff;
+  }
 
-  .actionRow {
-    flex-wrap: wrap;
+  .legal a,
+  .legal button {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
   }
 }

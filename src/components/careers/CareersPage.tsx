@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { SiteClose } from "../site/SiteClose";
+import { CtaBand } from "../shared/CtaBand";
 import { SiteNav } from "../site/SiteNav";
 import styles from "./careers.module.css";
 import { faqs } from "../shared/faqs";
@@ -200,7 +201,7 @@ export function CareersPage() {
           <img src={photos[1].src} alt="" width={photos[1].width} height={photos[1].height} />
           <div className={styles.centerPhoto}>
             <img src="/about/texture.webp" alt="" />
-            <img src="/careers/hero-3b.webp" alt="CNTXT team working together" />
+            <img src="/careers/culture-wall.webp" alt="Two CNTXT colleagues talking in front of the “Culture is Delivery” wall" />
           </div>
           <img src={photos[2].src} alt="" width={photos[2].width} height={photos[2].height} />
           <img src={photos[3].src} alt="" width={photos[3].width} height={photos[3].height} />
@@ -298,7 +299,14 @@ export function CareersPage() {
 
       <Faq items={faqs.careers} title="Questions candidates ask" />
 
-      <SiteClose current="Careers" packHref="/security#procurement" />
+      <CtaBand
+        id="careers-cta"
+        title="Do the real work with us."
+        body="Evaluators, coding experts, annotators and data collectors, remote and on-site."
+        primary={{ label: "See open roles", href: "#openings" }}
+      />
+
+      <SiteClose current="Careers" hideBand />
     </main>
   );
 }

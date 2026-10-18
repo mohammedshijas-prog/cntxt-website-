@@ -65,16 +65,6 @@ const products: Product[] = [
     shots: [{ src: "/brand/product/label-text.webp" }],
   },
   {
-    label: "Evaluation",
-    title: ["Tested before it", "reaches production."],
-    body: "TestAI tests, evaluates and audits AI systems for bias, reliability and compliance before deployment. Human evaluators bring medical, financial, coding and bilingual expertise.",
-    wash: "/solutions/wash-eval.svg",
-    washWidth: 1567,
-    washHeight: 558.5,
-    labelClass: styles.labelEval,
-    shots: [{ src: "/brand/product/testai.webp" }],
-  },
-  {
     label: "Munsit",
     title: ["Arabic voice AI", "across 25+ dialects."],
     body: "Speech-to-text and text-to-speech in one platform, ranked first on the Hugging Face Open Universal Arabic ASR Leaderboard. Deploys via API, on-premises, sovereign cloud or on-device.",

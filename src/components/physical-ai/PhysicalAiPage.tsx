@@ -1,12 +1,12 @@
-import { AnnotationMock, IconChip, IsoFloor, KitArt, PipelineDiagram } from "../shared/graphics";
+import { AnnotationMock, IconChip, IsoFloor, KitArt } from "../shared/graphics";
 import { SiteClose } from "../site/SiteClose";
 import { SiteNav } from "../site/SiteNav";
 import styles from "./physicalAi.module.css";
 import { faqs } from "../shared/faqs";
 import { Faq } from "../shared/Faq";
-import { ProofBar } from "../shared/ProofBar";
 import { BackgroundVideo } from "../shared/VideoToggle";
 import { EgoGrid, FeatureTabs, HeatGrid, LayerGlyph } from "./FeatureTabs";
+import { FactoryWalkthrough } from "./FactoryWalkthrough";
 
 /** Frames from our first-person footage, each with the action it shows. */
 const clips = [
@@ -140,7 +140,6 @@ export function PhysicalAiPage() {
         </div>
       </section>
 
-      <ProofBar />
 
       <section className={styles.features} aria-labelledby="features-heading">
         <Eyebrow>Key features</Eyebrow>
@@ -164,7 +163,7 @@ export function PhysicalAiPage() {
             },
             {
               title: "Evaluation layer",
-              body: "A person reviews every recorded hour before it is accepted, and TestAI checks models for bias, reliability and compliance before deployment.",
+              body: "A person reviews every recorded hour before it is accepted, and labelling is checked with a human in the loop at 98% accuracy.",
               icon: <LayerGlyph tone="ink" />,
               visual: <HeatGrid title="Review coverage by task and environment (illustrative)" />,
             },
@@ -218,11 +217,42 @@ export function PhysicalAiPage() {
         </ul>
       </section>
 
-      <section className={styles.flow} aria-labelledby="flow-heading">
-        <Eyebrow>How it works</Eyebrow>
-        <h2 id="flow-heading">Five stages between a shift and your training run.</h2>
-        <PipelineDiagram />
+      <section className={styles.klkt} aria-labelledby="klkt-heading">
+        <div className={styles.klktPhone}>
+          <img src="/art/klkt-phone.webp" alt="The KLKT app on a phone: record from your point of view with your phone and connected cameras" />
+        </div>
+        <div className={styles.klktCopy}>
+          <Eyebrow>Captured with KLKT</Eyebrow>
+          <h2 id="klkt-heading">A capture network in people&apos;s pockets.</h2>
+          <p>
+            KLKT is our mobile app. People record their everyday work hands-free and are paid in US
+            dollars for every accepted hour, with no fees to join, work or cash out.
+          </p>
+          <ul className={styles.klktFacts}>
+            <li>
+              <strong>Paid per accepted hour</strong>
+              <span>In US dollars, reviewed by a person first</span>
+            </li>
+            <li>
+              <strong>Consent in 4 languages</strong>
+              <span>Arabic, English, Filipino and Urdu</span>
+            </li>
+            <li>
+              <strong>Recent phones</strong>
+              <span>iPhone 11, Pixel 6, Galaxy S21 or newer</span>
+            </li>
+          </ul>
+          <a className={styles.klktLink} href="https://klkt.app">
+            Explore KLKT <span aria-hidden="true">→</span>
+          </a>
+        </div>
+        <figure className={styles.klktConsole}>
+          <img src="/art/klkt-console.webp" alt="The KLKT console: projects, tasks and recordings queued for processing" />
+          <figcaption>Every recording lands in one console: projects, tasks and jobs, ready for review and processing.</figcaption>
+        </figure>
       </section>
+
+      <FactoryWalkthrough />
 
       <section className={styles.caseStrip} aria-labelledby="case-heading">
         <p>Published case · Service robotics</p>

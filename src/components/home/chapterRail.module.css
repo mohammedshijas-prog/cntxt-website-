@@ -1,0 +1,104 @@
+.rail {
+  position: fixed;
+  z-index: 30;
+  top: 50%;
+  right: var(--space-5);
+  opacity: 0;
+  transform: translate(12px, -50%);
+  pointer-events: none;
+  transition:
+    opacity 300ms ease,
+    transform 400ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.shown {
+  opacity: 1;
+  transform: translate(0, -50%);
+  pointer-events: auto;
+}
+
+.rail ol {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0;
+  padding: var(--space-2);
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.72);
+  box-shadow: 0 1px 2px rgba(21, 17, 31, 0.08);
+  list-style: none;
+  backdrop-filter: blur(16px) saturate(160%);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+}
+
+.rail button {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.tick {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--label-3);
+  transition:
+    height 300ms cubic-bezier(0.16, 1, 0.3, 1),
+    background 200ms ease;
+}
+
+.rail button:hover .tick {
+  background: var(--label);
+}
+
+.rail button.active .tick {
+  height: 18px;
+  border-radius: var(--radius-pill);
+  background: var(--accent);
+}
+
+/* The label slides out to the left on hover and for the current chapter. */
+.label {
+  position: absolute;
+  right: 36px;
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  background: var(--label);
+  color: #ffffff;
+  font-family: var(--font-heading);
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateX(6px);
+  pointer-events: none;
+  transition:
+    opacity 200ms ease,
+    transform 250ms ease;
+}
+
+.rail button:hover .label,
+.rail button:focus-visible .label {
+  opacity: 1;
+  transform: none;
+}
+
+@media (max-width: 1068px) {
+  .rail {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rail,
+  .tick,
+  .label {
+    transition: none;
+  }
+}

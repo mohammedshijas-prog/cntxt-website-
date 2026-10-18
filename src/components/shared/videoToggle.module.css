@@ -5,18 +5,18 @@
   z-index: 4;
   display: grid;
   place-items: center;
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   border: 1px solid rgba(255, 255, 255, 0.35);
   border-radius: 50%;
-  background: rgba(20, 14, 11, 0.4);
+  background: rgba(14, 10, 24, 0.4);
   color: #ffffff;
   backdrop-filter: blur(6px);
   transition: background-color 180ms ease;
 }
 
 .toggle:hover {
-  background: rgba(20, 14, 11, 0.6);
+  background: rgba(14, 10, 24, 0.6);
 }
 
 .toggle:focus-visible {
@@ -25,7 +25,7 @@
 }
 
 .dark {
-  border-color: rgba(15, 12, 11, 0.2);
+  border-color: var(--separator);
   background: rgba(255, 255, 255, 0.7);
-  color: #0f0c0b;
+  color: var(--label);
 }

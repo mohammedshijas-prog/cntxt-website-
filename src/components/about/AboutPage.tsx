@@ -132,7 +132,7 @@ export function AboutPage() {
         id="about-cta"
         title="Build with the team behind Munsit and Agentix."
         body="Tell us what you are working on. We will show you how data, models and agents would fit."
-        secondary={{ label: "Meet the stack", href: "/products" }}
+        secondary={{ label: "Explore the AI Lab", href: "/products" }}
       />
 
       <SiteClose current="About" hideBand />

@@ -1,52 +1,119 @@
-/* The real dashboard, lifted over the edge of the hero. */
-.screen {
-  position: relative;
-  z-index: 1;
-  width: min(1300px, calc(100% - 96px));
-  margin: -64px auto 0;
+/* Hero: copy left, the live call over the voice orb right. */
+.hero {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  align-items: center;
+  padding: var(--section-y) var(--space-10) calc(var(--space-12) + var(--space-9)) var(--pad-x);
 }
 
-.screen img {
-  display: block;
+.heroActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  margin-top: 36px;
+}
+
+.heroActions > a {
+  margin-top: 0;
+}
+
+.ghost {
+  display: inline-flex;
+  align-items: center;
+  height: 48px;
+  margin-top: 36px;
+  padding: 0 20px;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 10px;
+  color: #ffffff;
+  font-family: var(--font-heading);
+  font-size: var(--fs-button);
+  font-weight: 500;
+  line-height: 20px;
+  transition: background 200ms ease;
+}
+
+.ghost:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.ghost:focus-visible {
+  outline: 2px solid #b79cff;
+  outline-offset: 3px;
+}
+
+/* Results: three large figures that count up. */
+.results {
   width: 100%;
-  height: auto;
-  border: 1px solid rgba(15, 12, 11, 0.08);
-  border-radius: 18px;
-  box-shadow: 0 40px 80px rgba(76, 46, 170, 0.22);
+  margin: 0 auto;
+  padding: var(--section-y) var(--pad-x) 0;
+}
+
+.results dl {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-top: 24px;
+  border-top: 1px solid var(--separator);
+}
+
+.results dl div {
+  padding: 28px 24px 0 0;
+}
+
+.results dl div + div {
+  padding-left: 32px;
+  border-left: 1px solid var(--separator);
+}
+
+.results dt {
+  background: linear-gradient(135deg, #2a1a66 10%, var(--accent) 90%);
+  background-clip: text;
+  color: transparent;
+  font-family: var(--font-heading);
+  font-size: clamp(64px, 8vw, 128px);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+
+.results dd {
+  margin-top: 12px;
+  color: var(--text-muted);
+  font-family: var(--font-heading);
+  font-size: var(--fs-h4);
+  line-height: var(--lh-h4);
+}
+
+.section {
+  width: 100%;
+  margin: 0 auto;
+  padding: var(--section-y) var(--pad-x) 0;
+}
+
+.dek {
+  width: min(560px, 100%);
+  margin-top: 16px !important;
+  color: var(--text-muted);
+  font-family: var(--font-body);
+  font-size: var(--fs-lead);
+  line-height: var(--lh-lead);
 }
 
 .uses {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  margin-top: 32px;
+  margin-top: 40px;
 }
 
 .uses li {
   padding: 6px 14px;
   border-radius: 20px;
-  background: #efe8ff;
+  background: var(--accent-tint);
   color: #5a3fc0;
   font-family: var(--font-heading);
   font-size: var(--fs-small);
   line-height: var(--lh-small);
-}
-
-.agent {
-  color: var(--text-muted);
-  font-family: var(--font-body);
-  font-size: var(--fs-body);
-  line-height: var(--lh-body);
-}
-
-.agent strong {
-  display: block;
-  margin-bottom: 4px;
-  color: var(--text-strong);
-  font-family: var(--font-heading);
-  font-size: var(--fs-h4);
-  font-weight: 400;
-  line-height: var(--lh-h4);
 }
 
 /* Telephony: copy left, the provider grid right, on lilac. */
@@ -56,15 +123,16 @@
   gap: 64px;
   align-items: center;
   margin: 117px 24px 0;
-  padding: 80px 93px;
+  padding: var(--space-11) var(--pad-x);
+  overflow: hidden;
   border-radius: 24px;
-  background: linear-gradient(180deg, #efe8ff 0%, #d6caf6 100%);
+  background: var(--accent-tint);
 }
 
 .telephony h2 + p {
   width: min(480px, 100%);
   margin-top: 16px;
-  color: rgba(15, 12, 11, 0.72);
+  color: var(--label-2);
   font-family: var(--font-body);
   font-size: var(--fs-lead);
   line-height: var(--lh-lead);
@@ -77,17 +145,11 @@
   margin-top: 32px;
 }
 
-.providers {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-
 /* Details as a ruled table. */
 .facts {
-  width: min(1499px, 100%);
+  width: 100%;
   margin: 0 auto;
-  padding: 117px 117px 0;
+  padding: var(--section-y) var(--pad-x) 0;
 }
 
 .facts dl {
@@ -95,7 +157,7 @@
   grid-template-columns: repeat(2, minmax(0, 1fr));
   column-gap: 64px;
   margin-top: 48px;
-  border-top: 1px solid rgba(15, 12, 11, 0.14);
+  border-top: 1px solid var(--separator);
 }
 
 .facts dl div {
@@ -103,11 +165,11 @@
   grid-template-columns: 160px 1fr;
   gap: 16px;
   padding: 22px 0;
-  border-bottom: 1px solid rgba(15, 12, 11, 0.14);
+  border-bottom: 1px solid var(--separator);
 }
 
 .facts dt {
-  color: #7d52f4;
+  color: var(--accent);
   font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
   font-size: 13px;
   letter-spacing: 0.08em;
@@ -123,16 +185,23 @@
 
 .source {
   margin-top: 24px;
-  color: rgba(15, 12, 11, 0.55);
+  color: var(--label-3);
   font-family: var(--font-body);
   font-size: var(--fs-small);
   line-height: var(--lh-small);
 }
 
 @media (max-width: 1200px) {
-  .screen {
-    width: calc(100% - 48px);
-    margin-top: -32px;
+  .hero {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    padding: var(--section-y) var(--pad-x) 56px;
+  }
+
+  .results,
+  .section {
+    padding-right: 40px;
+    padding-left: 40px;
   }
 
   .telephony {
@@ -143,7 +212,7 @@
   }
 
   .facts {
-    padding: 80px 40px 0;
+    padding: var(--section-y) var(--pad-x) 0;
   }
 
   .facts dl {
@@ -152,9 +221,32 @@
 }
 
 @media (max-width: 720px) {
-  .screen {
-    width: calc(100% - 24px);
-    margin-top: -20px;
+  .hero {
+    padding: var(--section-y) var(--pad-x) 40px;
+  }
+
+  .results,
+  .section {
+    padding-right: 20px;
+    padding-left: 20px;
+  }
+
+  .section {
+    padding-top: 96px;
+  }
+
+  .results dl {
+    grid-template-columns: 1fr;
+  }
+
+  .results dl div + div {
+    padding-left: 0;
+    border-left: 0;
+    border-top: 1px solid var(--separator);
+  }
+
+  .results dl div {
+    padding-bottom: 24px;
   }
 
   .telephony {
@@ -164,11 +256,15 @@
   }
 
   .facts {
-    padding: 64px 20px 0;
+    padding: var(--section-y) var(--pad-x) 0;
   }
 
   .facts dl div {
     grid-template-columns: 1fr;
     gap: 4px;
   }
+}
+
+.opsWrap {
+  margin-top: var(--section-head-gap);
 }

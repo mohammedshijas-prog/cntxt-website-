@@ -1,6 +1,6 @@
 .page {
   position: relative;
-  background: #fafaf8;
+  background: var(--bg);
   color: #000000;
 }
 
@@ -38,7 +38,7 @@
   content: "";
   position: absolute;
   height: 4px;
-  background: linear-gradient(to left, #7d52f4, #d6c7ff);
+  background: var(--accent);
 }
 
 .tag::before {
@@ -54,70 +54,11 @@
   transform: rotate(180deg);
 }
 
-.navWrap {
-  position: absolute;
-  top: 63px;
-  left: 0;
-  z-index: 5;
-  width: 100%;
-  padding: 0 97px;
-}
-
-.nav {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: min(1499px, 100%);
-  margin: 0 auto;
-  padding: 20px;
-  background: rgba(255, 255, 255, 0.92);
-  border-radius: 18px;
-  backdrop-filter: blur(55px);
-}
-
-.nav nav {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-}
-
-.nav nav a {
-  display: inline-flex;
-  gap: 4px;
-  align-items: center;
-  padding: 6px 12px;
-  color: var(--text-strong);
-  font-family: var(--font-heading);
-  font-size: var(--fs-small);
-  font-weight: 500;
-  line-height: var(--lh-small);
-  letter-spacing: -0.084px;
-  border-radius: 96px;
-}
-
 .nav nav img,
 .talk img,
 .cta img,
 .band a img {
   display: block;
-}
-
-.talk {
-  display: inline-flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 148px;
-  height: 36px;
-  padding: 5px 10px 5px 9px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 10px;
-  background: #7d52f4;
-  color: #ffffff;
-  font-family: var(--font-heading);
-  font-size: var(--fs-button);
-  font-weight: 500;
-  line-height: 20px;
-  letter-spacing: -0.12px;
 }
 
 .talk span,
@@ -130,18 +71,12 @@
   background: #ffffff;
 }
 
-.talk span {
-  width: 22px;
-  height: 22px;
-  border-radius: 5px;
-}
-
 .hero {
   display: flex;
   gap: 12px;
   align-items: center;
   min-height: 952px;
-  padding: 274px 117px 117px;
+  padding: calc(var(--section-y) + var(--space-12)) var(--pad-x) var(--section-y);
 }
 
 .heroCopy {
@@ -179,10 +114,8 @@
   align-items: center;
   height: 49px;
   padding: 5px 9px 5px 18px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 10px;
-  background: #7d52f4;
-  box-shadow: 0 1px 2px rgba(14, 18, 27, 0.24);
+  background: var(--accent);
   color: #ffffff;
   font-family: var(--font-heading);
   font-size: var(--fs-h5);
@@ -203,7 +136,7 @@
   height: 561px;
   overflow: hidden;
   border-radius: 12px;
-  background: #f5f1ff;
+  background: var(--bg-2);
 }
 
 .heroArt img {
@@ -219,7 +152,7 @@
   display: flex;
   flex-direction: column;
   gap: 24px;
-  padding: 117px;
+  padding: var(--section-y) var(--pad-x);
 }
 
 .tourIntro {
@@ -351,7 +284,7 @@
 }
 
 .steps {
-  padding: 99px 117px 83px;
+  padding: var(--space-12) var(--pad-x) var(--space-11);
 }
 
 .steps h2,
@@ -381,12 +314,12 @@
 .step,
 .stepOpen {
   position: relative;
-  border-top: 1px solid #dad8ce;
+  border-top: 1px solid var(--separator);
 }
 
 .step:last-child,
 .stepOpen:last-child {
-  border-bottom: 1px solid #dad8ce;
+  border-bottom: 1px solid var(--separator);
 }
 
 .step button,
@@ -433,15 +366,15 @@
   border-radius: 12px;
   object-fit: cover;
   object-position: left center;
-  background: #ecebe5;
+  background: var(--separator);
 }
 
 .cases {
-  padding: 83px;
+  padding: var(--space-11);
 }
 
 .customers {
-  padding: 83px 64px;
+  padding: var(--space-11) var(--space-10);
 }
 
 .customers h2 {
@@ -451,24 +384,6 @@
   font-weight: 400;
   line-height: var(--lh-h2);
   letter-spacing: -0.02em;
-}
-
-.logoBar {
-  display: flex;
-}
-
-.logoBar button {
-  display: flex;
-  flex: 1;
-  align-items: center;
-  justify-content: center;
-  height: 56px;
-  border: 1px solid #696969;
-  background: #ffffff;
-}
-
-.logoBar button[aria-selected="true"] {
-  border-bottom: 2px solid #111111;
 }
 
 .result {
@@ -489,20 +404,6 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-}
-
-.brandMark {
-  position: absolute;
-  top: 23%;
-  left: 34%;
-  display: block;
-}
-
-.brandWord {
-  position: absolute;
-  top: calc(50% + 59px);
-  left: 10.8%;
-  display: block;
 }
 
 .metric,
@@ -572,7 +473,7 @@
   align-items: stretch;
   height: 530px;
   overflow: hidden;
-  background: #7d52f4;
+  background: var(--accent);
 }
 
 .mapEdge {
@@ -630,8 +531,6 @@
 }
 
 @media (max-width: 1200px) {
-  .navWrap { padding: 0 24px; }
-  .nav nav { display: none; }
   .hero,
   .tour,
   .steps,
@@ -672,26 +571,12 @@
   .heroCopy h1 { font-size: var(--fs-display); line-height: var(--lh-display); }
   .metric,
   .result figure { min-height: 0; gap: 24px; }
-  .logoBar {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-  .logoBar button {
-    min-width: 0;
-    padding: 0 8px;
-  }
-  .logoBar img {
-    width: auto;
-    max-width: 100%;
-    height: 16px;
-    object-fit: contain;
-  }
 }
 
 /* Final pass: eyebrow, hero buttons and the research section. */
 .labEyebrow {
   margin: 0 0 16px;
-  color: #7d52f4;
+  color: var(--accent);
   font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
   font-size: 13px;
   letter-spacing: 0.14em;
@@ -711,9 +596,9 @@
   align-items: center;
   height: 48px;
   padding: 0 18px;
-  border: 1px solid rgba(15, 12, 11, 0.2);
+  border: 1px solid var(--separator);
   border-radius: 10px;
-  color: #0f0c0b;
+  color: var(--label);
   font-family: var(--font-heading);
   font-size: var(--fs-button);
   font-weight: 500;
@@ -721,11 +606,11 @@
 }
 
 .ghostCta:hover {
-  background: rgba(15, 12, 11, 0.04);
+  background: rgba(21, 17, 31, 0.04);
 }
 
 .tourIntro a {
-  color: #7d52f4;
+  color: var(--accent);
   text-decoration: underline;
 }
 
@@ -735,11 +620,9 @@
   gap: 64px;
   align-items: start;
   margin: 117px 24px 0;
-  padding: 88px 93px;
+  padding: var(--space-11) var(--pad-x);
   border-radius: 24px;
-  background:
-    radial-gradient(90% 80% at 100% 0%, rgba(125, 82, 244, 0.45) 0%, rgba(125, 82, 244, 0) 60%),
-    #15111f;
+  background: var(--grad-ink);
   color: #ffffff;
 }
 

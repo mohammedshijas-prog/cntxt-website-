@@ -15,9 +15,9 @@ export function Hero() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const fadeRef = useRef<HTMLDivElement>(null);
 
-  // Curtain transition: as the page scrolls, the hero sinks back (drifts down,
-  // grows slightly, darkens) while the next section rises over it with rounded
-  // top corners. Only one CSS variable changes per frame.
+  // Frame transition: the hero pins while the footage pulls back into a
+  // rounded card on the page and the copy fades, then the card scrolls away
+  // into the next section. Only one CSS variable changes per frame.
   useEffect(() => {
     const hero = sectionRef.current;
     const video = videoRef.current;
@@ -28,8 +28,10 @@ export function Hero() {
 
     const update = () => {
       frame = 0;
-      const height = hero.offsetHeight || 1;
-      const lift = reduced.matches ? 0 : clamp(window.scrollY / height);
+      // The pinned distance is the extra track height beyond one screen.
+      // Rect height, not offsetHeight: the body is zoomed on mid-size screens.
+      const travel = hero.getBoundingClientRect().height - window.innerHeight;
+      const lift = reduced.matches || travel <= 0 ? 0 : clamp(window.scrollY / travel);
       const rounded = Math.round(lift * 1000) / 1000;
       if (rounded === last) return;
       last = rounded;
@@ -61,6 +63,7 @@ export function Hero() {
 
   return (
     <section ref={sectionRef} className={styles.hero} aria-labelledby="hero-heading">
+      <div className={styles.stage}>
       <video
         ref={videoRef}
         className={styles.backgroundVideo}
@@ -109,7 +112,7 @@ export function Hero() {
           CNTXT AI raises a $60M Series A, co-led by AI71 and BlueFive Capital
           <span aria-hidden="true">→</span>
         </a>
-        <h1 id="hero-heading">Real-world AI for the world&apos;s most important work.</h1>
+        <h1 id="hero-heading">Real-world AI, from data to deployment.</h1>
         <p className={styles.sub}>
           We capture and verify data from real work, train models on it, and deploy Arabic-first
           AI agents on your own infrastructure.
@@ -120,9 +123,10 @@ export function Hero() {
             <img src="/healthcare/caret.svg" alt="" width={20} height={20} />
           </a>
           <a className={styles.ghost} href="/products">
-            Explore the stack
+            Explore the AI Lab
           </a>
         </div>
+      </div>
       </div>
       </div>
     </section>

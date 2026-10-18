@@ -7,10 +7,8 @@
   height: 48px;
   margin-top: 24px;
   padding: 5px 16px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 10px;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0)), #7d52f4;
-  box-shadow: 0 1px 2px rgba(14, 18, 27, 0.24);
+  background: var(--accent);
   color: #ffffff;
   font-family: var(--font-heading);
   font-size: var(--fs-button);
@@ -46,7 +44,7 @@
 }
 
 .orbitHub {
-  fill: #7d52f4;
+  fill: var(--accent);
 }
 
 .orbitDash {
@@ -61,11 +59,11 @@
 }
 
 .lineActive .orbitHub {
-  fill: #7d52f4;
+  fill: var(--accent);
 }
 
 .orbitDash {
-  stroke: #7d52f4;
+  stroke: var(--accent);
 }
 
 .tile {
@@ -84,7 +82,7 @@
 }
 
 .tile:focus-visible {
-  outline: none;
+  
 }
 
 .tileFrame {
@@ -145,7 +143,7 @@
 }
 
 .tile:focus-visible .tileFrame {
-  outline: 2px solid #7d52f4;
+  outline: 2px solid var(--accent);
   outline-offset: 3px;
 }
 
@@ -183,7 +181,7 @@
   content: "";
   width: 7px;
   height: 7px;
-  background: #7d52f4;
+  background: var(--accent);
   clip-path: polygon(0 0, 100% 0, 0 100%);
 }
 
@@ -224,7 +222,7 @@
 }
 
 .industryCopy h2 span {
-  color: #7d52f4;
+  color: var(--accent);
 }
 
 .industryCopy a {
@@ -261,6 +259,10 @@
   }
 }
 
+/* Phones: a compact 3-up grid so twelve industries fit in about a screen. */
 @media (max-width: 720px) {
-  .orbit { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .orbit {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px 10px;
+  }
 }

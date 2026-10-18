@@ -35,10 +35,9 @@ export const menus: Record<MenuId, Menu> = {
       {
         heading: "Products",
         items: [
-          { title: "Munsit", href: "https://munsit.com", desc: "Arabic speech-to-text and text-to-speech across 25+ dialects" },
-          { title: "Agentix", href: "/agentix", desc: "Arabic voice and chat agents with GCC telephony" },
-          { title: "TestAI", href: "/evaluate-ai", desc: "Test and audit AI for bias, reliability and compliance" },
-          { title: "KLKT", href: "https://klkt.app", desc: "Record everyday work and get paid for accepted hours" },
+          { title: "Munsit", href: "https://munsit.com", icon: "/nav/munsit-icon.svg", desc: "Arabic speech-to-text and text-to-speech across 25+ dialects" },
+          { title: "Agentix", href: "/agentix", icon: "/nav/agentix-icon.svg", desc: "Arabic voice and chat agents with GCC telephony" },
+          { title: "KLKT", href: "https://klkt.app", icon: "/nav/klkt-icon.svg", desc: "Record everyday work and get paid for accepted hours" },
         ],
       },
       {
@@ -89,10 +88,12 @@ export const menus: Record<MenuId, Menu> = {
         hint: "Robotics and embodied AI",
         heading: "Physical AI",
         items: [
-          { title: "Physical AI data", href: "/physical-ai" },
-          { title: "Video annotation for robotics", href: "/data-hub?category=Video" },
-          { title: "3D and LiDAR annotation", href: "/data-hub?category=3D" },
-          { title: "Robotics case study", href: "/physical-ai#case-heading" },
+          { title: "Physical AI overview", href: "/physical-ai" },
+          { title: "Robotics & humanoids", href: "/physical-ai/robotics-humanoids" },
+          { title: "World models & foundation models", href: "/physical-ai/world-models" },
+          { title: "Autonomous systems & perception", href: "/physical-ai/autonomous-systems" },
+          { title: "Logistics & warehousing", href: "/physical-ai/logistics-warehousing" },
+          { title: "Healthcare & service robotics", href: "/physical-ai/healthcare-service-robotics" },
         ],
       },
       {
@@ -242,10 +243,13 @@ export function NavMenu({
                 <li key={item.title}>
                   <a className={styles.item} href={item.href} tabIndex={open ? 0 : -1}>
                     {mega ? (
-                      <span>
-                        <strong>{item.title}</strong>
-                        {item.desc ? <small>{item.desc}</small> : null}
-                      </span>
+                      <>
+                        {item.icon ? <img className={styles.productIcon} src={item.icon} alt="" width={36} height={36} /> : null}
+                        <span>
+                          <strong>{item.title}</strong>
+                          {item.desc ? <small>{item.desc}</small> : null}
+                        </span>
+                      </>
                     ) : rich ? (
                       <>
                         <span className={`${styles.icon} ${item.icon ? styles.brandIcon : ""}`} aria-hidden="true">

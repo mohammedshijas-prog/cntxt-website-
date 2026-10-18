@@ -1,0 +1,99 @@
+.band {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.4fr);
+  gap: var(--space-9);
+  align-items: center;
+  width: var(--content);
+  margin: var(--section-y) auto 0;
+  padding: var(--space-12) var(--space-10);
+  border-radius: var(--radius-card);
+  background: var(--grad-ink);
+  color: var(--label-dark);
+}
+
+.band h2 {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: var(--fs-h2);
+  font-weight: 500;
+  letter-spacing: var(--ls-h2);
+  line-height: var(--lh-h2);
+}
+
+.flow {
+  position: relative;
+  height: 340px;
+}
+
+.canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.stages {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.stages li {
+  color: #ffffff;
+  font-family: var(--font-heading);
+  font-size: var(--fs-h4);
+  line-height: var(--lh-h4);
+  text-align: center;
+  text-shadow: 0 0 18px var(--ink), 0 0 6px var(--ink);
+}
+
+@media (max-width: 1068px) {
+  .band {
+    grid-template-columns: 1fr;
+    padding: var(--space-11) var(--space-8);
+  }
+}
+
+@media (max-width: 734px) {
+  .band {
+    width: auto;
+    margin-right: var(--space-3);
+    margin-left: var(--space-3);
+    padding: var(--space-10) var(--space-5);
+  }
+
+  .flow {
+    height: auto;
+  }
+
+  .canvas {
+    position: relative;
+    height: 180px;
+  }
+
+  /* Labels move under the matrix as a readable flow. */
+  .stages {
+    position: static;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-3);
+    margin-top: var(--space-5);
+  }
+
+  .stages li {
+    font-size: var(--fs-small);
+    line-height: 1.4;
+    text-shadow: none;
+  }
+
+  .stages li + li::before {
+    content: "→";
+    margin-right: var(--space-3);
+    color: var(--accent-on-dark);
+  }
+}

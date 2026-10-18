@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { SiteClose } from "../site/SiteClose";
+import { CaseStudies, DataTypes } from "./DataTypes";
 import { SiteNav } from "../site/SiteNav";
 import { CaseCards, type CaseCard } from "../shared/CaseCards";
 import styles from "./product.module.css";
@@ -125,7 +126,7 @@ export function ProductPage() {
           <Eyebrow>Product tour</Eyebrow>
           <h2 id="tour-heading">What’s inside AI Lab</h2>
           <p>
-            Three layers that build on each other. Data comes first, models are trained on it, and agents put those models to work inside your systems. <a href="/evaluate-ai">TestAI</a> checks each model before it reaches production.
+            Three layers that build on each other. Data comes first, models are trained on it, and agents put those models to work inside your systems.
           </p>
         </div>
         <article className={styles.feature}>
@@ -188,6 +189,10 @@ export function ProductPage() {
         <h2 id="capabilities-heading">What each layer does</h2>
         <CaseCards cases={cases} />
       </section>
+
+      <DataTypes />
+
+      <CaseStudies />
 
       <section className={styles.customers} aria-labelledby="customers-heading">
         <Eyebrow>Customers & results</Eyebrow>

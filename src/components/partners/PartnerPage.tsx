@@ -120,7 +120,7 @@ export function PartnerPage() {
         </article>
       </section>
 
-      <Faq items={faqs.partners} topic="Partnerships" />
+      <Faq items={faqs.partners} topic="Partnerships" title="Questions partners ask" />
 
       <section className={styles.apply} id="apply" aria-labelledby="apply-heading">
         <article className={styles.applyIntro}>
@@ -137,28 +137,6 @@ export function PartnerPage() {
           </div>
         </article>
         <PartnerForm />
-      </section>
-
-      <section className={styles.band} aria-labelledby="band-heading">
-        <div className={styles.mapEdge} aria-hidden="true">
-          <img src="/security/map-left.webp" alt="" />
-        </div>
-        <div className={styles.bandCopy}>
-          <h2 id="band-heading">Partner with us</h2>
-          <p>
-            Tell us what you build and where you operate. We will reply to
-            the address you give us.
-          </p>
-          <a className={styles.bandButton} href="#apply">
-            Become a partner
-            <span>
-              <img src="/partners/caret-right.svg" alt="" width={23} height={23} />
-            </span>
-          </a>
-        </div>
-        <div className={styles.mapEdge} aria-hidden="true">
-          <img src="/security/map-right.webp" alt="" />
-        </div>
       </section>
 
       <SiteClose current="Partnerships" hideBand />

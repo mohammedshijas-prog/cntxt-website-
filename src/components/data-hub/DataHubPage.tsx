@@ -4,11 +4,26 @@ import { useEffect, useRef, useState } from "react";
 import { SiteClose } from "../site/SiteClose";
 import { SiteNav } from "../site/SiteNav";
 import { NumberField } from "./NumberField";
+import { IconChip } from "../shared/graphics";
 import styles from "./data-hub.module.css";
 import { CtaBand } from "../shared/CtaBand";
 import { faqs } from "../shared/faqs";
 import { Faq } from "../shared/Faq";
-import { ProofBar } from "../shared/ProofBar";
+
+const glyphs: Record<string, "wave" | "text" | "image" | "camera" | "lidar" | "check" | "consent" | "floor"> = {
+  Audio: "wave",
+  "3D": "lidar",
+  Document: "text",
+  Text: "text",
+  Image: "image",
+  Video: "camera",
+  LiDAR: "lidar",
+  Evaluation: "check",
+  "Data services": "image",
+  "AI evaluation": "check",
+  "Arabic voice AI": "wave",
+  "Physical AI data": "camera",
+};
 
 const categories = [
   "All",
@@ -40,7 +55,6 @@ type AgentSet = {
   kind: "agent";
   title: string;
   category: string;
-  image: string;
   blurb: string;
   labels: [string, string];
   age: number;
@@ -101,7 +115,6 @@ const agentSets: AgentSet[] = [
     kind: "agent",
     title: "Transcribed audio",
     category: "Audio",
-    image: "/data-hub/orb-pink.jpg",
     blurb:
       "Audio transcribed, timestamped and split by speaker. Native Arabic annotators cover more than 25 dialects.",
     labels: ["Transcription", "Diarisation"],
@@ -112,7 +125,6 @@ const agentSets: AgentSet[] = [
     kind: "agent",
     title: "Sentiment and entity labels",
     category: "Text",
-    image: "/data-hub/orb-blue.png",
     blurb:
       "Text labelled for sentiment and named entities, with human-in-the-loop quality assurance at 98% labelling accuracy.",
     labels: ["Sentiment", "Entities"],
@@ -123,7 +135,6 @@ const agentSets: AgentSet[] = [
     kind: "agent",
     title: "Content moderation labels",
     category: "Text",
-    image: "/data-hub/orb-red.jpg",
     blurb:
       "Text reviewed and labelled against your moderation policy, in Arabic and English, with human quality assurance.",
     labels: ["Moderation", "Policy review"],
@@ -134,7 +145,6 @@ const agentSets: AgentSet[] = [
     kind: "agent",
     title: "Ranked model responses",
     category: "Text",
-    image: "/data-hub/orb-pink.jpg",
     blurb:
       "Prompts annotated and model responses ranked by people, for fine-tuning and evaluation.",
     labels: ["Eval ranking", "Prompt annotation"],
@@ -145,7 +155,6 @@ const agentSets: AgentSet[] = [
     kind: "agent",
     title: "Annotated images",
     category: "Image",
-    image: "/data-hub/orb-pink.jpg",
     blurb:
       "Images labelled with bounding boxes and segmentation masks, with human-in-the-loop quality assurance at 98% labelling accuracy.",
     labels: ["Bounding boxes", "Segmentation"],
@@ -156,7 +165,6 @@ const agentSets: AgentSet[] = [
     kind: "agent",
     title: "Action-labelled video",
     category: "Video",
-    image: "/data-hub/orb-blue.png",
     blurb:
       "Video labelled frame by frame with the actions it shows, including first-person recordings of real work.",
     labels: ["Action labels", "Frame by frame"],
@@ -167,7 +175,6 @@ const agentSets: AgentSet[] = [
     kind: "agent",
     title: "Annotated LiDAR",
     category: "3D",
-    image: "/data-hub/orb-red.jpg",
     blurb:
       "LiDAR scans annotated for perception models, with human review before delivery.",
     labels: ["LiDAR", "Human review"],
@@ -178,7 +185,6 @@ const agentSets: AgentSet[] = [
     kind: "agent",
     title: "Expert evaluation sets",
     category: "Evaluation",
-    image: "/data-hub/orb-pink.jpg",
     blurb:
       "Test sets written and graded by domain experts in fields such as finance, healthcare, logistics and government.",
     labels: ["Domain experts", "Model evaluation"],
@@ -352,7 +358,6 @@ export function DataHubPage({ initialCategory }: { initialCategory?: string }) {
         </div>
       </section>
 
-      <ProofBar />
 
       <section className={styles.catalog} id="request" aria-labelledby="catalog-heading">
         <h2 id="catalog-heading">
@@ -442,9 +447,7 @@ export function DataHubPage({ initialCategory }: { initialCategory?: string }) {
                     <img src="/data-hub/dot.svg" alt="" width={8} height={8} />
                     {item.category}
                   </p>
-                  <span className={styles.orb}>
-                    <img src={item.image} alt="" />
-                  </span>
+                  <IconChip name={glyphs[item.category] ?? "floor"} />
                   <div className={styles.agentCopy}>
                     <h3>{item.title}</h3>
                     <p>{item.blurb}</p>

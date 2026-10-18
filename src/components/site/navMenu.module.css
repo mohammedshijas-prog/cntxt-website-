@@ -101,7 +101,7 @@
 .item:hover,
 .item:focus-visible {
   background: #f7f5ff;
-  outline: none;
+  
 }
 
 .icon {
@@ -132,7 +132,7 @@
 .item:hover .icon:not(.brandIcon),
 .item:focus-visible .icon:not(.brandIcon) {
   background: #ece6ff;
-  color: #7d52f4;
+  color: var(--accent);
 }
 
 .item strong {
@@ -186,7 +186,7 @@
 
 .simple .item:hover strong,
 .simple .item:focus-visible strong {
-  color: #7d52f4;
+  color: var(--accent);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -240,6 +240,20 @@
   padding: 10px;
 }
 
+/* Product marks beside each product in the AI Lab menu. */
+.mega .item:has(.productIcon) {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+.productIcon {
+  flex: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 9px;
+}
+
 .mega .item strong {
   font-size: 16px;
   line-height: 22px;
@@ -257,7 +271,7 @@
 
 .mega .item:hover strong,
 .mega .item:focus-visible strong {
-  color: #7d52f4;
+  color: var(--accent);
 }
 
 .feature {
@@ -271,16 +285,14 @@
   padding: 22px 22px 0;
   overflow: hidden;
   border-radius: 14px;
-  background:
-    radial-gradient(120% 80% at 100% 0%, rgba(125, 82, 244, 0.6) 0%, rgba(125, 82, 244, 0) 60%),
-    #15111f;
+  background: var(--grad-ink);
   color: #ffffff;
 }
 
 .featureEyebrow {
   color: #b79cff;
   font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
-  font-size: 11px;
+  font-size: 12px;
   letter-spacing: 0.12em;
   line-height: 16px;
   text-transform: uppercase;
@@ -317,7 +329,7 @@
 }
 
 .feature:focus-visible {
-  outline: 2px solid #7d52f4;
+  outline: 2px solid var(--accent);
   outline-offset: 3px;
 }
 
@@ -376,11 +388,11 @@
 }
 
 .railItem[data-active="true"] strong {
-  color: #7d52f4;
+  color: var(--accent);
 }
 
 .railItem:focus-visible {
-  outline: 2px solid #7d52f4;
+  outline: 2px solid var(--accent);
   outline-offset: -2px;
 }
 
@@ -413,7 +425,7 @@
 
 .browse .item:hover strong,
 .browse .item:focus-visible strong {
-  color: #7d52f4;
+  color: var(--accent);
 }
 
 .browse .feature {

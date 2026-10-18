@@ -1,6 +1,6 @@
 .page {
   position: relative;
-  background: #fafaf8;
+  background: var(--bg);
   color: #000000;
 }
 
@@ -38,7 +38,7 @@
   content: "";
   position: absolute;
   height: 4px;
-  background: linear-gradient(to left, #7d52f4, #d6c7ff);
+  background: var(--accent);
 }
 
 .tag::before {
@@ -54,47 +54,6 @@
   transform: rotate(180deg);
 }
 
-.navWrap {
-  position: absolute;
-  top: 63px;
-  left: 0;
-  z-index: 5;
-  width: 100%;
-  padding: 0 97px;
-}
-
-.nav {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: min(1499px, 100%);
-  margin: 0 auto;
-  padding: 20px;
-  background: rgba(255, 255, 255, 0.92);
-  border-radius: 18px;
-  backdrop-filter: blur(55px);
-}
-
-.nav nav {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-}
-
-.nav nav a {
-  display: inline-flex;
-  gap: 4px;
-  align-items: center;
-  padding: 6px 12px;
-  color: var(--text-strong);
-  font-family: var(--font-heading);
-  font-size: var(--fs-small);
-  font-weight: 500;
-  line-height: var(--lh-small);
-  letter-spacing: -0.084px;
-  border-radius: 96px;
-}
-
 .nav nav img,
 .talk img,
 .partner img,
@@ -103,40 +62,12 @@
   display: block;
 }
 
-.talk {
-  display: inline-flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 148px;
-  height: 36px;
-  padding: 5px 10px 5px 9px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 10px;
-  background: #7d52f4;
-  color: #ffffff;
-  font-family: var(--font-heading);
-  font-size: var(--fs-button);
-  font-weight: 500;
-  line-height: 20px;
-  letter-spacing: -0.12px;
-}
-
-.talk span {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 22px;
-  height: 22px;
-  border-radius: 5px;
-  background: #ffffff;
-}
-
 .hero {
   display: flex;
   gap: 12px;
   align-items: center;
   min-height: 952px;
-  padding: 274px 117px 117px;
+  padding: calc(var(--section-y) + var(--space-12)) var(--pad-x) var(--section-y);
 }
 
 .heroCopy {
@@ -174,9 +105,8 @@
   align-items: center;
   height: 49px;
   padding: 5px 9px 5px 18px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 10px;
-  background: #7d52f4;
+  background: var(--accent);
   color: #ffffff;
   font-family: var(--font-heading);
   font-size: var(--fs-h5);
@@ -206,7 +136,7 @@
 
 .cases,
 .offers {
-  padding: 83px;
+  padding: var(--space-11);
 }
 
 .cases h2 {
@@ -260,22 +190,6 @@
   font-size: var(--fs-xs);
   font-weight: 500;
   line-height: var(--lh-xs);
-}
-
-.orb {
-  display: block;
-  width: 87px;
-  height: 87px;
-  overflow: hidden;
-  border-radius: 99px;
-}
-
-.orb img {
-  display: block;
-  width: 177.78%;
-  max-width: none;
-  height: 100%;
-  margin-left: -38.89%;
 }
 
 .offers li div {
@@ -338,32 +252,13 @@
 }
 
 .offers button[aria-pressed="true"] {
-  border-color: #7d52f4;
-  background: #7d52f4;
+  border-color: var(--accent);
+  background: var(--accent);
   color: #ffffff;
 }
 
 .customers {
-  padding: 83px 64px;
-}
-
-.logoBar {
-  display: flex;
-}
-
-.logoBar button {
-  display: flex;
-  flex: 1;
-  align-items: center;
-  justify-content: center;
-  height: 56px;
-  border: 1px solid #696969;
-  border-bottom-width: 1px;
-  background: #ffffff;
-}
-
-.logoBar button[aria-selected="true"] {
-  border-bottom: 2px solid #111111;
+  padding: var(--space-11) var(--space-10);
 }
 
 .result {
@@ -384,20 +279,6 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-}
-
-.brandMark {
-  position: absolute;
-  top: 23%;
-  left: 34%;
-  display: block;
-}
-
-.brandWord {
-  position: absolute;
-  top: calc(50% + 59px);
-  left: 10.8%;
-  display: block;
 }
 
 .metric,
@@ -467,7 +348,7 @@
   align-items: stretch;
   height: 530px;
   overflow: hidden;
-  background: #7d52f4;
+  background: var(--accent);
 }
 
 .mapEdge {
@@ -525,8 +406,6 @@
 }
 
 @media (max-width: 1200px) {
-  .navWrap { padding: 0 24px; }
-  .nav nav { display: none; }
   .hero,
   .cases,
   .offers,
@@ -559,18 +438,4 @@
   .result { grid-template-columns: 1fr; }
   .heroCopy h1 { font-size: var(--fs-display); line-height: var(--lh-display); }
   .metric, .result figure { min-height: 0; gap: 24px; }
-  .logoBar {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-  .logoBar button {
-    min-width: 0;
-    padding: 0 8px;
-  }
-  .logoBar img {
-    width: auto;
-    max-width: 100%;
-    height: 16px;
-    object-fit: contain;
-  }
 }

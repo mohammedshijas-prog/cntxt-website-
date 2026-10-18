@@ -16,11 +16,7 @@ export function BlogArticle() {
       <article className={styles.article}>
         <div>
           <p className={styles.articleKicker}>{article.kicker}</p>
-          <h1>
-            {article.title[0]}
-            <br />
-            {article.title[1]}
-          </h1>
+          <h1>{`${article.title[0]} ${article.title[1]}`}</h1>
           <p className={styles.byline}>{article.meta}</p>
           <div className={styles.heroImage}>
             <img src="/blog/hero-under.webp" alt="" />

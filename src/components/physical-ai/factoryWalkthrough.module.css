@@ -1,0 +1,152 @@
+.walk {
+  position: relative;
+  height: calc(var(--screen-h) * 4.2);
+  margin-top: var(--section-y);
+}
+
+.sticky {
+  position: sticky;
+  top: 0;
+  height: var(--screen-h);
+  overflow: hidden;
+  background: #f3f1f8;
+}
+
+.scene {
+  position: absolute;
+  inset: 0;
+}
+
+/* Two pill labels, like a sticker on the drawing. */
+.title {
+  position: absolute;
+  top: calc(var(--space-12) + var(--space-5));
+  left: var(--pad-x);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+  margin: 0;
+  pointer-events: none;
+}
+
+.page section .title,
+.title {
+  font-size: inherit;
+}
+
+.title span {
+  padding: var(--space-2) var(--space-6) var(--space-3);
+  border-radius: var(--radius-pill);
+  background: #ffffff;
+  color: var(--label);
+  font-family: var(--font-heading);
+  font-size: clamp(28px, 3.4vw, 52px);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+  box-shadow: 0 1px 2px rgba(21, 17, 31, 0.06);
+}
+
+.title span:first-child {
+  background: var(--accent);
+  color: #ffffff;
+}
+
+.card {
+  position: absolute;
+  right: var(--pad-x);
+  bottom: var(--space-9);
+  width: min(400px, calc(100% - 2 * var(--space-5)));
+  padding: var(--space-7) var(--space-7) var(--space-6);
+  border-radius: var(--radius-card);
+  background: #ffffff;
+  box-shadow: 0 12px 32px rgba(21, 17, 31, 0.1);
+}
+
+.step {
+  margin: 0;
+  color: var(--accent-text);
+  font-family: var(--font-heading);
+  font-size: var(--fs-small);
+  font-weight: 600;
+}
+
+.card h3 {
+  margin: var(--space-2) 0 0;
+  font-family: var(--font-heading);
+  font-size: var(--fs-h3);
+  font-weight: 500;
+  line-height: var(--lh-h3);
+}
+
+.body {
+  min-height: 4.5em;
+  margin: var(--space-3) 0 0;
+  color: var(--label-2);
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+}
+
+.pills {
+  display: flex;
+  gap: var(--space-2);
+  margin-top: var(--space-6);
+}
+
+.pills button {
+  width: 14px;
+  height: 14px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: var(--bg-3);
+  cursor: pointer;
+  transition:
+    width 400ms cubic-bezier(0.16, 1, 0.3, 1),
+    background 300ms ease;
+}
+
+.pills button.pillActive {
+  width: 64px;
+  background: var(--accent);
+}
+
+/* Bigger hit area without changing the drawn pill. */
+.pills button::after {
+  content: "";
+  display: block;
+  margin: -15px -6px;
+  height: 44px;
+}
+
+@media (max-width: 734px) {
+  .walk {
+    height: calc(var(--screen-h) * 4);
+  }
+
+  .title {
+    top: 88px;
+    left: var(--space-5);
+  }
+
+  .title span {
+    padding: var(--space-1) var(--space-4) var(--space-2);
+    font-size: 24px;
+  }
+
+  .card {
+    right: var(--space-3);
+    bottom: var(--space-3);
+    left: var(--space-3);
+    width: auto;
+    padding: var(--space-6) var(--space-5) var(--space-5);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pills button {
+    transition: none;
+  }
+}

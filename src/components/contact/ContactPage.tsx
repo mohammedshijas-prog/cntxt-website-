@@ -39,7 +39,7 @@ export function ContactPage() {
 
       <div style={{ height: 96 }} />
 
-      <SiteClose current="Contact" packHref="/security#procurement" />
+      <SiteClose current="Contact" hideBand />
     </main>
   );
 }

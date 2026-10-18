@@ -1,8 +1,8 @@
 .bar {
   width: min(1499px, calc(100% - 48px));
   margin: 32px auto 0;
-  border-top: 1px solid rgba(15, 12, 11, 0.12);
-  border-bottom: 1px solid rgba(15, 12, 11, 0.12);
+  border-top: 1px solid var(--separator);
+  border-bottom: 1px solid var(--separator);
 }
 
 .bar ul {
@@ -21,11 +21,11 @@
 }
 
 .bar li + li {
-  border-left: 1px solid rgba(15, 12, 11, 0.12);
+  border-left: 1px solid var(--separator);
 }
 
 .bar strong {
-  color: #0f0c0b;
+  color: var(--label);
   font-family: var(--font-heading);
   font-size: 30px;
   font-weight: 400;
@@ -34,7 +34,7 @@
 }
 
 .bar span {
-  color: rgba(15, 12, 11, 0.62);
+  color: var(--label-2);
   font-family: var(--font-body);
   font-size: var(--fs-small);
   line-height: var(--lh-small);
@@ -66,7 +66,7 @@
   }
 
   .bar li:nth-child(n + 3) {
-    border-top: 1px solid rgba(15, 12, 11, 0.12);
+    border-top: 1px solid var(--separator);
   }
 }
 

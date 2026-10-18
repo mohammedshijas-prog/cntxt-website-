@@ -366,6 +366,21 @@ const iconPaths: Record<string, ReactNode> = {
       <path d="M8.500 10.500V8a3.500 3.500 0 0 1 7 0v2.500" />
     </>
   ),
+  wave: <path d="M3 12h1.5M6.5 8.5v7M10 5.5v13M13.5 8v8M17 10v4M20.5 12H21" />,
+  text: <path d="M5 6.5h14M5 10.5h14M5 14.5h9M5 18.5h6" />,
+  image: (
+    <>
+      <rect x="3.5" y="5" width="17" height="14" rx="2.5" />
+      <path d="m3.5 16 4.5-4.5 4 4 3-3 5.5 5.5" />
+      <circle cx="15.5" cy="9.5" r="1.5" />
+    </>
+  ),
+  lidar: (
+    <>
+      <circle cx="12" cy="12" r="2" />
+      <path d="M7.8 7.8a6 6 0 0 0 0 8.4M16.2 7.8a6 6 0 0 1 0 8.4M5 5a10 10 0 0 0 0 14M19 5a10 10 0 0 1 0 14" />
+    </>
+  ),
   pay: (
     <>
       <circle cx="12" cy="12" r="8.500" />

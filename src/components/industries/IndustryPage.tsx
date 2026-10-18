@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { IconChip } from "../shared/graphics";
 import { SiteClose } from "../site/SiteClose";
 import { SiteNav } from "../site/SiteNav";
@@ -6,7 +7,6 @@ import { industries } from "./industries";
 import styles from "./industry.module.css";
 import { industryFaqs } from "../shared/faqs";
 import { Faq } from "../shared/Faq";
-import { ProofBar } from "../shared/ProofBar";
 
 const marks = [
   { name: "SOC 2 Type II", src: "/brand/certs/soc2.svg" },
@@ -53,7 +53,6 @@ export function IndustryPage({ industry }: { industry: Industry }) {
         </dl>
       </section>
 
-      <ProofBar />
 
       <section className={styles.problems} aria-labelledby="problems-heading">
         <div>
@@ -161,9 +160,9 @@ export function IndustryPage({ industry }: { industry: Industry }) {
             </a>
           </li>
           <li>
-            <a href="/physical-ai">
+            <Link href="/physical-ai/robotics-humanoids">
               Robotics <span aria-hidden="true">→</span>
-            </a>
+            </Link>
           </li>
         </ul>
       </section>

@@ -44,7 +44,7 @@ export function MobileMenu({ dark = false }: { dark?: boolean }) {
       {/* Rendered at the end of <body>: the header's backdrop blur would trap a fixed panel inside it. */}
       {open
         ? createPortal(
-            <div id="mobile-menu" className={styles.panel}>
+            <div id="mobile-menu" className={styles.panel} data-lenis-prevent="">
               <nav aria-label="Mobile">
                 <ul className={styles.list}>
                   {menuOrder.map((id) => {

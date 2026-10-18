@@ -1,12 +1,10 @@
 .wall {
   position: relative;
   margin: 0 24px;
-  padding: 72px 93px 80px;
+  padding: var(--space-10) var(--pad-x) var(--space-11);
   overflow: hidden;
   border-radius: 24px;
-  background:
-    radial-gradient(120% 90% at 100% 0%, rgba(125, 82, 244, 0.38) 0%, rgba(125, 82, 244, 0) 55%),
-    #15111f;
+  background: var(--grad-ink);
   color: #ffffff;
 }
 
@@ -102,7 +100,7 @@
 .role {
   color: #b79cff;
   font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
-  font-size: 11px;
+  font-size: 12px;
   letter-spacing: 0.14em;
   line-height: 16px;
   text-transform: uppercase;

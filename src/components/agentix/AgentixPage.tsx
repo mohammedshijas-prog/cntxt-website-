@@ -1,48 +1,67 @@
-import { IconChip } from "../shared/graphics";
 import { SiteClose } from "../site/SiteClose";
 import { SiteNav } from "../site/SiteNav";
 import base from "../industries/industry.module.css";
 import styles from "./agentix.module.css";
 import { faqs } from "../shared/faqs";
 import { Faq } from "../shared/Faq";
-import { ProofBar } from "../shared/ProofBar";
+import { AgentFlows, CallFlow, CountUp, HeroCall, LiveOps, PlatformStack, ProviderOrbit } from "./AgentixVisuals";
 
 /* Facts on this page come from the product's own site, actualize.pro (see docs/content-brief.md, section 8). */
 
 const results = [
-  { value: "30%", label: "More calls resolved first time" },
-  { value: "37%", label: "Lower operational cost" },
-  { value: "43%", label: "Higher customer satisfaction" },
+  { value: 30, label: "More calls resolved first time" },
+  { value: 37, label: "Lower operational cost" },
+  { value: 43, label: "Higher customer satisfaction" },
 ];
 
-const capabilities = [
+const layers = [
   {
-    icon: "camera",
+    key: "voice",
     title: "A full voice stack",
-    body: "Speech-to-text, text-to-speech and intent in one pipeline, built on Faseeh, our Arabic speech models.",
+    body: "Speech-to-text, text-to-speech and intent in one pipeline, built on Faseeh, our Arabic speech models. Arabic speech streams back in under 150 milliseconds.",
   },
   {
-    icon: "consent",
+    key: "channels",
     title: "Every channel, one agent",
-    body: "Voice calls, WhatsApp, web chat, app, email and SMS share the same knowledge base and history.",
+    body: "Voice calls, WhatsApp, web chat, app, email and SMS share the same knowledge base and history, so a customer never starts again.",
   },
   {
-    icon: "globe",
+    key: "telephony",
     title: "GCC telephony",
     body: "UAE, Saudi and Qatar numbers over SIP and WebRTC, compatible with PABX, Cisco and Avaya systems.",
   },
   {
-    icon: "loop",
+    key: "workflows",
     title: "Drag-and-drop workflows",
     body: "A visual builder turns a conversation into completed work: bookings, updates, payments and follow-ups.",
   },
-] as const;
+];
 
 const agents = [
-  { name: "Receptionist", body: "Handles enquiries, answers common questions, shares business details and schedules callbacks." },
-  { name: "Booking confirmation", body: "Follows up with customers to confirm availability, so fewer appointments are missed." },
-  { name: "Sales agent", body: "Engages leads and schedules the follow-up." },
-  { name: "Order and payment follow-up", body: "Tracks order status and keeps customers updated on payments and refunds." },
+  {
+    name: "Receptionist",
+    body: "Handles enquiries, answers common questions, shares business details and schedules callbacks.",
+    channel: "Voice · WhatsApp",
+    steps: ["Answer the enquiry", "Share business details", "Answer common questions", "Schedule a callback"],
+  },
+  {
+    name: "Booking confirmation",
+    body: "Follows up with customers to confirm availability, so fewer appointments are missed.",
+    channel: "Outbound voice",
+    steps: ["Call the customer", "Confirm availability", "Update the booking", "Send the confirmation"],
+  },
+  {
+    name: "Sales agent",
+    body: "Engages leads and schedules the follow-up.",
+    channel: "Voice · Web chat",
+    steps: ["Engage the lead", "Answer product questions", "Schedule the follow-up"],
+  },
+  {
+    name: "Order and payment follow-up",
+    body: "Tracks order status and keeps customers updated on payments and refunds.",
+    channel: "WhatsApp · SMS",
+    steps: ["Look up the order", "Update on payment or refund", "Hand off to a person if needed"],
+  },
 ];
 
 const uses = [
@@ -81,71 +100,80 @@ export function AgentixPage() {
     <main className={base.page}>
       <SiteNav current="products" />
 
-      <section className={base.hero} aria-labelledby="agentix-heading">
+      <section className={`${base.hero} ${styles.hero}`} aria-labelledby="agentix-heading">
         <div className={base.heroCopy}>
-          <p className={base.heroEyebrow}>Agentix · Conversational AI platform</p>
+          <p className={base.heroEyebrow}>Agentix · Arabic voice and chat agents</p>
           <h1 id="agentix-heading">Arabic voice and chat agents that finish the job.</h1>
           <p>
-            Agentix runs voice, chat and workflow automation on one platform, with native Arabic
-            speech and GCC telephony. Agents answer, decide and complete the task: a booking, an
-            update, a payment follow-up.
+            Customers call, message and wait. Agentix answers in their dialect, decides what they
+            need and completes the task: a booking, an update, a payment follow-up.
           </p>
-          <a className={base.primary} href={contact}>
-            Book a demo
-            <img src="/home/caret.svg" alt="" width={24} height={24} />
-          </a>
+          <div className={styles.heroActions}>
+            <a className={base.primary} href={contact}>
+              Book a demo
+              <img src="/home/caret.svg" alt="" width={24} height={24} />
+            </a>
+            <a className={styles.ghost} href="#platform">
+              See how it works
+            </a>
+          </div>
         </div>
-        <dl className={base.results}>
+        <HeroCall />
+      </section>
+
+      <section className={styles.results} aria-labelledby="results-heading">
+        <h2 id="results-heading" className={styles.resultsTitle}>
+          Results published for Agentix deployments
+        </h2>
+        <dl>
           {results.map((result) => (
             <div key={result.label}>
-              <dt>{result.value}</dt>
+              <dt>
+                <CountUp value={result.value} />
+              </dt>
               <dd>{result.label}</dd>
             </div>
           ))}
         </dl>
       </section>
 
-      <section className={styles.screen} aria-label="The Agentix dashboard">
-        <img src="/art/agentix-ops.svg" alt="Agentix live operations: conversations across voice, WhatsApp, web chat and SMS, with sentiment, intent and hand-off to a person" />
+      <section className={styles.section} aria-labelledby="flow-heading">
+        <Eyebrow>How it works</Eyebrow>
+        <h2 id="flow-heading">From a call to finished work, in five steps.</h2>
+        <CallFlow />
       </section>
 
-      <ProofBar />
+      <section className={styles.section} id="platform" aria-labelledby="platform-heading">
+        <Eyebrow>The platform</Eyebrow>
+        <h2 id="platform-heading">One platform for the whole conversation.</h2>
+        <p className={styles.dek}>
+          Four layers that most teams stitch together from separate vendors, in one product built
+          for Arabic.
+        </p>
+        <PlatformStack layers={layers} />
+      </section>
 
-      <section className={base.solutions} aria-labelledby="capabilities-heading">
-        <Eyebrow>What it does</Eyebrow>
-        <h2 id="capabilities-heading">One platform for the whole conversation.</h2>
-        <ul>
-          {capabilities.map((item) => (
-            <li key={item.title}>
-              <IconChip name={item.icon} />
-              <h3>{item.title}</h3>
-              <p>{item.body}</p>
-            </li>
+      <section className={styles.section} aria-labelledby="agents-heading">
+        <Eyebrow>Ready-made agents</Eyebrow>
+        <h2 id="agents-heading">Start from an agent that already knows the job.</h2>
+        <AgentFlows agents={agents} />
+        <ul className={styles.uses} aria-label="Common uses">
+          {uses.map((use) => (
+            <li key={use}>{use}</li>
           ))}
         </ul>
       </section>
 
-      <section className={base.problems} aria-labelledby="agents-heading">
-        <div>
-          <Eyebrow>Ready-made agents</Eyebrow>
-          <h2 id="agents-heading">Start from an agent that already knows the job.</h2>
-          <ul className={styles.uses} aria-label="Common uses">
-            {uses.map((use) => (
-              <li key={use}>{use}</li>
-            ))}
-          </ul>
+      <section className={styles.section} aria-labelledby="ops-heading">
+        <Eyebrow>Live operations</Eyebrow>
+        <h2 id="ops-heading">Every conversation, visible as it happens.</h2>
+        <p className={styles.dek}>
+          A dashboard shows each conversation with its channel, intent and sentiment, and when it was
+          handed to a person.
+        </p>
+        <div className={styles.opsWrap}>
+          <LiveOps />
         </div>
-        <ol>
-          {agents.map((agent, index) => (
-            <li key={agent.name}>
-              <span>{String(index + 1).padStart(2, "0")}</span>
-              <div className={styles.agent}>
-                <strong>{agent.name}</strong>
-                {agent.body}
-              </div>
-            </li>
-          ))}
-        </ol>
       </section>
 
       <section className={styles.telephony} aria-labelledby="telephony-heading">
@@ -158,12 +186,9 @@ export function AgentixPage() {
           </p>
           <img className={styles.flags} src="/brand/agentix/mena-flags.png" alt="UAE, Saudi Arabia and Qatar" width={172} height={46} />
         </div>
-        <img
-          className={styles.providers}
-          src="/brand/agentix/sip-providers.webp"
-          alt="SIP providers Agentix connects to, including Maqsam, 3CX, Telnyx, Twilio and Yeastar"
-        />
+        <ProviderOrbit />
       </section>
+
 
       <section className={styles.facts} aria-labelledby="facts-heading">
         <Eyebrow>The details</Eyebrow>

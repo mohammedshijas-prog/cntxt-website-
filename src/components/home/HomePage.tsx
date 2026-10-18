@@ -1,34 +1,16 @@
 import { Hero } from "../Hero";
 import { BlogRail } from "./BlogRail";
 import { CustomerSpotlights } from "./CustomerSpotlights";
-import { LogoZoom } from "./LogoZoom";
-import { ScrollStory } from "./ScrollStory";
+import { LogoMarquee, SecurityBand } from "./HomeSections";
+import { PhysicalAccordion } from "./PhysicalAccordion";
+import { ChapterRail } from "./ChapterRail";
+import { PipelineBand } from "./PipelineBand";
+import { IndustriesSection } from "../shared/IndustriesSection";
+import { StackStory } from "./StackStory";
 import { SiteClose } from "../site/SiteClose";
 import { SiteNav } from "../site/SiteNav";
-import { IndustriesSection } from "../shared/IndustriesSection";
 import { ResultsBand } from "../shared/ResultsBand";
 import styles from "./home.module.css";
-
-const proof = [
-  {
-    label: "Munsit ranks #1 for Arabic speech",
-    image: "/proven/munsit.webp",
-    body: "Top of the Hugging Face Open Universal Arabic ASR Leaderboard. Trained from 30,000+ hours across 25+ dialects, on a patented architecture.",
-    href: "https://munsit.com",
-  },
-  {
-    label: "One standard for every hour",
-    image: "/art/standard.svg",
-    body: "A person reviews every recorded hour before it is accepted. CNTXT holds SOC 2 Type II and ISO 27001.",
-    href: "/security",
-  },
-  {
-    label: "Captures the data. Deploys the AI. Closes the loop.",
-    image: "/proven/loop.webp",
-    body: "One company captures real work with consent, verifies it with human review, trains models on it and deploys the AI.",
-    href: "/about",
-  },
-];
 
 function Eyebrow({ children }: { children: string }) {
   return (
@@ -39,61 +21,67 @@ function Eyebrow({ children }: { children: string }) {
   );
 }
 
-function Explore({ href, children }: { href: string; children: string }) {
-  return (
-    <a className={styles.pill} href={href}>
-      {children}
-      <img src="/home/caret.svg" alt="" width={24} height={24} />
-    </a>
-  );
-}
-
 export function HomePage() {
   return (
     <main className={styles.page}>
       <SiteNav pinAfterHero />
+      <ChapterRail />
       <Hero />
 
-      <ScrollStory
-        steps={[
+      <LogoMarquee />
+
+      <StackStory
+        stages={[
           {
-            eyebrow: "Data",
-            title: "Data captured from real work, verified by humans.",
-            body: "Text, speech, vision, computer-use and robotics data, captured from real work and checked by human reviewers.",
+            label: "Real work",
+            title: "Data from the places AI has never seen.",
+            body: "We record real jobs on warehouse floors, in kitchens, hotels and hospitals, with every worker's consent, through our KLKT app.",
             stat: (
               <>
-                <strong>98%</strong> labelling accuracy, checked by people.
+                Consent in <strong>4 languages</strong>: Arabic, English, Filipino and Urdu.
               </>
             ),
-            cta: <Explore href="/data-hub">Explore the Data Hub</Explore>,
+            cta: { label: "Explore Physical AI", href: "/physical-ai" },
           },
           {
-            eyebrow: "Models",
+            label: "Verified data",
+            title: "Checked by people, hour by hour.",
+            body: "Text, speech, vision and robotics data, reviewed by a person before it is accepted and labelled with human-in-the-loop checks.",
+            stat: (
+              <>
+                <strong>98%</strong> labelling accuracy.
+              </>
+            ),
+            cta: { label: "Explore the Data Hub", href: "/data-hub" },
+          },
+          {
+            label: "Models",
             title: "Models trained on real work.",
-            body: "Munsit, the leading Arabic speech model, plus foundation models for physical AI, trained and tested on our own captured data.",
+            body: "Munsit, our Arabic speech model, is trained from 30,000+ hours across 25+ dialects, on a patented architecture.",
             stat: (
               <>
-                <strong>#1</strong> on the Hugging Face Arabic ASR leaderboard.
-                <img className={styles.statLogo} src="/customers/hugging-face.png" alt="Hugging Face" />
+                <strong>#1</strong> on the Hugging Face Open Universal Arabic ASR Leaderboard.
               </>
             ),
-            cta: <Explore href="https://munsit.com">Explore Munsit</Explore>,
+            cta: { label: "Explore Munsit", href: "https://munsit.com" },
           },
           {
-            eyebrow: "Agents",
-            title: "Agents that work where you work.",
-            body: "Agentix runs Arabic voice and chat agents on one platform, with workflow automation and GCC telephony, in the cloud or on-premises.",
+            label: "Agents",
+            title: "Agents that finish the job.",
+            body: "Agentix runs Arabic voice and chat agents with workflow automation and GCC telephony, in the cloud or on your own premises.",
             stat: (
               <>
                 <strong>20+</strong> enterprise deployments.
               </>
             ),
-            cta: <Explore href="/agentix">Explore Agentix</Explore>,
+            cta: { label: "Explore Agentix", href: "/agentix" },
           },
         ]}
       />
 
-      <LogoZoom />
+      <PipelineBand />
+
+      <PhysicalAccordion />
 
       <IndustriesSection />
 
@@ -101,24 +89,7 @@ export function HomePage() {
 
       <ResultsBand />
 
-      <section className={styles.proven} aria-labelledby="proven-heading">
-        <h2 id="proven-heading">Proven on the floor, in every industry.</h2>
-        <ul>
-          {proof.map((item) => (
-            <li key={item.label}>
-              <a href={item.href}>
-                <span className={styles.provenMedia}>
-                  <img src={item.image} alt="" />
-                </span>
-                <span className={styles.provenText}>
-                  <h3>{item.label}</h3>
-                  <p>{item.body}</p>
-                </span>
-              </a>
-            </li>
-          ))}
-        </ul>
-      </section>
+      <SecurityBand />
 
       <BlogRail
         eyebrow={<Eyebrow>Latest</Eyebrow>}

@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { articleSlug } from "@/components/blog/posts";
 import { industries } from "@/components/industries/industries";
+import { verticals } from "@/components/physical-ai/verticals";
 
 const base = "https://www.cntxt.tech";
 
@@ -9,8 +10,8 @@ const paths = [
   "/products",
   "/agentix",
   "/physical-ai",
+  ...verticals.map((vertical) => `/physical-ai/${vertical.slug}`),
   "/data-hub",
-  "/evaluate-ai",
   "/solutions",
   "/healthcare",
   ...industries.map((industry) => `/industries/${industry.slug}`),

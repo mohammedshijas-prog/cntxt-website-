@@ -2,7 +2,7 @@
   display: grid;
   grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
   margin-top: 48px;
-  border: 1px solid rgba(15, 12, 11, 0.1);
+  border: 1px solid var(--separator);
   border-radius: 18px;
   overflow: hidden;
   background: #ffffff;
@@ -12,11 +12,11 @@
   margin: 0;
   padding: 0;
   list-style: none;
-  border-right: 1px solid rgba(15, 12, 11, 0.1);
+  border-right: 1px solid var(--separator);
 }
 
 .list li + li {
-  border-top: 1px solid rgba(15, 12, 11, 0.1);
+  border-top: 1px solid var(--separator);
 }
 
 .list button {
@@ -35,7 +35,7 @@
 }
 
 .list button:focus-visible {
-  outline: 2px solid #7d52f4;
+  outline: 2px solid var(--accent);
   outline-offset: -2px;
 }
 
@@ -46,7 +46,7 @@
 
 .text strong {
   display: block;
-  color: #0f0c0b;
+  color: var(--label);
   font-family: var(--font-heading);
   font-size: var(--fs-h4);
   font-weight: 400;
@@ -56,7 +56,7 @@
 .text .body {
   display: grid;
   grid-template-rows: 0fr;
-  color: rgba(15, 12, 11, 0.62);
+  color: var(--label-2);
   font-family: var(--font-body);
   font-size: var(--fs-body);
   line-height: var(--lh-body);
@@ -84,12 +84,12 @@
   width: 24px;
   height: 2px;
   border-radius: 1px;
-  background: rgba(15, 12, 11, 0.16);
+  background: rgba(21, 17, 31, 0.16);
   transition: background-color 200ms ease, width 200ms ease;
 }
 
 .list li[data-open="true"] .bar {
-  background: #7d52f4;
+  background: var(--accent);
 }
 
 .stage {
@@ -97,8 +97,8 @@
   min-height: 420px;
   background-color: #faf9f7;
   background-image:
-    linear-gradient(rgba(15, 12, 11, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(15, 12, 11, 0.05) 1px, transparent 1px);
+    linear-gradient(rgba(21, 17, 31, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(21, 17, 31, 0.05) 1px, transparent 1px);
   background-size: 76px 76px;
 }
 
@@ -135,7 +135,7 @@
 
 .card p {
   margin: 0 0 14px;
-  color: #0f0c0b;
+  color: var(--label);
   font-family: var(--font-heading);
   font-size: 15px;
 }
@@ -158,9 +158,9 @@
   align-items: center;
   justify-content: flex-end;
   margin-top: 12px;
-  color: rgba(15, 12, 11, 0.5);
+  color: var(--label-3);
   font-family: var(--font-body);
-  font-size: 11px;
+  font-size: 12px;
 }
 
 .legend i {
@@ -202,9 +202,9 @@
   padding: 4px 7px;
   border-radius: 6px;
   background: rgba(255, 255, 255, 0.92);
-  color: #0f0c0b;
+  color: var(--label);
   font-family: var(--font-heading);
-  font-size: 10px;
+  font-size: 12px;
   line-height: 13px;
 }
 
@@ -215,7 +215,7 @@
 
   .list {
     border-right: 0;
-    border-bottom: 1px solid rgba(15, 12, 11, 0.1);
+    border-bottom: 1px solid var(--separator);
   }
 
   .stage {

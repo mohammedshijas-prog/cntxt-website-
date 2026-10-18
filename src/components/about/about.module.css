@@ -1,6 +1,6 @@
 .page {
   position: relative;
-  background: #fafaf8;
+  background: var(--bg);
   color: #000000;
 }
 
@@ -36,7 +36,7 @@
   content: "";
   position: absolute;
   height: 4px;
-  background: linear-gradient(to left, #7d52f4, #d6c7ff);
+  background: var(--accent);
 }
 
 .tag::before {
@@ -52,86 +52,12 @@
   transform: rotate(180deg);
 }
 
-.navWrap {
-  position: absolute;
-  top: 63px;
-  left: 0;
-  z-index: 5;
-  width: 100%;
-  padding: 0 97px;
-}
-
-.nav {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: min(1499px, 100%);
-  margin: 0 auto;
-  padding: 20px;
-  background: rgba(255, 255, 255, 0.92);
-  border-radius: 18px;
-  backdrop-filter: blur(55px);
-}
-
-.nav nav {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-}
-
-.nav nav a {
-  display: inline-flex;
-  gap: 4px;
-  align-items: center;
-  padding: 6px 12px;
-  color: var(--text-strong);
-  font-family: var(--font-heading);
-  font-size: var(--fs-small);
-  font-weight: 500;
-  line-height: var(--lh-small);
-  letter-spacing: -0.084px;
-  border-radius: 96px;
-}
-
-.nav nav img,
-.talk img {
-  display: block;
-}
-
-.talk {
-  display: inline-flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 148px;
-  height: 36px;
-  padding: 5px 10px 5px 9px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 10px;
-  background: #7d52f4;
-  color: #ffffff;
-  font-family: var(--font-heading);
-  font-size: var(--fs-button);
-  font-weight: 600;
-  line-height: 20px;
-  letter-spacing: -0.12px;
-}
-
-.talk span {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 22px;
-  height: 22px;
-  border-radius: 5px;
-  background: #ffffff;
-}
-
 .hero {
   display: flex;
   flex-direction: column;
   gap: 53px;
   align-items: center;
-  padding: 240px 117px 117px;
+  padding: calc(var(--section-y) + var(--space-12)) var(--pad-x) var(--section-y);
 }
 
 .heroCopy {
@@ -173,11 +99,11 @@
 
 .photo {
   position: relative;
-  width: min(1499px, 100%);
+  width: 100%;
   height: 494px;
   overflow: hidden;
   border-radius: 16px;
-  background: #7d52f4;
+  background: var(--accent);
 }
 
 .texture {
@@ -218,7 +144,7 @@
   display: flex;
   flex-direction: column;
   gap: 24px;
-  padding: 83px 117px;
+  padding: var(--space-11) var(--pad-x);
 }
 
 .storyCopy {
@@ -253,8 +179,8 @@
   align-items: flex-start;
   justify-content: space-between;
   gap: 32px;
-  padding: 83px 117px;
-  background: #f5f1ff;
+  padding: var(--space-11) var(--pad-x);
+  background: var(--bg-2);
 }
 
 .stats p:last-child {
@@ -279,7 +205,7 @@
   display: flex;
   flex-direction: column;
   gap: 32px;
-  padding: 96px 79px 65px 117px;
+  padding: var(--space-12) var(--space-11) var(--space-10) var(--pad-x);
 }
 
 .teamCopy {
@@ -315,7 +241,7 @@
   flex: 0 0 492px;
   height: 503px;
   overflow: hidden;
-  background: #efe8ff;
+  background: var(--accent-tint);
 }
 
 .leaders img {
@@ -357,57 +283,7 @@
   text-transform: uppercase;
 }
 
-.investors {
-  display: flex;
-  flex-direction: column;
-  gap: 32px;
-  justify-content: center;
-  min-height: 296px;
-  padding: 38px 117px;
-}
-
-.investors h2 {
-  color: var(--text-strong);
-  font-family: var(--font-heading);
-  font-size: var(--fs-small);
-  font-weight: 400;
-  line-height: var(--lh-small);
-  text-transform: uppercase;
-}
-
-.investors ul {
-  display: flex;
-  gap: 8px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.investors li {
-  display: flex;
-  flex: 1 1 0;
-  align-items: center;
-  min-width: 0;
-  padding: 22px 47px;
-  border: 1px dashed rgba(0, 0, 0, 0.4);
-}
-
-.investors img {
-  display: block;
-  width: 100%;
-  height: auto;
-  aspect-ratio: 284 / 80;
-  object-fit: contain;
-}
-
 @media (max-width: 1200px) {
-  .navWrap {
-    padding: 0 24px;
-  }
-
-  .nav nav {
-    display: none;
-  }
 
   .hero,
   .story,
@@ -437,14 +313,6 @@
   .teamCopy h2 {
     font-size: var(--fs-h2);
     line-height: var(--lh-h2);
-  }
-
-  .investors ul {
-    flex-wrap: wrap;
-  }
-
-  .investors li {
-    flex-basis: calc(50% - 8px);
   }
 }
 
@@ -480,11 +348,6 @@
     font-size: var(--fs-h4);
     line-height: var(--lh-h4);
   }
-
-  .investors li {
-    flex-basis: 100%;
-    padding: 16px 24px;
-  }
 }
 
 /* Leader without a full portrait: a round thumbnail, or their initials. */
@@ -493,7 +356,7 @@
   inset: 0 0 96px;
   display: grid;
   place-items: center;
-  background: radial-gradient(80% 70% at 50% 40%, #ffffff 0%, #efe8ff 70%);
+  background: radial-gradient(80% 70% at 50% 40%, #ffffff 0%, var(--accent-tint) 70%);
   color: #cbbaf7;
   font-family: var(--font-heading);
   font-size: 148px;

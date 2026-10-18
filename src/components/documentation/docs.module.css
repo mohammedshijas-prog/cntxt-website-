@@ -1,79 +1,6 @@
 .page {
-  background: #fafaf8;
+  background: var(--bg);
   color: #171c22;
-}
-
-.navWrap {
-  position: absolute;
-  top: 63px;
-  left: 0;
-  z-index: 5;
-  width: 100%;
-  padding: 0 97px;
-}
-
-.nav {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: min(1499px, 100%);
-  margin: 0 auto;
-  padding: 20px;
-  background: rgba(255, 255, 255, 0.92);
-  border-radius: 18px;
-  backdrop-filter: blur(55px);
-}
-
-.nav nav {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-}
-
-.nav nav a {
-  display: inline-flex;
-  gap: 4px;
-  align-items: center;
-  padding: 6px 12px;
-  color: var(--text-strong);
-  font-family: var(--font-heading);
-  font-size: var(--fs-small);
-  font-weight: 500;
-  line-height: var(--lh-small);
-  letter-spacing: -0.084px;
-  border-radius: 96px;
-}
-
-.nav img {
-  display: block;
-}
-
-.talk {
-  display: inline-flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 148px;
-  height: 36px;
-  padding: 5px 10px 5px 9px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 10px;
-  background: #7d52f4;
-  color: #ffffff;
-  font-family: var(--font-heading);
-  font-size: var(--fs-button);
-  font-weight: 600;
-  line-height: 20px;
-  letter-spacing: -0.12px;
-}
-
-.talk span {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 22px;
-  height: 22px;
-  border-radius: 5px;
-  background: #ffffff;
 }
 
 .docs {
@@ -205,12 +132,12 @@
 }
 
 .group button:hover {
-  background: #f5f1ff;
+  background: var(--bg-2);
 }
 
 .group button[aria-current="page"] {
   background: #ebe4ff;
-  color: #7d52f4;
+  color: var(--accent);
 }
 
 .article {
@@ -229,7 +156,7 @@
 }
 
 .crumbCurrent {
-  color: #7d52f4;
+  color: var(--accent);
 }
 
 .article h1 {
@@ -302,7 +229,7 @@
   margin: 0;
   padding-bottom: 19px;
   border-bottom: 2px solid #bd5c23;
-  color: #7d52f4;
+  color: var(--accent);
   font-family: var(--font-source), "Source Code Pro", monospace;
   font-size: 14px;
   font-weight: 600;
@@ -368,7 +295,7 @@
 }
 
 .article code {
-  color: #7d52f4;
+  color: var(--accent);
   font-family: var(--font-source), "Source Code Pro", monospace;
   font-size: 0.9em;
   font-weight: 400;
@@ -412,8 +339,8 @@
   width: 165px;
   margin: 0 0 20px;
   padding-bottom: 13px;
-  border-bottom: 2px solid #7d52f4;
-  color: #7d52f4;
+  border-bottom: 2px solid var(--accent);
+  color: var(--accent);
   font-family: var(--font-source), "Source Code Pro", monospace;
   font-size: 13px;
   font-weight: 600;
@@ -458,7 +385,6 @@
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 10px;
   background: transparent;
-  box-shadow: 0 1px 2px rgba(14, 18, 27, 0.24);
   color: var(--text-strong);
   font-family: var(--font-heading);
   font-size: var(--fs-button);
@@ -473,7 +399,7 @@
 }
 
 .next {
-  background: #7d52f4 !important;
+  background: var(--accent) !important;
   color: #ffffff !important;
 }
 
@@ -521,7 +447,7 @@
 }
 
 .toc section:first-of-type h3 button {
-  color: #7d52f4;
+  color: var(--accent);
 }
 
 .toc ul {
@@ -540,25 +466,18 @@
 
 .toc li[data-current] {
   margin-left: -2px;
-  border-left: 3px solid #7d52f4;
+  border-left: 3px solid var(--accent);
 }
 
 .toc li[data-current] button {
-  color: #7d52f4;
+  color: var(--accent);
 }
 
 @media (max-width: 1200px) {
-  .navWrap {
-    padding: 0 20px;
-  }
-
-  .nav nav {
-    display: none;
-  }
 
   .docs {
     grid-template-columns: 1fr;
-    padding: 160px 20px 40px;
+    padding: var(--section-y) var(--pad-x) 40px;
   }
 
   .toc {

@@ -73,7 +73,7 @@
 }
 
 .link[aria-current="page"] {
-  color: #7d52f4;
+  color: var(--accent);
 }
 
 .link img,
@@ -93,7 +93,7 @@
   height: 36px;
   padding: 0 7px 0 14px;
   border-radius: 9px;
-  background: #7d52f4;
+  background: var(--accent);
   color: #ffffff;
   font-family: var(--font-heading);
   font-size: 15px;
@@ -123,7 +123,7 @@
 }
 
 .nav a:focus-visible {
-  outline: 2px solid #7d52f4;
+  outline: 2px solid var(--accent);
   outline-offset: 2px;
 }
 
@@ -191,4 +191,19 @@
 @media (max-width: 720px) {
   .nav { width: 100%; }
   .talk { display: none; }
+}
+
+/* Phones: soften whatever scrolls behind the floating pill, so no clipped
+   strip of text shows above it. */
+@media (max-width: 734px) {
+  .navWrap::before {
+    content: "";
+    position: absolute;
+    inset: -16px 0 -10px;
+    z-index: -1;
+    backdrop-filter: blur(14px) saturate(160%);
+    -webkit-backdrop-filter: blur(14px) saturate(160%);
+    mask-image: linear-gradient(#000 70%, transparent);
+    pointer-events: none;
+  }
 }
