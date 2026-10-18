@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { SiteClose } from "../site/SiteClose";
+import { PageHero } from "../shared/PageHero";
 import { CtaBand } from "../shared/CtaBand";
 import { SiteNav } from "../site/SiteNav";
 import styles from "./careers.module.css";
@@ -14,22 +15,22 @@ const culture = [
   {
     src: "/careers/culture-1.webp",
     title: "Culture is delivery.",
-    body: "We judge our work by what reaches the people who use it: data that has been checked, models that have been tested, systems that run.",
+    body: "We judge work by what reaches the people who use it.",
   },
   {
     src: "/careers/culture-2.webp",
     title: "Built for real problems.",
-    body: "The work starts from real workplaces and real organisations. We capture data from the job as it is done and build on that.",
+    body: "We start from real workplaces, not lab demos.",
   },
   {
     src: "/careers/culture-3.webp",
     title: "Work hard. Play bold.",
-    body: "We take the work seriously and each other less so. Say what you think, try the bold option, and own the result.",
+    body: "Say what you think, try the bold option, own the result.",
   },
   {
     src: "/careers/culture-4.webp",
     title: "Room to grow.",
-    body: "Mentorship, hands-on projects and professional certifications are part of the job, whether you work remotely or on site.",
+    body: "Mentorship, real projects and certifications, remote or on site.",
   },
 ];
 
@@ -185,38 +186,33 @@ export function CareersPage() {
     <main className={styles.page}>
       <SiteNav />
 
-      <section className={styles.hero} aria-labelledby="careers-heading">
-        <Eyebrow>Our team</Eyebrow>
-        <h1 id="careers-heading">
-          Build AI on real data, with people
-          <br />
-          who <span>do the real work.</span>
-        </h1>
-        <p>
-          CNTXT captures and verifies data from real work, trains models on it and deploys
-          AI on-premise. We are hiring evaluators, coding experts, annotators and data collectors.
-        </p>
-        <div className={styles.photos}>
-          <img src={photos[0].src} alt="" width={photos[0].width} height={photos[0].height} />
-          <img src={photos[1].src} alt="" width={photos[1].width} height={photos[1].height} />
-          <div className={styles.centerPhoto}>
-            <img src="/about/texture.webp" alt="" />
-            <img src="/careers/culture-wall.webp" alt="Two CNTXT colleagues talking in front of the “Culture is Delivery” wall" />
-          </div>
-          <img src={photos[2].src} alt="" width={photos[2].width} height={photos[2].height} />
-          <img src={photos[3].src} alt="" width={photos[3].width} height={photos[3].height} />
-        </div>
-      </section>
+      <PageHero
+        id="careers-heading"
+        kicker="Careers"
+        title={["Build AI on real data,", "with people who do the real work."]}
+        lead="CNTXT captures and verifies data from real work, trains models on it and deploys AI on-premise. We are hiring evaluators, coding experts, annotators and data collectors."
+        actions={[
+          { label: "See open roles", href: "#openings", primary: true },
+          { label: "How we work", href: "#culture-heading" },
+        ]}
+        art={
+          <img
+            className={styles.heroWall}
+            src="/careers/culture-wall.webp"
+            alt="Two CNTXT colleagues talking in front of the “Culture is Delivery” wall"
+          />
+        }
+      />
 
       <section className={styles.culture} aria-labelledby="culture-heading">
         <Eyebrow>Culture</Eyebrow>
         <h2 id="culture-heading">
           How we <span>work</span>
         </h2>
-        <ul>
+        <ul data-rail>
           {culture.map((item) => (
-            <li key={item.src}>
-              <img src={item.src} alt="" />
+            <li key={item.src} data-tilt>
+              <img loading="lazy" decoding="async" src={item.src} alt="" />
               <p>
                 <strong>{item.title}</strong> {item.body}
               </p>
@@ -291,7 +287,7 @@ export function CareersPage() {
             })}
           </div>
           <div className={styles.benefitPhoto}>
-            <img src="/partners/hero.webp" alt="" />
+            <img loading="lazy" decoding="async" src="/partners/hero.webp" alt="" />
             <span>{benefits[Math.max(openBenefit, 0)].number}</span>
           </div>
         </div>

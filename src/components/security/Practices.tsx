@@ -8,19 +8,19 @@ const slides = [
     category: "Access",
     title: "Access control and logging",
     image: "/security/practice-a.png",
-    body: "Role-based access decides who can see which data, and access is logged. Identity validation and limited network connections are among our published controls.",
+    body: "Role-based access, and every access logged.",
   },
   {
     category: "Sovereignty",
     title: "Data residency and sovereignty",
     image: "/industries/government.jpg",
-    body: "Data is stored and processed in-region. Deployments can be configured to meet regional data-residency requirements such as the UAE and Saudi PDPL.",
+    body: "Stored and processed in region, aligned with UAE and Saudi PDPL.",
   },
   {
     category: "Encryption",
     title: "Encryption in transit and at rest",
     image: "/art/cover-5.svg",
-    body: "Data is encrypted at rest and in transit. The full list of controls, from anti-malware to breach notification, is published in our trust centre.",
+    body: "Encrypted at rest and in transit.",
   },
 ];
 
@@ -139,7 +139,7 @@ export function Practices() {
                   {slide.category}
                 </span>
                 <span className={styles.slideMedia}>
-                  <img src={slide.image} alt="" draggable={false} />
+                  <img loading="lazy" decoding="async" src={slide.image} alt="" draggable={false} />
                   <span className={styles.slideTitle}>{slide.title}</span>
                 </span>
                 <p className={styles.slideBody}>{slide.body}</p>

@@ -1,0 +1,69 @@
+/* The clean hero language: accent kicker, two-tone headline, pill button. */
+.page {
+  display: grid;
+  min-height: 100vh;
+  place-items: center;
+  padding: var(--space-6);
+  background: var(--bg);
+  color: var(--label);
+}
+
+.copy {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.kicker {
+  margin: 0 0 var(--space-4);
+  color: var(--accent-text);
+  font-family: var(--font-heading);
+  font-size: var(--fs-small);
+  font-weight: 600;
+}
+
+.copy h1 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0;
+}
+
+.copy h1 span {
+  font-family: var(--font-heading);
+  font-size: var(--fs-display);
+  font-weight: 500;
+  letter-spacing: var(--ls-display);
+  line-height: 1.05;
+}
+
+.copy h1 span + span {
+  color: var(--label-2);
+}
+
+.lead {
+  margin: var(--space-5) 0 0;
+  color: var(--label-2);
+  font-family: var(--font-body);
+  font-size: var(--fs-lead);
+  line-height: var(--lh-lead);
+}
+
+.home {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+  margin-top: var(--space-6);
+  padding: 0 var(--space-6);
+  border-radius: var(--radius-pill);
+  background: var(--accent);
+  color: #ffffff;
+  font-family: var(--font-heading);
+  font-size: var(--fs-button);
+  font-weight: 500;
+}
+
+.home:hover {
+  background: var(--accent-hover);
+}

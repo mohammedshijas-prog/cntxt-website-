@@ -1,0 +1,114 @@
+.page {
+  background: var(--bg);
+  color: var(--label);
+}
+
+.head {
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 160px var(--pad-x) var(--space-8);
+}
+
+.kicker {
+  margin: 0 0 var(--space-3);
+  color: var(--accent-text);
+  font-family: var(--font-heading);
+  font-size: var(--fs-small);
+  font-weight: 600;
+}
+
+.head h1 {
+  margin: 0;
+  color: var(--label);
+  font-family: var(--font-heading);
+  font-size: clamp(34px, 4vw, 52px);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+/* Readable long-form text for the verbatim document. */
+.doc {
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 0 var(--pad-x) var(--section-y);
+  color: var(--label-2);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.7;
+}
+
+.doc :global(h1) {
+  display: none;
+}
+
+.doc :global(h2) {
+  margin: var(--space-9) 0 var(--space-3);
+  color: var(--label);
+  font-family: var(--font-heading);
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+.doc :global(h3),
+.doc :global(h4) {
+  margin: var(--space-6) 0 var(--space-2);
+  color: var(--label);
+  font-family: var(--font-heading);
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.doc :global(p) {
+  margin: 0 0 var(--space-4);
+}
+
+.doc :global(ul),
+.doc :global(ol) {
+  margin: 0 0 var(--space-5);
+  padding-left: 22px;
+}
+
+.doc :global(li) {
+  margin-bottom: 6px;
+}
+
+.doc :global(a) {
+  color: var(--accent-text);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.doc :global(strong) {
+  color: var(--label);
+}
+
+.doc :global(.important-notice) {
+  margin: 0 0 var(--space-7);
+  padding: var(--space-5);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius-tile) var(--radius-tile) 0;
+  background: var(--bg-2);
+}
+
+.doc :global(.company-name),
+.doc :global(.metadata) {
+  color: var(--label-3);
+  font-size: 14px;
+}
+
+.doc :global(table) {
+  width: 100%;
+  margin: 0 0 var(--space-5);
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.doc :global(th),
+.doc :global(td) {
+  padding: 8px 10px;
+  border: 1px solid var(--separator);
+  text-align: left;
+  vertical-align: top;
+}

@@ -4,14 +4,14 @@ import { useEffect, useState } from "react";
 import styles from "./chapterRail.module.css";
 
 const chapters = [
-  { id: "story-heading", label: "What we do" },
-  { id: "pipeline-heading", label: "Pipeline" },
-  { id: "physical-heading", label: "Physical AI" },
+  { id: "story-heading", label: "How it works" },
+  { id: "pipeline-heading", label: "One platform" },
+  { id: "verticals-heading", label: "Physical AI" },
   { id: "industries-heading", label: "Industries" },
   { id: "customers-heading", label: "Customers" },
   { id: "results-heading", label: "Results" },
   { id: "security-heading", label: "Security" },
-  { id: "blogs-heading", label: "Latest" },
+  { id: "ready-heading", label: "Get started" },
 ];
 
 /**

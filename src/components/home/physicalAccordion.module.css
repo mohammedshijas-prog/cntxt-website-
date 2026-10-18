@@ -234,3 +234,27 @@
     transition: none;
   }
 }
+
+/* Photo panels: the picture fills the card and fades into the tone where the copy sits. */
+.photo .art {
+  height: 100%;
+  opacity: 0.4;
+  filter: saturate(0.85);
+}
+
+.photo.open .art {
+  opacity: 1;
+  filter: none;
+}
+
+.photo .card::after {
+  content: "";
+  position: absolute;
+  inset: 35% 0 0;
+  background: linear-gradient(transparent, var(--tone) 62%);
+  pointer-events: none;
+}
+
+.photo .card > :not(.art) {
+  z-index: 1;
+}

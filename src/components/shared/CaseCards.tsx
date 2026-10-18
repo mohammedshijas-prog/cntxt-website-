@@ -16,8 +16,8 @@ export function CaseCards({ cases }: { cases: CaseCard[] }) {
       {cases.map((item) => (
         <li key={item.index} className={styles.item}>
           <div className={styles.shot}>
-            <img src={item.image} alt="" />
-            <img className={styles.grain} src="/healthcare/grain.svg" alt="" width={140} height={140} />
+            <img loading="lazy" decoding="async" src={item.image} alt="" />
+            <img loading="lazy" decoding="async" className={styles.grain} src="/healthcare/grain.svg" alt="" width={140} height={140} />
             <p className={styles.label}>
               <span>{item.index}</span>
               {item.label}

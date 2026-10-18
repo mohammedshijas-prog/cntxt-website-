@@ -1,270 +1,165 @@
-/* Hero: copy left, the live call over the voice orb right. */
-.hero {
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
-  align-items: center;
-  padding: var(--section-y) var(--space-10) calc(var(--space-12) + var(--space-9)) var(--pad-x);
+.page {
+  background: var(--bg);
+  color: var(--label);
 }
 
-.heroActions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  align-items: center;
-  margin-top: 36px;
+/* Hero art: the dashboard, with the published results on a glass strip. */
+.art {
+  position: relative;
 }
 
-.heroActions > a {
-  margin-top: 0;
-}
-
-.ghost {
-  display: inline-flex;
-  align-items: center;
-  height: 48px;
-  margin-top: 36px;
-  padding: 0 20px;
-  border: 1px solid rgba(255, 255, 255, 0.28);
-  border-radius: 10px;
-  color: #ffffff;
-  font-family: var(--font-heading);
-  font-size: var(--fs-button);
-  font-weight: 500;
-  line-height: 20px;
-  transition: background 200ms ease;
-}
-
-.ghost:hover {
-  background: rgba(255, 255, 255, 0.1);
-}
-
-.ghost:focus-visible {
-  outline: 2px solid #b79cff;
-  outline-offset: 3px;
-}
-
-/* Results: three large figures that count up. */
-.results {
+.art > img {
+  display: block;
   width: 100%;
-  margin: 0 auto;
-  padding: var(--section-y) var(--pad-x) 0;
+  aspect-ratio: 4 / 3.2;
+  padding-bottom: 96px;
+  object-fit: contain;
+  background: var(--bg-2);
 }
 
-.results dl {
+.results {
+  position: absolute;
+  right: var(--space-4);
+  bottom: var(--space-4);
+  left: var(--space-4);
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  margin-top: 24px;
-  border-top: 1px solid var(--separator);
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: var(--radius-tile);
+  background: rgba(255, 255, 255, 0.78);
+  box-shadow: 0 20px 40px -20px rgba(14, 10, 24, 0.45);
+  backdrop-filter: blur(16px) saturate(170%);
+  -webkit-backdrop-filter: blur(16px) saturate(170%);
 }
 
-.results dl div {
-  padding: 28px 24px 0 0;
+.results > div {
+  padding: var(--space-4);
 }
 
-.results dl div + div {
-  padding-left: 32px;
+.results > div + div {
   border-left: 1px solid var(--separator);
 }
 
 .results dt {
-  background: linear-gradient(135deg, #2a1a66 10%, var(--accent) 90%);
-  background-clip: text;
-  color: transparent;
+  color: var(--accent-text);
   font-family: var(--font-heading);
-  font-size: clamp(64px, 8vw, 128px);
-  font-variant-numeric: tabular-nums;
-  letter-spacing: -0.04em;
+  font-size: clamp(26px, 2.4vw, 36px);
+  font-weight: 500;
+  letter-spacing: -0.02em;
   line-height: 1;
 }
 
 .results dd {
-  margin-top: 12px;
-  color: var(--text-muted);
+  margin: 6px 0 0;
+  color: var(--label-2);
   font-family: var(--font-heading);
-  font-size: var(--fs-h4);
-  line-height: var(--lh-h4);
+  font-size: var(--fs-xs);
+  line-height: 1.3;
 }
 
-.section {
-  width: 100%;
-  margin: 0 auto;
-  padding: var(--section-y) var(--pad-x) 0;
+/* Where teams use it. */
+.uses {
+  padding: var(--section-y) var(--pad-x);
+  background: var(--bg-2);
+}
+
+.head {
+  max-width: 780px;
+  margin: 0 auto var(--section-head-gap);
+  text-align: center;
+}
+
+.kicker {
+  margin: 0 0 var(--space-3);
+  color: var(--accent-text);
+  font-family: var(--font-heading);
+  font-size: var(--fs-small);
+  font-weight: 600;
+}
+
+.head h2 {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: var(--fs-h2);
+  font-weight: 500;
+  letter-spacing: var(--ls-h2);
+  line-height: var(--lh-h2);
 }
 
 .dek {
-  width: min(560px, 100%);
-  margin-top: 16px !important;
-  color: var(--text-muted);
-  font-family: var(--font-body);
-  font-size: var(--fs-lead);
-  line-height: var(--lh-lead);
-}
-
-.uses {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 40px;
-}
-
-.uses li {
-  padding: 6px 14px;
-  border-radius: 20px;
-  background: var(--accent-tint);
-  color: #5a3fc0;
-  font-family: var(--font-heading);
-  font-size: var(--fs-small);
-  line-height: var(--lh-small);
-}
-
-/* Telephony: copy left, the provider grid right, on lilac. */
-.telephony {
-  display: grid;
-  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1fr);
-  gap: 64px;
-  align-items: center;
-  margin: 117px 24px 0;
-  padding: var(--space-11) var(--pad-x);
-  overflow: hidden;
-  border-radius: 24px;
-  background: var(--accent-tint);
-}
-
-.telephony h2 + p {
-  width: min(480px, 100%);
-  margin-top: 16px;
+  margin: var(--space-5) auto 0;
+  max-width: 34em;
   color: var(--label-2);
   font-family: var(--font-body);
   font-size: var(--fs-lead);
   line-height: var(--lh-lead);
 }
 
-.flags {
-  display: block;
-  width: 172px;
-  height: auto;
-  margin-top: 32px;
-}
-
-/* Details as a ruled table. */
-.facts {
-  width: 100%;
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-4);
+  max-width: 1260px;
   margin: 0 auto;
-  padding: var(--section-y) var(--pad-x) 0;
+  padding: 0;
+  list-style: none;
 }
 
-.facts dl {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  column-gap: 64px;
-  margin-top: 48px;
-  border-top: 1px solid var(--separator);
+.grid li {
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-7) var(--space-6);
+  border-radius: var(--radius-card);
+  background: #ffffff;
+  box-shadow: 0 0 0 1px rgba(21, 17, 31, 0.05);
 }
 
-.facts dl div {
-  display: grid;
-  grid-template-columns: 160px 1fr;
-  gap: 16px;
-  padding: 22px 0;
-  border-bottom: 1px solid var(--separator);
-}
-
-.facts dt {
-  color: var(--accent);
-  font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
-  font-size: 13px;
-  letter-spacing: 0.08em;
-  line-height: 24px;
-  text-transform: uppercase;
-}
-
-.facts dd {
+.grid h3 {
+  margin: var(--space-5) 0 0;
   font-family: var(--font-heading);
+  font-size: var(--fs-h4);
+  font-weight: 500;
+  line-height: var(--lh-h4);
+}
+
+.grid p {
+  margin: var(--space-2) 0 0;
+  color: var(--label-2);
+  font-family: var(--font-body);
   font-size: var(--fs-body);
   line-height: var(--lh-body);
 }
 
-.source {
-  margin-top: 24px;
-  color: var(--label-3);
-  font-family: var(--font-body);
-  font-size: var(--fs-small);
-  line-height: var(--lh-small);
+.by {
+  align-self: flex-start;
+  margin-top: auto;
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  background: var(--accent-tint);
+  color: var(--accent-text);
+  font-family: var(--font-heading);
+  font-size: var(--fs-xs);
+  font-weight: 600;
 }
 
-@media (max-width: 1200px) {
-  .hero {
-    grid-template-columns: 1fr;
-    gap: 24px;
-    padding: var(--section-y) var(--pad-x) 56px;
-  }
+.grid p + .by {
+  margin-top: var(--space-5);
+}
 
-  .results,
-  .section {
-    padding-right: 40px;
-    padding-left: 40px;
-  }
-
-  .telephony {
-    grid-template-columns: 1fr;
-    gap: 40px;
-    margin-top: 80px;
-    padding: 56px 40px;
-  }
-
-  .facts {
-    padding: var(--section-y) var(--pad-x) 0;
-  }
-
-  .facts dl {
-    grid-template-columns: 1fr;
+@media (max-width: 1068px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
-@media (max-width: 720px) {
-  .hero {
-    padding: var(--section-y) var(--pad-x) 40px;
-  }
-
-  .results,
-  .section {
-    padding-right: 20px;
-    padding-left: 20px;
-  }
-
-  .section {
-    padding-top: 96px;
-  }
-
-  .results dl {
+@media (max-width: 734px) {
+  .grid {
     grid-template-columns: 1fr;
   }
 
-  .results dl div + div {
-    padding-left: 0;
-    border-left: 0;
-    border-top: 1px solid var(--separator);
+  .results dd {
+    display: none;
   }
-
-  .results dl div {
-    padding-bottom: 24px;
-  }
-
-  .telephony {
-    margin: 64px 12px 0;
-    padding: 40px 20px;
-    border-radius: 18px;
-  }
-
-  .facts {
-    padding: var(--section-y) var(--pad-x) 0;
-  }
-
-  .facts dl div {
-    grid-template-columns: 1fr;
-    gap: 4px;
-  }
-}
-
-.opsWrap {
-  margin-top: var(--section-head-gap);
 }

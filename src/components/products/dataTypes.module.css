@@ -156,20 +156,6 @@
   font-size: var(--fs-small);
 }
 
-.panel .datasets {
-  margin: 0;
-  padding: 0;
-  border-top: 1px solid var(--separator);
-  list-style: none;
-}
-
-.datasets li {
-  padding: var(--space-3) 0;
-  border-bottom: 1px solid var(--separator);
-  font-family: var(--font-body);
-  font-size: var(--fs-body);
-}
-
 .copy a {
   display: inline-block;
   margin-top: var(--space-6);
@@ -201,16 +187,13 @@
   height: 100%;
   padding: var(--space-7) var(--space-6);
   border: 1px solid var(--separator);
-  border-radius: var(--radius-tile);
+  border-radius: var(--radius-card);
+  background: #ffffff;
   color: var(--label);
-  transition:
-    border-color 200ms ease,
-    transform 300ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .cases a:hover {
   border-color: var(--accent);
-  transform: translateY(-2px);
 }
 
 .sector {
@@ -306,4 +289,52 @@
   .copy {
     animation: none;
   }
+}
+
+/* A sample of what the labelled data looks like for this type. */
+.record {
+  margin-top: var(--space-6);
+  overflow: hidden;
+  border-radius: var(--radius-tile);
+  background: #120d22;
+  box-shadow: 0 24px 48px -28px rgba(14, 10, 24, 0.6);
+  animation: fadeIn 400ms ease 120ms both;
+}
+
+.panel .record p {
+  display: flex;
+  justify-content: space-between;
+  margin: 0;
+  padding: 10px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.85);
+  font-family: var(--font-heading);
+  font-size: var(--fs-xs);
+}
+
+.record p span {
+  font-weight: 600;
+}
+
+.record p em {
+  color: rgba(255, 255, 255, 0.45);
+  font-style: normal;
+}
+
+.record pre {
+  max-height: 260px;
+  margin: 0;
+  padding: 14px 16px 16px;
+  overflow: auto;
+  color: #d9ccff;
+  font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
+  font-size: 12.5px;
+  line-height: 1.55;
+  white-space: pre;
+  /* Each line keeps its own direction, so Arabic values read correctly. */
+  unicode-bidi: plaintext;
+}
+
+.record code {
+  unicode-bidi: plaintext;
 }

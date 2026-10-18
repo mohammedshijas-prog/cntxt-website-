@@ -122,7 +122,7 @@ export function BlogRail({ eyebrow, title = "From the blog" }: { eyebrow: ReactN
             >
               <p className={styles.category}><span />{post.category}</p>
               <div className={styles.photo}>
-                <img src={post.image} alt="" />
+                <img loading="lazy" decoding="async" src={post.image} alt="" />
                 <strong>{post.title}</strong>
               </div>
               {post.body ? <p className={styles.cardBody}>{post.body}</p> : null}

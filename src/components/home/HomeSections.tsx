@@ -5,7 +5,7 @@ import styles from "./sections.module.css";
 export function LogoMarquee() {
   const row = partners.map((item) => (
     <li key={item.name}>
-      <img src={`/brand/partners/${item.logo}`} alt={item.name} style={{ width: item.width * 0.8 }} />
+      <img loading="lazy" decoding="async" src={`/brand/partners/${item.logo}`} alt={item.name} style={{ width: item.width * 0.8 }} />
     </li>
   ));
   return (
@@ -52,7 +52,7 @@ export function SecurityBand() {
       <ul className={styles.certs}>
         {certs.map((cert) => (
           <li key={cert.name}>
-            <img src={`/brand/certs/${cert.logo}`} alt="" />
+            <img loading="lazy" decoding="async" src={`/brand/certs/${cert.logo}`} alt="" />
             <strong>{cert.name}</strong>
             <span>{cert.note}</span>
           </li>

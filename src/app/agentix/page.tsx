@@ -5,13 +5,9 @@ export const metadata: Metadata = {
   title: "Agentix",
   alternates: { canonical: "/agentix" },
   description:
-    "Agentix is CNTXT's conversational AI platform: Arabic voice and chat agents, workflow automation and GCC telephony, in the cloud or on-premises.",
+    "Agentix: Arabic voice and chat agents with GCC telephony that answer customers in their dialect and complete the task.",
 };
 
 export default function Agentix() {
-  return (
-    <div>
-      <AgentixPage />
-    </div>
-  );
+  return <AgentixPage />;
 }

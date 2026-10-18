@@ -10,8 +10,8 @@
 }
 
 .stage {
-  background: #ffffff;
-  padding-top: 62px;
+  padding: 132px 0 var(--section-y);
+  background: var(--paper-dots), var(--paper);
 }
 
 .row {
@@ -29,7 +29,8 @@
   flex: 1 1 0;
   min-width: 0;
   height: 692px;
-  border-radius: 29px;
+  border: var(--card-line);
+  border-radius: var(--radius-card);
   overflow: hidden;
 }
 
@@ -49,11 +50,12 @@
 }
 
 .introCopy h1 {
-  color: var(--text-strong);
+  color: var(--label);
   font-family: var(--font-heading);
   font-size: var(--fs-display);
-  font-weight: 400;
-  line-height: var(--lh-display);
+  font-weight: 500;
+  letter-spacing: var(--ls-display);
+  line-height: 1.05;
 }
 
 .introCopy p {
@@ -119,7 +121,6 @@
   justify-content: center;
   padding: 56px;
   background: var(--bg);
-  border: 1px solid rgba(21, 17, 31, 0.1);
 }
 
 .formBody {
@@ -360,4 +361,18 @@
     flex-direction: column;
     gap: 16px;
   }
+}
+
+/* HubSpot renders its own fields; give them room and let the card grow. */
+.hubspot {
+  width: 100%;
+  min-height: 420px;
+  font-family: var(--font-body);
+}
+
+.formCard:has(.hubspot) {
+  height: auto;
+  min-height: 692px;
+  align-items: stretch;
+  overflow: visible;
 }

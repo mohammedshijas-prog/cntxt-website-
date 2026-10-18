@@ -19,15 +19,15 @@ export function BlogArticle() {
           <h1>{`${article.title[0]} ${article.title[1]}`}</h1>
           <p className={styles.byline}>{article.meta}</p>
           <div className={styles.heroImage}>
-            <img src="/blog/hero-under.webp" alt="" />
-            <img src="/art/cover-1.svg" alt="" />
+            <img loading="lazy" decoding="async" src="/blog/hero-under.webp" alt="" />
+            <img loading="lazy" decoding="async" src="/art/cover-1.svg" alt="" />
           </div>
           <div className={styles.body}>
             {article.paragraphs.map((paragraph) => (
               <p key={paragraph.slice(0, 24)}>{paragraph}</p>
             ))}
           </div>
-          <img className={styles.midImage} src="/blog/article-mid.jpg" alt="" />
+          <img loading="lazy" decoding="async" className={styles.midImage} src="/blog/article-mid.jpg" alt="" />
           <h2>{article.subhead}</h2>
           <div className={styles.body}>
             {article.more.map((paragraph) => (
@@ -61,9 +61,9 @@ export function BlogArticle() {
             <li key={item.href}>
               <a href={item.href} target="_blank" rel="noopener noreferrer">
                 <span className={styles.nextPhoto}>
-                  <img src="/blog/next-base.webp" alt="" />
-                  <img src={item.under} alt="" />
-                  <img src={item.image} alt="" />
+                  <img loading="lazy" decoding="async" src="/blog/next-base.webp" alt="" />
+                  <img loading="lazy" decoding="async" src={item.under} alt="" />
+                  <img loading="lazy" decoding="async" src={item.image} alt="" />
                 </span>
                 <strong>{item.title}</strong>
                 <span>

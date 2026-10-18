@@ -6,9 +6,10 @@
   width: var(--content);
   margin: var(--section-y) auto 0;
   padding: var(--space-12) var(--space-10);
+  border: var(--card-line);
   border-radius: var(--radius-card);
-  background: var(--grad-ink);
-  color: var(--label-dark);
+  background: #ffffff;
+  color: var(--label);
 }
 
 .band h2 {
@@ -44,12 +45,12 @@
 }
 
 .stages li {
-  color: #ffffff;
+  color: var(--label);
   font-family: var(--font-heading);
   font-size: var(--fs-h4);
   line-height: var(--lh-h4);
   text-align: center;
-  text-shadow: 0 0 18px var(--ink), 0 0 6px var(--ink);
+  text-shadow: 0 0 14px #ffffff, 0 0 6px #ffffff, 0 0 2px #ffffff;
 }
 
 @media (max-width: 1068px) {

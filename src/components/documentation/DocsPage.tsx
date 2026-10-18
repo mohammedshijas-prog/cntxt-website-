@@ -289,7 +289,7 @@ export function DocsPage() {
         <aside className={styles.sidebar} aria-label="Documentation" data-open={navOpen}>
           <label className={styles.search}>
             <span className={styles.searchField}>
-              <img src="/documentation/search.svg" alt="" width={18} height={18} />
+              <img loading="lazy" decoding="async" src="/documentation/search.svg" alt="" width={18} height={18} />
               <input
                 ref={searchRef}
                 type="search"
@@ -492,7 +492,7 @@ export function DocsPage() {
               disabled={activeIndex === flat.length - 1}
             >
               {following ? following.title : "Next"}
-              <img src="/documentation/caret.svg" alt="" width={25} height={25} />
+              <img loading="lazy" decoding="async" src="/documentation/caret.svg" alt="" width={25} height={25} />
             </button>
           </div>
         </article>

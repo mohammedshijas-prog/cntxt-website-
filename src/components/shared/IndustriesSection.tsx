@@ -15,7 +15,7 @@ export function IndustriesSection() {
         </h2>
         <a href="/contact">
           Speak to an expert
-          <img src="/home/caret.svg" alt="" width={24} height={24} />
+          <img loading="lazy" decoding="async" src="/home/caret.svg" alt="" width={24} height={24} />
         </a>
       </div>
     </section>

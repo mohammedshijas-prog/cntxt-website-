@@ -21,10 +21,24 @@ export const featured = {
   blurb:
     "People do not speak the Arabic that most speech models were trained on. How Munsit was trained on real-world audio across more than 25 dialects, and why that decides whether a transcript can be used.",
   meta: "CNTXT AI · 4 min read",
-  image: "/art/cover-1.svg",
+  image: "/brand/product/munsit-app.webp",
 };
 
-const covers = Array.from({ length: 12 }, (_, i) => `/art/cover-${i + 2}.svg`);
+// Real product and industry imagery, picked by category, instead of abstract art.
+const coversByChip: Record<string, string[]> = {
+  "Arabic AI": ["/brand/product/munsit-app.webp", "/brand/product/label-audio.webp", "/brand/product/munsit-platform.webp"],
+  Data: ["/brand/product/label-video.webp", "/brand/product/label-image.webp", "/art/frame-shelf.webp"],
+  Evaluation: ["/brand/product/label-text.webp", "/healthcare/tile-lab.webp"],
+  Agents: ["/home/agentix-ui.png", "/brand/agentix/sip-providers.webp"],
+  Industry: ["/healthcare/tile-lab.webp", "/healthcare/tile-chart.webp", "/healthcare/tile-robot.webp"],
+};
+const seen: Record<string, number> = {};
+const coverFor = (chip: string) => {
+  const list = coversByChip[chip] ?? coversByChip.Data;
+  const i = seen[chip] ?? 0;
+  seen[chip] = i + 1;
+  return list[i % list.length];
+};
 
 // Articles published on cntxt.tech/insight-hub. Cards link out to the original.
 const insights: { chip: Category; title: string; blurb: string; path: string }[] = [
@@ -123,7 +137,7 @@ export const cards = insights.map((insight, index) => ({
   blurb: insight.blurb,
   meta: insight.chip,
   chip: insight.chip,
-  image: covers[index % covers.length],
+  image: coverFor(insight.chip),
 }));
 
 export const article = {

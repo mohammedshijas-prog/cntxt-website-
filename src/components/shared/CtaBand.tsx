@@ -1,6 +1,6 @@
 import styles from "./ctaBand.module.css";
 
-/** Closing call to action: one primary button, one optional secondary link. */
+/** The site's one closing band: brand purple between two dotted map edges. */
 export function CtaBand({
   id,
   title,
@@ -16,18 +16,26 @@ export function CtaBand({
 }) {
   return (
     <section className={styles.band} aria-labelledby={id}>
-      <h2 id={id}>{title}</h2>
-      <p>{body}</p>
-      <div className={styles.actions}>
-        <a className={styles.primary} href={primary.href}>
-          {primary.label}
-          <img src="/home/caret.svg" alt="" width={24} height={24} />
-        </a>
-        {secondary ? (
-          <a className={styles.secondary} href={secondary.href}>
-            {secondary.label}
+      <div className={styles.mapEdge} aria-hidden="true">
+        <img loading="lazy" decoding="async" src="/security/map-left.webp" alt="" />
+      </div>
+      <div className={styles.copy}>
+        <h2 id={id}>{title}</h2>
+        <p>{body}</p>
+        <div className={styles.actions}>
+          <a className={styles.primary} href={primary.href}>
+            {primary.label}
+            <span aria-hidden="true">→</span>
           </a>
-        ) : null}
+          {secondary ? (
+            <a className={styles.secondary} href={secondary.href}>
+              {secondary.label}
+            </a>
+          ) : null}
+        </div>
+      </div>
+      <div className={styles.mapEdge} aria-hidden="true">
+        <img loading="lazy" decoding="async" src="/security/map-right.webp" alt="" />
       </div>
     </section>
   );

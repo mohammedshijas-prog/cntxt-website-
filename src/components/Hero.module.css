@@ -117,7 +117,7 @@
   justify-content: center;
   height: 48px;
   padding: 0 14px 0 20px;
-  border-radius: 10px;
+  border-radius: 999px;
   background: #ffffff;
   color: #111111;
   font-family: var(--font-heading);
@@ -296,7 +296,7 @@
   height: 48px;
   padding: 0 20px;
   border: 1px solid rgba(255, 255, 255, 0.5);
-  border-radius: 10px;
+  border-radius: 999px;
   color: #ffffff;
   font-family: var(--font-heading);
   font-size: var(--fs-button);
@@ -324,8 +324,8 @@
   height: calc(var(--screen-h) * 1.6);
   min-height: 0;
   overflow: visible;
-  /* The frame settles onto ink, where the 3D story picks up. */
-  background: var(--ink);
+  /* The frame settles onto grid paper, where the 3D story picks up. */
+  background: radial-gradient(circle, rgba(125, 82, 244, 0.38) 1.3px, transparent 1.6px) 0 0 / 28px 28px, #f3f1f8;
 }
 
 .stage {

@@ -32,7 +32,7 @@ export function CountUp({
         observer.disconnect();
         const start = performance.now();
         const tick = (now: number) => {
-          const t = Math.min(1, (now - start) / duration);
+          const t = Math.min(1, Math.max(0, (now - start) / duration));
           const eased = 1 - (1 - t) ** 3;
           setShown(Math.max(1, Math.round(1 + (value - 1) * eased)));
           if (t < 1) frame = requestAnimationFrame(tick);

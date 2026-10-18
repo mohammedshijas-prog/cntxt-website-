@@ -11,12 +11,16 @@ export type Industry = {
   /** Contact-form topic this page's buttons preselect. */
   topic: string;
   eyebrow: string;
+  /** A photo of the work this industry does, used in the hero and the industry cards. */
+  image: string;
   title: string;
   lead: string;
   description: string;
   results: { value: string; label: string }[];
   problemsTitle: string;
   problems: string[];
+  /** For each problem, the index of the solution that fixes it. */
+  fixes: number[];
   solutionsTitle: string;
   solutions: { icon: "check" | "lock" | "globe" | "loop" | "floor" | "consent"; title: string; body: string }[];
   study: {
@@ -41,6 +45,7 @@ export const industries: Industry[] = [
     name: "Financial services",
     topic: "Custom AI solutions",
     eyebrow: "Financial services",
+    image: "/healthcare/tile-chart.webp",
     title: "Build your own AI for financial institutions, end to end.",
     lead: "AI trained on your KYC files, VAT records, contracts and IDs, deployed into the systems you already run, with every byte kept inside UAE jurisdiction.",
     description:
@@ -51,6 +56,7 @@ export const industries: Industry[] = [
       { value: "50–70%", label: "Lower operating costs" },
     ],
     problemsTitle: "Where generic AI breaks in finance.",
+    fixes: [0, 1, 1, 3, 2],
     problems: [
       "Extraction errors of 30–45% or more on financial documents.",
       "KYC logic misread, which raises both false negatives and false positives.",
@@ -94,6 +100,7 @@ export const industries: Industry[] = [
     name: "Public sector",
     topic: "Custom AI solutions",
     eyebrow: "Government & public sector",
+    image: "/industries/government.jpg",
     title: "AI built for government operations.",
     lead: "Secure, sovereign and designed for public service. Trained on your policies and regulations, fluent in Arabic, and run on infrastructure the government controls.",
     description:
@@ -104,6 +111,7 @@ export const industries: Industry[] = [
       { value: "50%", label: "Lower operational, legal and compliance risk" },
     ],
     problemsTitle: "Why generic AI fails in government.",
+    fixes: [0, 1, 0, 3, 2],
     problems: [
       "It does not match government operating models or terminology.",
       "It cannot reason reliably over laws, regulations and official records.",
@@ -145,6 +153,7 @@ export const industries: Industry[] = [
     name: "Real estate",
     topic: "Custom AI solutions",
     eyebrow: "Real estate & proptech",
+    image: "/solutions/study-4.webp",
     title: "One data foundation for the whole brokerage.",
     lead: "We unify the CRM, the spreadsheets and the document folders, then put AI to work on lead scoring, pricing and demand forecasting.",
     description:
@@ -154,6 +163,7 @@ export const industries: Industry[] = [
       { value: "28%", label: "Less legal workload" },
     ],
     problemsTitle: "What holds real estate teams back.",
+    fixes: [0, 0, 3, 1],
     problems: [
       "A CRM that is only partly implemented.",
       "Deals and leads tracked in scattered Excel files.",
@@ -194,6 +204,7 @@ export const industries: Industry[] = [
     name: "Insurance",
     topic: "Custom AI solutions",
     eyebrow: "Insurance",
+    image: "/security/practice-a.png",
     title: "Claims that are right the first time.",
     lead: "Real-time AI validation catches errors while a claim is being submitted, so fewer are rejected and reviewers spend their time on the hard cases.",
     description:
@@ -203,6 +214,7 @@ export const industries: Industry[] = [
       { value: "60%", label: "Less processing time" },
     ],
     problemsTitle: "Where claims go wrong.",
+    fixes: [1, 0, 0],
     problems: [
       "Submission portals with complex interfaces.",
       "Manual submission steps with no validation.",

@@ -8,10 +8,13 @@ import styles from "./sections.module.css";
 
 const ParticleField = dynamic(() => import("../three/ParticleField"), { ssr: false });
 
-const COUNT = 3600;
 // Rain over the hero, then one form per stage: a worker, labelled frames,
 // a neural network, and an agent wired into the systems it runs.
-const shapes = [rain(COUNT), worker(COUNT), frames(COUNT), network(COUNT), agentHub(COUNT)];
+// Phones get fewer particles so the scene stays smooth.
+function buildShapes() {
+  const count = typeof window !== "undefined" && window.innerWidth <= 734 ? 2000 : 3600;
+  return [rain(count), worker(count), frames(count), network(count), agentHub(count)];
+}
 
 export type Stage = {
   label: string;
@@ -30,6 +33,7 @@ export type Stage = {
  */
 export function StackStory({ stages }: { stages: Stage[] }) {
   const section = useRef<HTMLElement>(null);
+  const [shapes] = useState(buildShapes);
   const progress = useRef(0);
   const level = useRef(0.15);
   const place: Place = useRef({ x: 0, y: 0, scale: 1 });
@@ -112,6 +116,7 @@ export function StackStory({ stages }: { stages: Stage[] }) {
           sway={0.4}
           yaw={-0.45}
           pointSize={17}
+          light
         />
       </div>
       <div className={styles.storySticky}>

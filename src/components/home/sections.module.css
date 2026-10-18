@@ -1,15 +1,5 @@
 
 
-.kicker {
-  margin: 0 0 18px;
-  color: var(--accent);
-  font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
-  font-size: 13px;
-  letter-spacing: 0.14em;
-  line-height: 18px;
-  text-transform: uppercase;
-}
-
 .sectionHead h2,
 .security h2 {
   margin: 0;
@@ -18,42 +8,6 @@
   font-weight: 400;
   letter-spacing: -0.02em;
   line-height: 1.06;
-}
-
-.lead {
-  max-width: 600px;
-  margin: 20px 0 0;
-  color: var(--text-muted);
-  font-family: var(--font-body);
-  font-size: var(--fs-lead);
-  line-height: var(--lh-lead);
-}
-
-.outlineButton,
-.outlineLight {
-  display: inline-flex;
-  align-items: center;
-  height: 46px;
-  margin-top: 28px;
-  padding: 0 20px;
-  border: 1px solid var(--separator);
-  border-radius: 10px;
-  color: var(--text-strong);
-  font-family: var(--font-heading);
-  font-size: var(--fs-button);
-  font-weight: 500;
-  transition:
-    background 200ms ease,
-    border-color 200ms ease;
-}
-
-.outlineLight {
-  border-color: rgba(255, 255, 255, 0.3);
-  color: #ffffff;
-}
-
-.outlineLight:hover {
-  background: rgba(255, 255, 255, 0.1);
 }
 
 .srOnly {
@@ -74,8 +28,9 @@
   gap: 40px;
   align-items: center;
   padding: 36px 48px;
-  background: var(--ink);
-  color: rgba(255, 255, 255, 0.55);
+  border-bottom: 1px solid var(--separator);
+  background: var(--bg);
+  color: var(--label-3);
 }
 
 .marquee > p {
@@ -112,8 +67,8 @@
   display: block;
   height: auto;
   max-height: 34px;
-  filter: brightness(0) invert(1);
-  opacity: 0.7;
+  filter: brightness(0);
+  opacity: 0.6;
 }
 
 @keyframes marquee {
@@ -124,10 +79,26 @@
 
 /* ---------- Stack story (3D) ---------- */
 .story {
+  /* The story is part of the dotted world the hero rains into. */
+  --paper: #f3f1f8;
+  --paper-dots: radial-gradient(circle, rgba(125, 82, 244, 0.38) 1.3px, transparent 1.6px) 0 0 / 28px 28px;
   position: relative;
   height: calc(var(--screen-h) * var(--stages, 4) * 0.85);
-  background: var(--ink);
-  color: #ffffff;
+  background: var(--paper);
+  color: var(--label);
+}
+
+/* Fade the grid paper into the white page below, so there is no hard edge. */
+.story::after {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: min(40vh, 320px);
+  background: linear-gradient(rgba(255, 255, 255, 0), var(--bg));
+  pointer-events: none;
 }
 
 .storySticky {
@@ -136,8 +107,9 @@
   height: var(--screen-h);
   overflow: hidden;
   background:
-    radial-gradient(45% 60% at 74% 50%, rgba(125, 82, 244, 0.26), rgba(125, 82, 244, 0) 70%),
-    var(--grad-ink);
+    radial-gradient(45% 60% at 74% 50%, rgba(125, 82, 244, 0.12), rgba(125, 82, 244, 0) 70%),
+    var(--paper-dots),
+    var(--paper);
 }
 
 /* One fixed layer over the hero and the story; StackStory fades it. */
@@ -204,7 +176,7 @@
 
 .storyPanel p {
   margin: 20px 0 0;
-  color: rgba(255, 255, 255, 0.72);
+  color: var(--label-2);
   font-family: var(--font-body);
   font-size: var(--fs-lead);
   line-height: var(--lh-lead);
@@ -213,7 +185,7 @@
 .storyPanel .storyStat {
   padding-left: 14px;
   border-left: 2px solid var(--accent);
-  color: #ffffff;
+  color: var(--label);
   font-family: var(--font-heading);
   font-size: var(--fs-body);
 }
@@ -227,10 +199,10 @@
   gap: 10px;
   align-items: center;
   margin-top: 28px;
-  padding: 12px 18px;
-  border-radius: 10px;
-  background: #ffffff;
-  color: var(--ink);
+  padding: 12px 22px;
+  border-radius: var(--radius-pill);
+  background: var(--accent);
+  color: #ffffff;
   font-family: var(--font-heading);
   font-size: var(--fs-button);
   font-weight: 500;

@@ -232,7 +232,7 @@ export function AnnotationMock({ className }: { className?: string }) {
       </div>
       <div className={styles.mockBody}>
         <div className={styles.frame}>
-          <img src="/art/frame-shelf.webp" alt="" />
+          <img loading="lazy" decoding="async" src="/art/frame-shelf.webp" alt="" />
           <span className={styles.region} style={{ left: "37%", top: "16%", width: "40%", height: "44%" }}>
             <b>Right hand</b>
           </span>
@@ -333,7 +333,7 @@ export function TerminalMock() {
   );
 }
 
-const iconPaths: Record<string, ReactNode> = {
+export const iconPaths: Record<string, ReactNode> = {
   floor: <path d="M3 9.5 12 5l9 4.5-9 4.5-9-4.5Zm0 4.5 9 4.5 9-4.5" />,
   camera: (
     <>

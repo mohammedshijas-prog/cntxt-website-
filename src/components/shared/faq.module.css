@@ -17,10 +17,11 @@
 .kicker {
   margin: 0 0 16px;
   color: var(--accent);
-  font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
-  font-size: 13px;
-  letter-spacing: 0.14em;
+  font-family: var(--font-heading);
+  font-size: var(--fs-small);
+  letter-spacing: 0;
   line-height: 18px;
+  font-weight: 600;
 }
 
 .intro h2 {

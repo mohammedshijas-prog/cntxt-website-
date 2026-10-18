@@ -3,8 +3,8 @@
 import Link from "next/link";
 import { useEffect, useRef } from "react";
 import { MobileMenu } from "./site/MobileMenu";
-import { VideoToggle, isUserPaused } from "./shared/VideoToggle";
 import { NavMenu, menuOrder, menus } from "./site/NavMenu";
+import { VideoToggle, isUserPaused } from "./shared/VideoToggle";
 import styles from "./Hero.module.css";
 
 

@@ -1,7 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { ChallengeArt } from "./ChallengeArt";
 import { SiteClose } from "../site/SiteClose";
+import { CtaBand } from "../shared/CtaBand";
+import { PageHero } from "../shared/PageHero";
 import { SiteNav } from "../site/SiteNav";
 import styles from "./solutions.module.css";
 import { faqs } from "../shared/faqs";
@@ -12,22 +15,22 @@ const challenges = [
   {
     number: "01",
     title: "Pilots that stall on messy data",
-    body: "AI projects fail on messy data, not on models. Demos run on clean samples; production runs on scattered documents, recordings and records. We source, label and verify the data first: text, image, video and audio at 98% accuracy, with human-in-the-loop quality assurance.",
+    body: "We label and verify the data first, at 98% accuracy.",
   },
   {
     number: "02",
     title: "Global models that miss Arabic",
-    body: "Global models underperform in Arabic, and more so in dialect, because the training data is scarce. Our native Arabic annotators cover 25+ dialects, and Munsit, our Arabic voice AI, ranks first on the Hugging Face Open Universal Arabic ASR Leaderboard.",
+    body: "Native annotators across 25+ dialects, and the #1 Arabic speech model.",
   },
   {
     number: "03",
     title: "Data that cannot leave the region",
-    body: "Some data cannot be sent abroad. We host and process data in region, and deploy on-premises, hybrid or in the cloud. CNTXT AI holds SOC 2 Type II and ISO 27001, and complies with GDPR and HIPAA.",
+    body: "Hosted in region, on-premises or hybrid. SOC 2 Type II and ISO 27001.",
   },
   {
     number: "04",
     title: "No way to measure model quality",
-    body: "Without evaluation, every model choice is a guess. Domain experts test, evaluate and audit AI systems for bias, reliability and compliance before deployment. RAGMeter, our open-source toolkit, evaluates RAG pipelines.",
+    body: "Domain experts test for bias, reliability and compliance before launch.",
   },
 ];
 
@@ -47,7 +50,7 @@ const products: Product[] = [
   {
     label: "Custom AI",
     title: ["Built on your data.", "Run where you choose."],
-    body: "Custom AI integrated with enterprise and government systems and trained on proprietary and regional data. Delivery runs from discovery and roadmap through two build phases, with review and iteration between them, to sign-off.",
+    body: "Custom AI trained on your data, built into your systems, delivered in two phases.",
     wash: "/solutions/wash-build.svg",
     washWidth: 1567,
     washHeight: 562,
@@ -57,7 +60,7 @@ const products: Product[] = [
   {
     label: "Data services",
     title: ["Sourced, labelled", "and verified."],
-    body: "Domain-specific datasets, field collection, enterprise integration and synthetic data. Text, image, video and audio labelling at 98% accuracy, by native Arabic annotators and domain experts in finance, healthcare, logistics and government.",
+    body: "Data collected, labelled and verified at 98% accuracy.",
     wash: "/solutions/wash-app.svg",
     washWidth: 1567,
     washHeight: 562.5,
@@ -67,7 +70,7 @@ const products: Product[] = [
   {
     label: "Munsit",
     title: ["Arabic voice AI", "across 25+ dialects."],
-    body: "Speech-to-text and text-to-speech in one platform, ranked first on the Hugging Face Open Universal Arabic ASR Leaderboard. Deploys via API, on-premises, sovereign cloud or on-device.",
+    body: "Arabic speech-to-text and text-to-speech, ranked #1. Runs on-premises or on-device.",
     link: { href: "https://munsit.com", text: "munsit.com" },
     wash: "/solutions/wash-hub.svg",
     washWidth: 1567,
@@ -81,22 +84,22 @@ const studies = [
   {
     image: "/solutions/study-1.webp",
     title: "Contract compliance",
-    body: "AI-assisted contract compliance review made reviews 85% faster and application processing 60% faster.",
+    body: "85% faster reviews.",
   },
   {
     image: "/solutions/panel-app.webp",
     title: "Insurance claims",
-    body: "A rejection rate above 70% was cut by an estimated 72%, with 60% less processing time.",
+    body: "Rejections cut by an estimated 72%.",
   },
   {
     image: "/solutions/study-3.webp",
     title: "Real estate operations",
-    body: "Reviews ran 22% faster and legal workload fell by 28%.",
+    body: "22% faster reviews, 28% less legal work.",
   },
   {
     image: "/solutions/study-4.webp",
     title: "Hiring and supply chain",
-    body: "Across 3,000+ CVs, admin cost fell 21% and hiring and onboarding ran 32% faster. In supply chain, projected gains are 23% faster processing and 17% fewer data-entry errors.",
+    body: "32% faster hiring across 3,000+ CVs.",
   },
 ];
 
@@ -131,46 +134,60 @@ function Eyebrow({ children }: { children: string }) {
 
 export function SolutionsPage() {
   const [open, setOpen] = useState(0);
+  const [auto, setAuto] = useState(true);
+  const challengeBox = useRef<HTMLDivElement>(null);
+
+  // The challenges play through on their own while in view, until someone picks one.
+  useEffect(() => {
+    const node = challengeBox.current;
+    if (!node || !auto) return;
+    let timer: ReturnType<typeof setInterval> | undefined;
+    const seen = new IntersectionObserver(([entry]) => {
+      clearInterval(timer);
+      if (entry.isIntersecting && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        timer = setInterval(() => setOpen((value) => (value + 1) % challenges.length), 6000);
+      }
+    }, { threshold: 0.35 });
+    seen.observe(node);
+    return () => {
+      seen.disconnect();
+      clearInterval(timer);
+    };
+  }, [auto]);
 
   return (
     <main className={styles.page}>
       <SiteNav current="solutions" />
 
-      <section className={styles.hero} aria-labelledby="solutions-heading">
-        <div className={styles.heroCopy}>
-          <Eyebrow>Solutions</Eyebrow>
-          <h1 id="solutions-heading">Real-world AI for enterprises.</h1>
-          <p>
-            CNTXT AI captures and verifies data from real work, trains models on it and
-            deploys them on-premises, hybrid or in the cloud, for enterprises and
-            governments in finance, the public sector, logistics, healthcare, real
-            estate and insurance.
-          </p>
-          <div className={styles.heroActions}>
-            <a className={styles.cta} href="/contact?topic=Custom%20AI%20solutions">
-              Book a demo
-              <span>
-                <img src="/healthcare/caret.svg" alt="" width={23} height={23} />
-              </span>
-            </a>
-            <a className={styles.ghostCta} href="/products">
-              Explore the AI Lab
-            </a>
+      <PageHero
+        id="solutions-heading"
+        kicker="Solutions"
+        title={["Real-world AI", "for enterprises."]}
+        lead="Data verified from real work, models trained on it, and AI deployed where your data has to stay, for enterprises and governments."
+        actions={[
+          { label: "Book a demo", href: "/contact?topic=Custom%20AI%20solutions", primary: true },
+          { label: "Explore the AI Lab", href: "/products" },
+        ]}
+        art={
+          <div className={styles.heroCollage} aria-hidden="true">
+            <img loading="lazy" decoding="async" src="/healthcare/tile-chart.webp" alt="" />
+            <img loading="lazy" decoding="async" src="/industries/government.jpg" alt="" />
+            <img loading="lazy" decoding="async" src="/healthcare/tile-lab.webp" alt="" />
+            <img loading="lazy" decoding="async" src="/healthcare/tile-robot.webp" alt="" />
           </div>
-        </div>
-        <img className={styles.heroArt} src="/healthcare/hero.webp" alt="" />
-      </section>
+        }
+      />
 
       <ProofBar />
 
       <section className={styles.browse} aria-labelledby="browse-heading">
         <p className={styles.browseKicker}>Browse by</p>
         <h2 id="browse-heading">Find the solution for your industry.</h2>
-        <ul className={styles.browseCards}>
+        <ul className={styles.browseCards} data-rail>
           {sectors.map((sector) => (
             <li key={sector.name}>
-              <a href={sector.href}>
-                <img src={sector.image} alt="" />
+              <a href={sector.href} data-tilt>
+                <img loading="lazy" decoding="async" src={sector.image} alt="" />
                 <span className={styles.browseGroup}>{sector.group}</span>
                 <strong>{sector.name}</strong>
                 <span>{sector.line}</span>
@@ -196,7 +213,7 @@ export function SolutionsPage() {
       <section className={styles.challenges} aria-labelledby="challenges-heading">
         <Eyebrow>Challenges</Eyebrow>
         <h2 id="challenges-heading">Challenges we solve</h2>
-        <div className={styles.challengeGrid}>
+        <div ref={challengeBox} className={styles.challengeGrid}>
           <div className={styles.accordion}>
             {challenges.map((item, index) => {
               const expanded = open === index;
@@ -205,20 +222,21 @@ export function SolutionsPage() {
                   <button
                     type="button"
                     aria-expanded={expanded}
-                    onClick={() => setOpen(expanded ? -1 : index)}
+                    onClick={() => {
+                      setOpen(index);
+                      setAuto(false);
+                    }}
                   >
                     <span>{item.number}</span>
                     {item.title}
                   </button>
                   {expanded && item.body ? <p>{item.body}</p> : null}
+                  {expanded && auto ? <i key={`t-${index}`} className={styles.challengeTimer} aria-hidden="true" /> : null}
                 </div>
               );
             })}
           </div>
-          <div className={styles.challengeArt}>
-            <img src="/security/practice-a.png" alt="" />
-            <span>01</span>
-          </div>
+          <ChallengeArt index={Math.max(open, 0)} />
         </div>
       </section>
 
@@ -272,10 +290,10 @@ export function SolutionsPage() {
       <section className={styles.studies} aria-labelledby="studies-heading">
         <Eyebrow>Use cases</Eyebrow>
         <h2 id="studies-heading">Case studies</h2>
-        <ul>
+        <ul data-rail>
           {studies.map((study) => (
-            <li key={study.title}>
-              <img src={study.image} alt="" />
+            <li key={study.title} data-tilt>
+              <img loading="lazy" decoding="async" src={study.image} alt="" />
               <p>
                 <strong>{study.title}</strong> {study.body}
               </p>
@@ -286,31 +304,12 @@ export function SolutionsPage() {
 
       <Faq items={faqs.solutions} topic="Custom AI solutions" />
 
-      <section className={styles.band} aria-labelledby="enterprise-heading">
-        <div className={styles.mapEdge} aria-hidden="true">
-          <img src="/security/map-left.webp" alt="" />
-        </div>
-        <div>
-          <h2 id="enterprise-heading">
-            Bring real-world AI to
-            <br />
-            your enterprise
-          </h2>
-          <p>
-            “The speed at which CNTXT AI operates is unmatched for a company of its
-            scale.” Youssef Salem, CFO, ADNOC Drilling
-          </p>
-          <a href="/contact?topic=Custom%20AI%20solutions">
-            Book a demo
-            <span>
-              <img src="/healthcare/caret.svg" alt="" width={23} height={23} />
-            </span>
-          </a>
-        </div>
-        <div className={styles.mapEdge} aria-hidden="true">
-          <img src="/security/map-right.webp" alt="" />
-        </div>
-      </section>
+      <CtaBand
+        id="enterprise-heading"
+        title="Bring real-world AI to your enterprise."
+        body="“The speed at which CNTXT AI operates is unmatched for a company of its scale.” Youssef Salem, CFO, ADNOC Drilling"
+        primary={{ label: "Book a demo", href: "/contact?topic=Custom%20AI%20solutions" }}
+      />
 
       <SiteClose current="Enterprises" hideBand />
     </main>

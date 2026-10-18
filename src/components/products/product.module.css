@@ -17,20 +17,16 @@
   gap: 6px;
   align-items: center;
   margin: 0 0 21px;
-  color: var(--text-strong);
+  color: var(--accent-text);
   font-family: var(--font-heading);
   font-size: var(--fs-small);
-  font-weight: 500;
+  font-weight: 600;
   line-height: var(--lh-small);
-  letter-spacing: 0.44px;
-  text-transform: uppercase;
+  letter-spacing: 0;
 }
 
 .tag {
-  position: relative;
-  flex: none;
-  width: 28px;
-  height: 14px;
+  display: none;
 }
 
 .tag::before,
@@ -54,105 +50,12 @@
   transform: rotate(180deg);
 }
 
-.nav nav img,
-.talk img,
-.cta img,
-.band a img {
-  display: block;
-}
-
-.talk span,
-.cta span,
-.band a span {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 10px;
-  background: #ffffff;
-}
-
-.hero {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  min-height: 952px;
-  padding: calc(var(--section-y) + var(--space-12)) var(--pad-x) var(--section-y);
-}
-
-.heroCopy {
-  display: flex;
-  flex: 0 0 707px;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
-  width: 707px;
-}
-
-.heroCopy h1 {
-  width: min(620px, 100%);
-  margin-bottom: 12px;
-  font-family: var(--font-heading);
-  font-size: var(--fs-display);
-  font-weight: 400;
-  line-height: var(--lh-display);
-}
-
-.heroCopy p {
-  width: min(620px, 100%);
-  margin-bottom: 32px;
-  color: var(--text-muted);
-  font-family: var(--font-body);
-  font-size: var(--fs-lead);
-  font-weight: 400;
-  line-height: var(--lh-lead);
-}
-
-.cta,
-.band a {
-  display: inline-flex;
-  gap: 17px;
-  align-items: center;
-  height: 49px;
-  padding: 5px 9px 5px 18px;
-  border-radius: 10px;
-  background: var(--accent);
-  color: #ffffff;
-  font-family: var(--font-heading);
-  font-size: var(--fs-h5);
-  font-weight: 500;
-  line-height: var(--lh-h5);
-  letter-spacing: -0.12px;
-}
-
-.cta span,
-.band a span {
-  width: 33px;
-  height: 33px;
-}
-
-.heroArt {
-  position: relative;
-  flex: 1;
-  height: 561px;
-  overflow: hidden;
-  border-radius: 12px;
-  background: var(--bg-2);
-}
-
-.heroArt img {
-  position: absolute;
-  top: -7.79%;
-  left: 0;
-  width: 100%;
-  height: 109.58%;
-  object-fit: cover;
-}
-
 .tour {
   display: flex;
   flex-direction: column;
   gap: 24px;
   padding: var(--section-y) var(--pad-x);
+  background: var(--paper-dots), var(--paper);
 }
 
 .tourIntro {
@@ -202,7 +105,8 @@
   align-items: center;
   overflow: hidden;
   padding: 40px 0 40px 40px;
-  border-radius: 12px;
+  border: var(--card-line);
+  border-radius: var(--radius-card);
   background: #ffffff;
 }
 
@@ -253,8 +157,9 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
-  padding: 28px;
-  border-radius: 12px;
+  padding: 32px;
+  border: var(--card-line);
+  border-radius: var(--radius-card);
   background: #ffffff;
 }
 
@@ -294,14 +199,6 @@
   font-size: var(--fs-h2);
   font-weight: 400;
   line-height: var(--lh-h2);
-}
-
-.cases h2 {
-  margin-bottom: 48px;
-  font-size: var(--fs-h2);
-  font-weight: 500;
-  line-height: var(--lh-h2);
-  letter-spacing: -0.03em;
 }
 
 .stepGrid {
@@ -367,10 +264,6 @@
   object-fit: cover;
   object-position: left center;
   background: var(--separator);
-}
-
-.cases {
-  padding: var(--space-11);
 }
 
 .customers {
@@ -468,68 +361,6 @@
   line-height: var(--lh-h5);
 }
 
-.band {
-  display: flex;
-  align-items: stretch;
-  height: 530px;
-  overflow: hidden;
-  background: var(--accent);
-}
-
-.mapEdge {
-  position: relative;
-  flex: 1;
-  min-width: 0;
-  overflow: hidden;
-  border-right: 1px solid #ffffff;
-}
-
-.mapEdge:last-child {
-  border-right: 0;
-  border-left: 1px solid #ffffff;
-}
-
-.mapEdge img {
-  position: absolute;
-  top: calc(50% + 65px);
-  left: calc(50% + 596px);
-  display: block;
-  transform: translate(-50%, -50%);
-}
-
-.band > div:nth-child(2) {
-  display: flex;
-  flex: 0 0 1215px;
-  flex-direction: column;
-  gap: 24px;
-  align-items: center;
-  justify-content: center;
-  width: min(1215px, 70%);
-  padding: 48px 52px;
-  text-align: center;
-}
-
-.band h2 {
-  color: #ffffff;
-  font-family: var(--font-heading);
-  font-size: var(--fs-h2);
-  font-weight: 400;
-  line-height: var(--lh-h2);
-}
-
-.band > div:nth-child(2) > p {
-  color: rgba(255, 255, 255, 0.6);
-  font-family: var(--font-body);
-  font-size: var(--fs-lead);
-  line-height: var(--lh-lead);
-}
-
-.band a {
-  gap: 8px;
-  background: #ffffff;
-  color: #000000;
-}
-
 @media (max-width: 1200px) {
   .hero,
   .tour,
@@ -539,13 +370,6 @@
     padding-right: 24px;
     padding-left: 24px;
   }
-  .hero {
-    flex-direction: column;
-    min-height: 0;
-    padding-top: 150px;
-  }
-  .heroCopy { flex-basis: auto; width: 100%; }
-  .heroArt { width: 100%; height: 360px; }
   .feature {
     grid-template-columns: 1fr;
     gap: 24px;
@@ -561,52 +385,11 @@
   .steps h2,
   .cases h2,
   .tourIntro h2 { font-size: var(--fs-h2); line-height: var(--lh-h2); }
-  .band { height: auto; flex-direction: column; }
-  .mapEdge { display: none; }
-  .band > div:nth-child(2) { flex-basis: auto; width: 100%; }
-  .band h2 { font-size: var(--fs-h2); line-height: var(--lh-h2); }
 }
 
 @media (max-width: 720px) {
-  .heroCopy h1 { font-size: var(--fs-display); line-height: var(--lh-display); }
   .metric,
   .result figure { min-height: 0; gap: 24px; }
-}
-
-/* Final pass: eyebrow, hero buttons and the research section. */
-.labEyebrow {
-  margin: 0 0 16px;
-  color: var(--accent);
-  font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
-  font-size: 13px;
-  letter-spacing: 0.14em;
-  line-height: 18px;
-  text-transform: uppercase;
-}
-
-.heroActions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  align-items: center;
-}
-
-.ghostCta {
-  display: inline-flex;
-  align-items: center;
-  height: 48px;
-  padding: 0 18px;
-  border: 1px solid var(--separator);
-  border-radius: 10px;
-  color: var(--label);
-  font-family: var(--font-heading);
-  font-size: var(--fs-button);
-  font-weight: 500;
-  line-height: 20px;
-}
-
-.ghostCta:hover {
-  background: rgba(21, 17, 31, 0.04);
 }
 
 .tourIntro a {
@@ -663,11 +446,14 @@
   gap: 8px;
   padding: 26px 8px;
   color: inherit;
-  transition: background-color 220ms ease;
+  transition:
+    background-color 220ms ease,
+    padding 300ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .papers a:hover {
-  background: rgba(255, 255, 255, 0.04);
+  padding-left: 20px;
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .papers a:focus-visible {

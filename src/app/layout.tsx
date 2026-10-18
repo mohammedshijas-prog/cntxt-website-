@@ -40,12 +40,50 @@ export const metadata: Metadata = {
   },
 };
 
+/*
+ * Tracking, kept exactly as on cntxt.tech. Google Tag Manager carries GA4,
+ * Google Ads, LinkedIn Insight, the Meta pixel and the HubSpot "form
+ * submitted" events; HubSpot's own script records page visits and sources.
+ */
+const gtmId = "GTM-PVNBSB8S";
+const gtmHead = `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','${gtmId}');`;
+
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`${host.variable} ${manrope.variable}`}>
+      <head>
+        {/* Google Tag Manager */}
+        <script id="gtm-head" dangerouslySetInnerHTML={{ __html: gtmHead }} />
+        {/* End Google Tag Manager */}
+      </head>
       <body>
+        {/* Google Tag Manager (noscript) */}
+        <noscript>
+          <iframe
+            src={`https://www.googletagmanager.com/ns.html?id=${gtmId}`}
+            height="0"
+            width="0"
+            style={{ display: "none", visibility: "hidden" }}
+          />
+        </noscript>
+        {/* End Google Tag Manager (noscript) */}
         {children}
         <MotionProvider />
+        {/* Cookie banner, as on the current site */}
+        <script
+          src="https://cookie-consent-cdn-prod.pages.dev/cookie-consent/3.0.33/cookie-consent.js"
+          type="text/javascript"
+          integrity="sha384-hID7SQtXLqNKM1f6agvO2qhK2radQn5wf+Su4pAEM5ElgJ/FmSWXrmcaYP4/D3E0"
+          crossOrigin="anonymous"
+          async
+        />
+        {/* Start of HubSpot Embed Code */}
+        <script type="text/javascript" id="hs-script-loader" async defer src="//js.hs-scripts.com/48027770.js" />
+        {/* End of HubSpot Embed Code */}
       </body>
     </html>
   );

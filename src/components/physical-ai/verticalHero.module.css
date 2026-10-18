@@ -1,0 +1,222 @@
+.hero {
+  position: relative;
+  height: max(640px, min(var(--screen-h), 940px));
+  overflow: hidden;
+  background: #f3f1f8;
+}
+
+.scene {
+  position: absolute;
+  inset: 0;
+}
+
+/* Fade into the page below. */
+.hero::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 120px;
+  background: linear-gradient(rgba(255, 255, 255, 0), var(--bg));
+  pointer-events: none;
+}
+
+/* A soft paper wash on the left keeps the copy readable over the world. */
+.hero::before {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  inset: 0 45% 0 0;
+  background: linear-gradient(90deg, rgba(243, 241, 248, 0.94) 55%, rgba(243, 241, 248, 0));
+  pointer-events: none;
+}
+
+.copy {
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  left: var(--pad-x);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  align-items: flex-start;
+  max-width: min(760px, calc(100% - 2 * var(--pad-x)));
+  transform: translateY(-46%);
+}
+
+/* The kicker sits closer to its headline than the rest. */
+.copy > .kicker {
+  margin-bottom: calc(var(--space-2) - var(--space-6) + 6px) !important;
+}
+
+.copy > .actions {
+  margin-top: var(--space-2) !important;
+}
+
+.kicker {
+  margin: 0 0 var(--space-5);
+  line-height: 1.4;
+  color: var(--accent-text);
+  font-family: var(--font-heading);
+  font-size: var(--fs-small);
+  font-weight: 600;
+}
+
+/* One calm block: the first phrase on a purple highlight, the rest plain. */
+.title {
+  margin: 0;
+  max-width: 13em;
+  color: var(--label);
+  font-family: var(--font-heading);
+  font-size: clamp(34px, 3.4vw, 52px);
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  line-height: 1.16;
+}
+
+.title span {
+  padding: 0 0.18em;
+  border-radius: 0.2em;
+  background: var(--accent);
+  color: #ffffff;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
+
+.lead {
+  max-width: 30em;
+  margin: var(--space-6) 0 0;
+  color: var(--label-2);
+  font-family: var(--font-body);
+  font-size: var(--fs-lead);
+  line-height: var(--lh-lead);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3) var(--space-6);
+  align-items: center;
+  margin-top: var(--space-7);
+}
+
+.primary {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+  padding: 0 var(--space-6);
+  border-radius: var(--radius-pill);
+  font-family: var(--font-heading);
+  font-size: var(--fs-button);
+  font-weight: 500;
+  transition: transform 150ms ease, background 200ms ease;
+}
+
+.primary {
+  background: var(--accent);
+  color: #ffffff;
+}
+
+.primary:hover {
+  background: var(--accent-hover);
+  transform: translateY(-2px);
+}
+
+.textLink {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+  color: var(--accent-text);
+  font-family: var(--font-heading);
+  font-size: var(--fs-button);
+  font-weight: 500;
+}
+
+.textLink:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.label {
+  position: absolute;
+  z-index: 1;
+  right: var(--pad-x);
+  bottom: calc(var(--space-12) + var(--space-4));
+  padding: 8px 14px;
+  border-radius: var(--radius-pill);
+  background: var(--label);
+  color: #ffffff;
+  font-family: var(--font-heading);
+  font-size: var(--fs-small);
+  font-weight: 500;
+}
+
+/* Tablets and phones: copy on top, the world underneath, never overlapping. */
+@media (max-width: 1068px) {
+  .hero::before {
+    display: none;
+  }
+
+  .hero {
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    min-height: 0;
+    padding: 120px var(--pad-x) 0;
+  }
+
+  .copy {
+    order: 0;
+  }
+
+  .scene {
+    order: 1;
+  }
+
+  .copy {
+    position: relative;
+    top: auto;
+    left: auto;
+    right: auto;
+    max-width: 640px;
+    transform: none;
+  }
+
+  .scene {
+    position: relative;
+    inset: auto;
+    height: min(70vw, 560px);
+    margin: var(--space-6) calc(var(--pad-x) * -1) 0;
+    mask-image: linear-gradient(transparent, #000 60px);
+  }
+
+  /* The label sits in the flow, tucked over the bottom edge of the scene. */
+  .label {
+    position: relative;
+    right: auto;
+    bottom: auto;
+    left: auto;
+    order: 2;
+    align-self: flex-start;
+    margin: -56px 0 var(--space-9);
+  }
+
+
+}
+
+@media (max-width: 734px) {
+  .hero {
+    padding-top: 104px;
+  }
+
+  .scene {
+    height: 380px;
+  }
+
+  .title {
+    font-size: clamp(28px, 8vw, 34px);
+  }
+
+}

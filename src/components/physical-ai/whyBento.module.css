@@ -1,0 +1,378 @@
+.section {
+  padding: var(--section-y) var(--pad-x);
+  background: var(--paper-dots), var(--paper);
+}
+
+.head {
+  max-width: 760px;
+  margin-bottom: var(--section-head-gap);
+}
+
+.kicker {
+  margin: 0 0 var(--space-3);
+  color: var(--accent-text);
+  font-family: var(--font-heading);
+  font-size: var(--fs-small);
+  font-weight: 600;
+}
+
+.head h2 {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: var(--fs-h2);
+  font-weight: 500;
+  letter-spacing: var(--ls-h2);
+  line-height: var(--lh-h2);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tile {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  justify-content: space-between;
+  min-height: 300px;
+  padding: var(--space-8);
+  overflow: hidden;
+  border: var(--card-line);
+  border-radius: var(--radius-card);
+  background: #ffffff;
+}
+
+.wide {
+  grid-column: span 2;
+}
+
+.full {
+  grid-column: 1 / -1;
+  flex-direction: row;
+  align-items: center;
+  min-height: 0;
+}
+
+.copy h3 {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: var(--fs-h3);
+  font-weight: 500;
+  line-height: var(--lh-h3);
+}
+
+.copy p {
+  max-width: 32em;
+  margin: var(--space-3) 0 0;
+  color: var(--label-2);
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+}
+
+.copy a {
+  color: var(--accent-text);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* End to end: a pipeline that lights up step by step. */
+.flow {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.flow li {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  border-radius: var(--radius-tile);
+  background: var(--paper);
+  font-family: var(--font-heading);
+  font-size: var(--fs-body);
+  font-weight: 500;
+  animation: lit 3s ease-in-out infinite;
+}
+
+.flow li span {
+  color: var(--accent-text);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+}
+
+/* A connector between steps. */
+.flow li + li::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: calc(var(--space-2) * -1);
+  width: var(--space-2);
+  height: 2px;
+  background: var(--accent);
+}
+
+@keyframes lit {
+  0%,
+  100% {
+    background: var(--paper);
+    color: var(--label);
+  }
+  15%,
+  30% {
+    background: var(--accent);
+    color: #ffffff;
+  }
+}
+
+.flow li:nth-child(n) span {
+  color: inherit;
+  opacity: 0.7;
+}
+
+/* Review: the one ink tile, with a full meter. */
+.ink {
+  border-color: transparent;
+  background: var(--grad-ink);
+  color: #ffffff;
+}
+
+.ink .copy p {
+  color: var(--label-dark-2);
+}
+
+.meter {
+  position: relative;
+  width: 120px;
+  height: 120px;
+}
+
+.meter svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.meter circle {
+  fill: none;
+  stroke-width: 10;
+}
+
+.meterTrack {
+  stroke: rgba(255, 255, 255, 0.12);
+}
+
+.meterFill {
+  stroke: var(--accent-on-dark);
+  stroke-dasharray: 314;
+  stroke-dashoffset: 314;
+  stroke-linecap: round;
+  animation: fill 2.4s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards;
+}
+
+@keyframes fill {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.meter strong {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-heading);
+  font-size: 26px;
+  font-weight: 500;
+}
+
+/* Consent: the four languages, as chips. */
+.langs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.langs li {
+  padding: 10px var(--space-4);
+  border: 1px solid var(--separator);
+  border-radius: var(--radius-pill);
+  background: var(--paper);
+  font-family: var(--font-heading);
+  font-size: var(--fs-h4);
+  transition: background 200ms ease, color 200ms ease;
+}
+
+.tile:hover .langs li:nth-child(odd) {
+  background: var(--accent);
+  color: #ffffff;
+}
+
+/* Pay: a payslip. */
+.ticket {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: var(--space-5);
+  border: 1.5px dashed rgba(125, 82, 244, 0.45);
+  border-radius: var(--radius-tile);
+  background: var(--accent-tint);
+  font-family: var(--font-heading);
+}
+
+.ticket span {
+  color: var(--accent-text);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+}
+
+.ticket strong {
+  font-size: var(--fs-h3);
+  font-weight: 500;
+}
+
+.ticket em {
+  color: var(--label-2);
+  font-size: var(--fs-small);
+  font-style: normal;
+}
+
+/* Region: a pin with rings that pulse outward. */
+.region {
+  position: relative;
+  display: grid;
+  height: 110px;
+  place-items: center;
+}
+
+.ring {
+  position: absolute;
+  width: 70px;
+  height: 70px;
+  border: 1.5px solid var(--accent);
+  border-radius: 50%;
+  opacity: 0;
+  animation: pulse 2.6s ease-out infinite;
+}
+
+.ring2 {
+  animation-delay: 1.3s;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.8;
+    transform: scale(0.5);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.7);
+  }
+}
+
+.pin {
+  position: relative;
+  padding: 8px var(--space-4);
+  border-radius: var(--radius-pill);
+  background: var(--accent);
+  color: #ffffff;
+  font-family: var(--font-heading);
+  font-size: var(--fs-small);
+  font-weight: 500;
+}
+
+/* Security: the real marks. */
+.marks {
+  display: flex;
+  flex: none;
+  gap: var(--space-6);
+  margin: 0 0 0 auto;
+  padding: 0;
+  list-style: none;
+}
+
+.marks li {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  align-items: center;
+  color: var(--label-2);
+  font-family: var(--font-heading);
+  font-size: var(--fs-xs);
+}
+
+.marks img {
+  display: block;
+  padding: 8px;
+  border-radius: 50%;
+  background: var(--label);
+}
+
+@media (max-width: 1068px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .full {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .marks {
+    margin: 0;
+  }
+}
+
+@media (max-width: 734px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .wide,
+  .full {
+    grid-column: auto;
+  }
+
+  .tile {
+    min-height: 0;
+    padding: var(--space-6);
+  }
+
+  .flow {
+    grid-template-columns: 1fr;
+  }
+
+  .flow li + li::before {
+    display: none;
+  }
+
+  .marks {
+    flex-wrap: wrap;
+    gap: var(--space-4);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flow li,
+  .ring {
+    animation: none;
+  }
+
+  .meterFill {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+}

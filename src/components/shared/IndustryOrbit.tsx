@@ -199,7 +199,7 @@ export function IndustryOrbit() {
           onBlur={() => setHovered(null)}
         >
           <span className={styles.tileFrame} style={{ height: item.size }}>
-            <img src={item.image} alt="" />
+            <img loading="lazy" decoding="async" src={item.image} alt="" />
             <span className={styles.tileExplore}>
               Explore
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">

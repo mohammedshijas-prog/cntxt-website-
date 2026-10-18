@@ -9,18 +9,21 @@ const footerColumns = [
   { title: "Resources", links: ["Blog", "Documentation", "Partners"] },
 ];
 
-const legalLinks = ["Terms of use", "Privacy policy", "Cookie policy"];
+const legalLinks = ["Terms of use", "Privacy policy", "Cookie policy", "KLKT terms", "KLKT privacy"];
 
 const hrefs: Record<string, string> = {
   "Financial services": "/industries/financial-services",
   "Public sector": "/industries/public-sector",
   "Real estate": "/industries/real-estate",
   Insurance: "/industries/insurance",
-  Terms: "https://www.cntxt.tech/terms-conditions",
-  Privacy: "https://www.cntxt.tech/privacy-policy",
-  "Terms of use": "https://www.cntxt.tech/terms-conditions",
-  "Privacy policy": "https://www.cntxt.tech/privacy-policy",
-  "Cookie policy": "https://www.cntxt.tech/cookie-policy",
+  Terms: "/terms-conditions",
+  Privacy: "/privacy-policy",
+  "Terms of use": "/terms-conditions",
+  "Privacy policy": "/privacy-policy",
+  "Cookie policy": "/cookie-policy",
+  // The KLKT app store listings point to these two URLs; keep them linked.
+  "KLKT terms": "/klkt-terms-conditions",
+  "KLKT privacy": "/klkt-privacy-policy",
   "AI Lab": "/products",
   Agentix: "/agentix",
   Munsit: "https://munsit.com",
@@ -90,7 +93,7 @@ export function SiteClose({
         aria-labelledby="procurement-heading"
       >
         <div className={styles.mapEdge} aria-hidden="true">
-          <img src="/security/map-left.webp" alt="" />
+          <img loading="lazy" decoding="async" src="/security/map-left.webp" alt="" />
         </div>
         <div className={styles.procurementCopy}>
           <h2 id="procurement-heading">
@@ -108,7 +111,7 @@ export function SiteClose({
           </a>
         </div>
         <div className={styles.mapEdge} aria-hidden="true">
-          <img src="/security/map-right.webp" alt="" />
+          <img loading="lazy" decoding="async" src="/security/map-right.webp" alt="" />
         </div>
       </section>
       )}
@@ -118,13 +121,13 @@ export function SiteClose({
           <div className={styles.brand}>
             <div>
               <Link href="/" aria-label="CNTXT AI">
-                <img src="/security/logo.svg" alt="" />
+                <img loading="lazy" decoding="async" src="/security/logo.svg" alt="" />
               </Link>
               <p className={styles.tagline}>Arabic-first, on-prem AI, verified where the work happens.</p>
             </div>
             <div className={styles.social}>
               <a href="https://www.linkedin.com/company/cntxtai" aria-label="LinkedIn">
-                <img src="/security/linkedin.svg" alt="" />
+                <img loading="lazy" decoding="async" src="/security/linkedin.svg" alt="" />
               </a>
             </div>
           </div>

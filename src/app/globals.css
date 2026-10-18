@@ -56,6 +56,11 @@
      lit by one soft spotlight from above and a faint lift from below, like a
      product shot. Fine grain stops the gradient banding. */
   --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  /* Section ground and card outline. Most pages are clean Apple-style light grey with
+     hairline cards; the Physical AI world ([data-world]) swaps in grid paper and drawn outlines. */
+  --paper: var(--bg-2);
+  --paper-dots: none;
+  --card-line: 1px solid var(--separator);
   --grad-ink:
     var(--grain),
     radial-gradient(85% 65% at 50% -12%, rgba(125, 82, 244, 0.32) 0%, rgba(125, 82, 244, 0) 62%),
@@ -235,4 +240,89 @@ h1,
 h2,
 h3 {
   text-wrap: balance;
+}
+
+/* iOS zooms into any field with text under 16px; keep form text at 16px. */
+@media (max-width: 734px) {
+  input,
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+}
+
+[data-world] {
+  --paper: #f3f1f8;
+  --paper-dots: radial-gradient(circle, rgba(125, 82, 244, 0.38) 1.3px, transparent 1.6px) 0 0 / 28px 28px;
+  --card-line: 1.5px solid var(--label);
+}
+
+/* Interactive cards: lean toward the cursor, lift, and catch a soft light. */
+[data-tilt] {
+  position: relative;
+  transform: perspective(1000px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateY(var(--lift, 0));
+  transition:
+    transform 450ms cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 300ms ease,
+    border-color 200ms ease;
+}
+
+[data-tilt]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 0%), rgba(125, 82, 244, 0.1), transparent 60%);
+  opacity: 0;
+  transition: opacity 300ms ease;
+  pointer-events: none;
+}
+
+@media (pointer: fine) {
+  [data-tilt]:hover {
+    --lift: -4px;
+    box-shadow: 0 28px 56px -28px rgba(45, 25, 110, 0.4);
+  }
+
+  [data-tilt]:hover::after {
+    opacity: 1;
+  }
+}
+
+[data-tilt]:active {
+  --lift: 0px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-tilt] {
+    transform: none;
+  }
+}
+
+/* Phone rails: card lists that would stack into a long column swipe sideways instead. */
+@media (max-width: 734px) {
+  [data-rail] {
+    display: flex !important;
+    gap: var(--space-3) !important;
+    margin-right: calc(var(--pad-x) * -1) !important;
+    margin-left: calc(var(--pad-x) * -1) !important;
+    padding: var(--space-2) var(--pad-x) var(--space-4) !important;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-left: var(--pad-x);
+    scrollbar-width: none;
+  }
+
+  [data-rail]::-webkit-scrollbar {
+    display: none;
+  }
+
+  [data-rail] > * {
+    flex: 0 0 82%;
+    scroll-snap-align: start;
+  }
+
+  [data-rail] img {
+    max-height: 220px;
+  }
 }

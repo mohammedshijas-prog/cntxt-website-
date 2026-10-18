@@ -1,7 +1,7 @@
-.walk {
+/* One pinned world: ten chapters, one camera. */
+.world {
   position: relative;
-  height: calc(var(--screen-h) * 4.2);
-  margin-top: var(--section-y);
+  height: calc(var(--screen-h) * 10.2);
 }
 
 .sticky {
@@ -17,22 +17,32 @@
   inset: 0;
 }
 
-/* Two pill labels, like a sticker on the drawing. */
-.title {
+.hidden {
+  opacity: 0;
+  transform: translateY(12px);
+  pointer-events: none;
+}
+
+/* ---------- Overview: headline stickers ---------- */
+.heroCopy {
   position: absolute;
-  top: calc(var(--space-12) + var(--space-5));
+  top: calc(var(--space-12) + var(--space-6));
   left: var(--pad-x);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  max-width: min(980px, calc(100% - 2 * var(--pad-x)));
+  transition:
+    opacity 400ms ease,
+    transform 500ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.title {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: var(--space-2);
   margin: 0;
-  pointer-events: none;
-}
-
-.page section .title,
-.title {
-  font-size: inherit;
 }
 
 .title span {
@@ -41,10 +51,11 @@
   background: #ffffff;
   color: var(--label);
   font-family: var(--font-heading);
-  font-size: clamp(28px, 3.4vw, 52px);
+  font-size: clamp(34px, 4.4vw, 68px);
   font-weight: 500;
   letter-spacing: -0.02em;
   line-height: 1.05;
+  white-space: nowrap;
   box-shadow: 0 1px 2px rgba(21, 17, 31, 0.06);
 }
 
@@ -53,31 +64,120 @@
   color: #ffffff;
 }
 
+.heroActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-top: var(--space-6);
+}
+
+.heroPrimary,
+.heroSecondary {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+  padding: 0 var(--space-6);
+  border-radius: var(--radius-pill);
+  font-family: var(--font-heading);
+  font-size: var(--fs-button);
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.heroPrimary {
+  background: var(--accent);
+  color: #ffffff;
+}
+
+.heroPrimary:hover {
+  background: var(--accent-hover);
+}
+
+.heroSecondary {
+  border: 1.5px solid var(--label);
+  background: #ffffff;
+  color: var(--label);
+}
+
+/* ---------- Chapters ---------- */
+.chapterTag {
+  position: absolute;
+  top: calc(var(--space-12) + var(--space-6));
+  left: var(--pad-x);
+  display: flex;
+  gap: var(--space-2);
+  transition:
+    opacity 400ms ease,
+    transform 500ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.chapterTag span {
+  padding: var(--space-2) var(--space-5) var(--space-3);
+  border-radius: var(--radius-pill);
+  background: var(--accent);
+  color: #ffffff;
+  font-family: var(--font-heading);
+  font-size: clamp(24px, 2.6vw, 40px);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+}
+
+.chapterTag span + span {
+  background: #ffffff;
+  color: var(--label);
+}
+
 .card {
   position: absolute;
   right: var(--pad-x);
   bottom: var(--space-9);
-  width: min(400px, calc(100% - 2 * var(--space-5)));
+  width: min(420px, calc(100% - 2 * var(--space-5)));
   padding: var(--space-7) var(--space-7) var(--space-6);
+  border: 1.5px solid var(--label);
   border-radius: var(--radius-card);
   background: #ffffff;
-  box-shadow: 0 12px 32px rgba(21, 17, 31, 0.1);
+  transition:
+    opacity 400ms ease,
+    transform 500ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.step {
+.world .card h2 {
   margin: 0;
-  color: var(--accent-text);
-  font-family: var(--font-heading);
-  font-size: var(--fs-small);
-  font-weight: 600;
-}
-
-.card h3 {
-  margin: var(--space-2) 0 0;
   font-family: var(--font-heading);
   font-size: var(--fs-h3);
   font-weight: 500;
   line-height: var(--lh-h3);
+  animation: cardIn 450ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes cardIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+.cardImage {
+  height: 150px;
+  margin: calc(var(--space-7) * -1 + var(--space-3)) calc(var(--space-7) * -1 + var(--space-3)) var(--space-5);
+  overflow: hidden;
+  border-radius: calc(var(--radius-card) - 8px);
+  background: #f3f1f8;
+  animation: cardIn 450ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.cardImage img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cardImageContain img {
+  object-fit: contain;
+  object-position: center top;
+  padding-top: var(--space-3);
 }
 
 .body {
@@ -89,51 +189,88 @@
   line-height: var(--lh-body);
 }
 
-.pills {
+.stat {
+  margin: var(--space-4) 0 0;
+  padding-left: var(--space-3);
+  border-left: 2px solid var(--accent);
+  color: var(--label);
+  font-family: var(--font-heading);
+  font-size: var(--fs-small);
+  font-weight: 500;
+}
+
+.link {
+  display: inline-block;
+  margin-top: var(--space-4);
+  color: var(--accent-text);
+  font-family: var(--font-heading);
+  font-size: var(--fs-body);
+  font-weight: 500;
+}
+
+.link:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.rail {
   display: flex;
   gap: var(--space-2);
   margin-top: var(--space-6);
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--separator);
 }
 
-.pills button {
-  width: 14px;
-  height: 14px;
-  padding: 0;
-  border: 0;
+.rail button {
+  min-height: 36px;
+  padding: 0 var(--space-4);
+  border: 1px solid var(--separator);
   border-radius: var(--radius-pill);
-  background: var(--bg-3);
+  background: #ffffff;
+  color: var(--label-2);
+  font-family: var(--font-heading);
+  font-size: var(--fs-small);
   cursor: pointer;
   transition:
-    width 400ms cubic-bezier(0.16, 1, 0.3, 1),
-    background 300ms ease;
+    background 200ms ease,
+    color 200ms ease,
+    border-color 200ms ease;
 }
 
-.pills button.pillActive {
-  width: 64px;
-  background: var(--accent);
+.rail button:hover {
+  border-color: var(--label);
+  color: var(--label);
 }
 
-/* Bigger hit area without changing the drawn pill. */
-.pills button::after {
-  content: "";
-  display: block;
-  margin: -15px -6px;
-  height: 44px;
+.rail button.railActive {
+  border-color: var(--label);
+  background: var(--label);
+  color: #ffffff;
 }
 
 @media (max-width: 734px) {
-  .walk {
-    height: calc(var(--screen-h) * 4);
+  .world {
+    height: calc(var(--screen-h) * 7);
   }
 
-  .title {
-    top: 88px;
+  .heroCopy {
+    top: 92px;
+    right: var(--space-5);
     left: var(--space-5);
   }
 
   .title span {
-    padding: var(--space-1) var(--space-4) var(--space-2);
-    font-size: 24px;
+    font-size: 28px;
+    white-space: normal;
+  }
+
+  .chapterTag {
+    top: 88px;
+    left: var(--space-5);
+  }
+
+  .chapterTag span {
+    font-size: 22px;
   }
 
   .card {
@@ -143,10 +280,26 @@
     width: auto;
     padding: var(--space-6) var(--space-5) var(--space-5);
   }
+
+  .body {
+    min-height: 0;
+  }
+
+  .cardImage {
+    height: 110px;
+  }
+
+  .rail {
+    flex-wrap: wrap;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .pills button {
+  .heroCopy,
+  .chapterTag,
+  .card,
+  .card h2 {
     transition: none;
+    animation: none;
   }
 }

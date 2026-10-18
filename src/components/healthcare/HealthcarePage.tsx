@@ -2,9 +2,10 @@
 
 import { useRouter } from "next/navigation";
 import { SiteClose } from "../site/SiteClose";
+import { CtaBand } from "../shared/CtaBand";
+import { PageHero } from "../shared/PageHero";
 import { SiteNav } from "../site/SiteNav";
 import { CaseCards, type CaseCard } from "../shared/CaseCards";
-import { IndustriesSection } from "../shared/IndustriesSection";
 import { IconChip } from "../shared/graphics";
 import styles from "./healthcare.module.css";
 import { KitArt, PanelArt } from "../shared/graphics";
@@ -42,7 +43,7 @@ const cases: CaseCard[] = [
     body: "Medical AI evaluators test models for bias, reliability and compliance before deployment.",
   },
   {
-    image: "/healthcare/case-3.webp",
+    image: "/art/ego-trolley.webp",
     index: "03",
     label: "Physical AI data.",
     title: "Support work,\ncaptured as data.",
@@ -62,26 +63,26 @@ const offers: Offer[] = [
   {
     tag: "Data services",
     title: "Healthcare annotation",
-    body: "Healthcare domain annotators label text, audio, image and video, with human-in-the-loop quality assurance.",
+    body: "Text, audio, image and video, labelled by domain annotators.",
     points: ["98% accuracy", "In-region"],
   },
   {
     tag: "AI evaluation",
     title: "Medical AI evaluators",
-    body: "Evaluators with medical and biology expertise test and audit models before they are deployed.",
+    body: "Medical experts test models before they go live.",
     points: ["Bias", "Reliability"],
   },
   {
     tag: "Arabic voice AI",
     title: "Munsit",
-    body: "Speech-to-text and text-to-speech across 25+ Arabic dialects, via API or on-premises.",
+    body: "Arabic speech across 25+ dialects, on-premises if needed.",
     link: { href: "https://munsit.com", text: "munsit.com" },
     points: ["25+ dialects", "On-premises"],
   },
   {
     tag: "Physical AI data",
     title: "Real work capture",
-    body: "Teams record everyday support work, such as hospital portering, through KLKT, with worker consent.",
+    body: "Support work recorded with consent, as robotics data.",
     link: { href: "https://klkt.app", text: "klkt.app" },
     points: ["Consent", "Human review"],
   },
@@ -113,24 +114,17 @@ export function HealthcarePage() {
     <main className={styles.page}>
       <SiteNav />
 
-      <section className={styles.hero} aria-labelledby="healthcare-heading">
-        <div className={styles.heroCopy}>
-          <Eyebrow>Healthcare</Eyebrow>
-          <h1 id="healthcare-heading">Real-world AI for healthcare.</h1>
-          <p>
-            Data, evaluation and Arabic voice AI for healthcare organisations.
-            Hosted in region or deployed on-premises, with HIPAA listed in our trust centre.
-          </p>
-          <a className={styles.partner} href="/contact">
-            Book a demo
-            <span>
-              <img src="/healthcare/caret.svg" alt="" width={23} height={23} />
-            </span>
-          </a>
-        </div>
-        <img className={styles.heroArt} src="/healthcare/hero.webp" alt="" />
-      </section>
-
+      <PageHero
+        id="healthcare-heading"
+        kicker="Healthcare"
+        title={["Real-world AI", "for healthcare."]}
+        lead="Data, evaluation and Arabic voice AI for healthcare organisations. Hosted in region or deployed on-premises, with HIPAA listed in our trust centre."
+        actions={[
+          { label: "Book a demo", href: "/contact?topic=Other", primary: true },
+          { label: "See use cases", href: "#cases-heading" },
+        ]}
+        art={<img src="/art/lines/hospitals.webp" alt="" />}
+      />
 
       <section className={styles.cases} aria-labelledby="cases-heading">
         <Eyebrow>Use cases</Eyebrow>
@@ -145,12 +139,12 @@ export function HealthcarePage() {
           <br />
           Kept under your control.
         </h2>
-        <ul>
+        <ul data-rail>
           {offers.map((offer, index) => {
             return (
-              <li key={index}>
+              <li key={index} data-tilt>
                 <p className={styles.offerTag}>
-                  <img src="/data-hub/dot.svg" alt="" width={8} height={8} />
+                  <img loading="lazy" decoding="async" src="/data-hub/dot.svg" alt="" width={8} height={8} />
                   {offer.tag}
                 </p>
                 <IconChip name={glyphs[offer.tag] ?? "floor"} />
@@ -196,7 +190,7 @@ export function HealthcarePage() {
         </h2>
         <div className={styles.result}>
           <div className={styles.brand}>
-            <img className={styles.brandBg} src="/healthcare/brand-bg.webp" alt="" />
+            <img loading="lazy" decoding="async" className={styles.brandBg} src="/healthcare/brand-bg.webp" alt="" />
             <PanelArt>
               <KitArt kind="head" />
             </PanelArt>
@@ -241,31 +235,14 @@ export function HealthcarePage() {
         </div>
       </section>
 
-      <IndustriesSection />
-
       <Faq items={faqs.healthcare} topic="Other" />
 
-      <section className={styles.band} aria-labelledby="healthcare-cta">
-        <div className={styles.mapEdge} aria-hidden="true">
-          <img src="/security/map-left.webp" alt="" />
-        </div>
-        <div>
-          <h2 id="healthcare-cta">Bring AI to your healthcare operations.</h2>
-          <p>
-            Tell us what you are building and where the data has to stay. We
-            will show how data, evaluation and deployment would work.
-          </p>
-          <a href="/contact">
-            Book a demo
-            <span>
-              <img src="/healthcare/caret.svg" alt="" width={23} height={23} />
-            </span>
-          </a>
-        </div>
-        <div className={styles.mapEdge} aria-hidden="true">
-          <img src="/security/map-right.webp" alt="" />
-        </div>
-      </section>
+      <CtaBand
+        id="healthcare-cta"
+        title="Bring AI to your healthcare operations."
+        body="Tell us what you are building and where the data has to stay. We will show how data, evaluation and deployment would work."
+        primary={{ label: "Book a demo", href: "/contact?topic=Other" }}
+      />
 
       <SiteClose current="Healthcare" hideBand />
     </main>

@@ -1,0 +1,357 @@
+/* ================= The line, station by station ================= */
+.line,
+.crew {
+  padding: var(--section-y) var(--pad-x) 0;
+}
+
+.crew {
+  padding-bottom: var(--section-y);
+}
+
+.lineHead {
+  max-width: 760px;
+}
+
+.kicker {
+  margin: 0 0 var(--space-3);
+  color: var(--accent-text);
+  font-family: var(--font-heading);
+  font-size: var(--fs-small);
+  font-weight: 600;
+}
+
+.lineHead h2 {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: var(--fs-h2);
+  font-weight: 500;
+  letter-spacing: var(--ls-h2);
+  line-height: var(--lh-h2);
+}
+
+.dek {
+  margin: var(--space-6) 0 0;
+  color: var(--label-2);
+  font-family: var(--font-body);
+  font-size: var(--fs-lead);
+  line-height: var(--lh-lead);
+}
+
+.rail {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  margin-top: var(--section-head-gap);
+}
+
+/* The track runs between the first and last station centres. */
+.railTrack {
+  position: absolute;
+  top: 28px;
+  right: 10%;
+  left: 10%;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--separator);
+}
+
+.railFill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  border-radius: inherit;
+  background: var(--accent);
+  transition: width 700ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.railPacket {
+  position: absolute;
+  top: 50%;
+  width: 16px;
+  height: 16px;
+  border: 3px solid #ffffff;
+  border-radius: 5px;
+  background: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent), 0 6px 14px rgba(76, 40, 190, 0.45);
+  transform: translate(-50%, -50%) rotate(45deg);
+  transition: left 700ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.station {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  align-items: center;
+  padding: 0 var(--space-2) var(--space-2);
+  border: 0;
+  background: none;
+  color: var(--label-2);
+  font-family: var(--font-heading);
+  cursor: pointer;
+}
+
+.stationIcon {
+  display: grid;
+  width: 56px;
+  height: 56px;
+  place-items: center;
+  border: 1px solid var(--separator);
+  border-radius: 18px;
+  background: #ffffff;
+  color: var(--label-2);
+  transition:
+    background 300ms ease,
+    color 300ms ease,
+    border-color 300ms ease,
+    transform 400ms cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 300ms ease;
+}
+
+.station:hover .stationIcon {
+  border-color: var(--accent);
+  color: var(--accent-text);
+  transform: translateY(-3px);
+}
+
+.stationDone .stationIcon {
+  border-color: rgba(125, 82, 244, 0.4);
+  background: var(--accent-tint);
+  color: var(--accent-text);
+}
+
+.stationActive .stationIcon {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: #ffffff;
+  box-shadow: 0 0 0 6px rgba(125, 82, 244, 0.15), 0 14px 28px -12px rgba(76, 40, 190, 0.6);
+  transform: translateY(-3px);
+}
+
+.stationName {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  align-items: center;
+  font-size: var(--fs-h4);
+  font-weight: 500;
+}
+
+.stationName small {
+  color: var(--label-3);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+}
+
+.stationActive .stationName {
+  color: var(--label);
+}
+
+.panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  gap: var(--space-9);
+  align-items: center;
+  margin-top: var(--space-8);
+  padding: var(--space-9);
+  border-radius: var(--radius-card);
+  background: var(--bg-2);
+}
+
+.panelCopy {
+  animation: rise 500ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.panelCopy h3 {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: var(--fs-h3);
+  font-weight: 500;
+  line-height: var(--lh-h3);
+}
+
+.panelCopy p {
+  margin: var(--space-4) 0 0;
+  color: var(--label-2);
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+}
+
+.panelCopy ul {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin: var(--space-6) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.panelCopy li {
+  display: flex;
+  gap: var(--space-3);
+  align-items: center;
+  font-family: var(--font-heading);
+  font-size: var(--fs-body);
+  font-weight: 500;
+}
+
+.panelCopy li svg {
+  flex: none;
+  padding: 3px;
+  box-sizing: content-box;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #ffffff;
+}
+
+.panelArt {
+  position: relative;
+  display: grid;
+  min-height: 340px;
+  place-items: center;
+  overflow: hidden;
+  border-radius: var(--radius-tile);
+  background: #ffffff;
+  box-shadow: 0 30px 60px -36px rgba(45, 25, 110, 0.45);
+  animation: rise 600ms cubic-bezier(0.16, 1, 0.3, 1) 60ms both;
+}
+
+.panelArt img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-height: 400px;
+  object-fit: contain;
+}
+
+.stamp {
+  position: absolute;
+  top: var(--space-4);
+  left: var(--space-4);
+  padding: 6px 12px;
+  border-radius: var(--radius-pill);
+  background: rgba(14, 10, 24, 0.75);
+  color: #ffffff;
+  font-family: var(--font-heading);
+  font-size: var(--fs-xs);
+  font-weight: 500;
+  backdrop-filter: blur(8px);
+}
+
+/* Shows how long until the line moves on. */
+.timer {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  background: var(--accent);
+  transform-origin: left;
+  animation: timer 5.2s linear both;
+}
+
+@keyframes timer {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+
+/* ================= Crew ================= */
+.crew ul {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-4);
+  margin: var(--section-head-gap) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.crew li {
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-8) var(--space-6);
+  border: var(--card-line);
+  border-radius: var(--radius-card);
+  background: #ffffff;
+}
+
+.crew strong {
+  color: var(--accent-text);
+  font-family: var(--font-heading);
+  font-size: clamp(40px, 4vw, 60px);
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.crew span {
+  margin-top: var(--space-2);
+  font-family: var(--font-heading);
+  font-size: var(--fs-h4);
+  font-weight: 500;
+}
+
+.crew p {
+  margin: var(--space-3) 0 0;
+  color: var(--label-2);
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+}
+
+@media (max-width: 1068px) {
+  .panel {
+    grid-template-columns: 1fr;
+    padding: var(--space-7);
+  }
+
+  .crew ul {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 734px) {
+  .rail {
+    grid-template-columns: repeat(5, 72px);
+    margin-right: calc(var(--pad-x) * -1);
+    padding-right: var(--pad-x);
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .railTrack {
+    right: auto;
+    left: 36px;
+    width: calc(72px * 4);
+  }
+
+  .stationIcon {
+    width: 48px;
+    height: 48px;
+  }
+
+  .stationName {
+    font-size: var(--fs-small);
+  }
+
+  .panel {
+    padding: var(--space-5);
+  }
+
+  .panelArt {
+    min-height: 220px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .timer {
+    animation: none;
+  }
+}

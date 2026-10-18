@@ -7,10 +7,14 @@ import { cards, categories, featured, type Category } from "./posts";
 import styles from "./blog.module.css";
 import { CtaBand } from "../shared/CtaBand";
 
-export function BlogIndex() {
+export type BlogCard = Omit<(typeof cards)[number], "meta"> & { meta: string; internal?: boolean };
+
+/** `published` are posts written in the portal; they lead the grid, newest first. */
+export function BlogIndex({ published = [] }: { published?: BlogCard[] }) {
   const [category, setCategory] = useState<Category>("All");
   const showFeatured = category === "All" || featured.chip === category;
-  const visible = cards.filter((card) => category === "All" || card.chip === category);
+  const all: BlogCard[] = [...published, ...cards];
+  const visible = all.filter((card) => category === "All" || card.chip === category);
 
   return (
     <main className={styles.page}>
@@ -44,7 +48,7 @@ export function BlogIndex() {
 
         {showFeatured ? (
           <a className={styles.feature} href={`/blog/${featured.slug}`}>
-            <img src={featured.image} alt="" />
+            <img loading="lazy" decoding="async" src={featured.image} alt="" />
             <div>
               <p className={styles.kicker}>{featured.kicker}</p>
               <h2>
@@ -55,7 +59,7 @@ export function BlogIndex() {
               <p>{featured.blurb}</p>
               <footer>
                 <span>{featured.meta}</span>
-                <img src="/blog/arrow.svg" alt="" width={25} height={25} />
+                <img loading="lazy" decoding="async" src="/blog/arrow.svg" alt="" width={25} height={25} />
               </footer>
             </div>
           </a>
@@ -67,17 +71,17 @@ export function BlogIndex() {
           <ul className={styles.grid}>
             {visible.map((card) => (
               <li key={card.id}>
-                <a href={card.href} target="_blank" rel="noopener noreferrer">
+                <a href={card.href} {...(card.internal ? {} : { target: "_blank", rel: "noopener noreferrer" })}>
                   <div className={styles.cover}>
-                    <img src="/art/cover-13.svg" alt="" />
-                    <img src={card.image} alt="" />
+                    <img loading="lazy" decoding="async" src="/art/cover-13.svg" alt="" />
+                    <img loading="lazy" decoding="async" src={card.image} alt="" />
                   </div>
                   <p className={styles.kicker}>{card.kicker}</p>
                   <h2>{card.title}</h2>
                   <p>{card.blurb}</p>
                   <footer>
                     <span>{card.meta}</span>
-                    <img src="/blog/arrow.svg" alt="" width={25} height={25} />
+                    <img loading="lazy" decoding="async" src="/blog/arrow.svg" alt="" width={25} height={25} />
                   </footer>
                 </a>
               </li>

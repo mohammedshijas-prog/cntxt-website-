@@ -1,7 +1,6 @@
-import { Suspense } from "react";
 import { SiteClose } from "../site/SiteClose";
 import { SiteNav } from "../site/SiteNav";
-import { ContactForm } from "./ContactForm";
+import { HubspotForm } from "../shared/HubspotForm";
 import styles from "./contact.module.css";
 import { ProofBar } from "../shared/ProofBar";
 
@@ -27,17 +26,18 @@ export function ContactPage() {
               </div>
             </div>
             <div className={styles.people}>
-              <img src="/contact/people.webp" alt="" />
+              <img loading="lazy" decoding="async" src="/contact/people.webp" alt="" />
             </div>
           </article>
-          <Suspense fallback={null}>
-            <ContactForm />
-          </Suspense>
+          {/* HubSpot "Contact us" form. GTM listens for its submission (Google Ads conversion). */}
+          <div className={styles.formCard}>
+            <div className={styles.hubspot}>
+              <HubspotForm embed="v2" formId="3b23fdbe-4f21-46d6-b9de-ba525c033f35" />
+            </div>
+          </div>
         </div>
       </section>
       <ProofBar />
-
-      <div style={{ height: 96 }} />
 
       <SiteClose current="Contact" hideBand />
     </main>

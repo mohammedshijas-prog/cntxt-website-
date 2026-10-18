@@ -10,49 +10,6 @@
   margin: 0;
 }
 
-.hero {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 48px;
-  min-height: 984px;
-  padding: var(--space-11) var(--pad-x);
-  background: var(--grad-ink);
-  color: #ffffff;
-}
-
-.heroCopy {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 24px;
-  width: min(786px, 100%);
-}
-
-.heroCopy h1 {
-  width: min(786px, 100%);
-  color: #ffffff;
-  font-family: var(--font-heading);
-  font-size: var(--fs-display);
-  font-weight: 400;
-  line-height: var(--lh-display);
-}
-
-.heroCopy p {
-  width: min(684px, 100%);
-  color: rgba(255, 255, 255, 0.6);
-  font-family: var(--font-body);
-  font-size: var(--fs-lead);
-  font-weight: 400;
-  line-height: var(--lh-lead);
-}
-
-.heroActions {
-  display: flex;
-  gap: 17px;
-  align-items: center;
-}
-
 .primary,
 .secondary,
 .lightButton,
@@ -69,32 +26,10 @@
   white-space: nowrap;
 }
 
-.primary {
-  padding: 5px 10px;
-  background-image:
-    linear-gradient(180deg, rgba(193, 193, 193, 0.16) 0%, rgba(255, 255, 255, 0) 100%),
-    linear-gradient(90deg, #ffffff 0%, #ffffff 100%);
-  color: var(--accent);
-  font-family: var(--font-heading);
-}
-
-.secondary {
-  width: 204px;
-  padding: 5px 11px;
-  border: 1px solid #ffffff;
-  background: transparent;
-  color: #ffffff;
-  font-family: var(--font-heading);
-}
-
 .primary:hover,
 .lightButton:hover,
 .packButton:hover {
   background: #f4f0ff;
-}
-
-.secondary:hover {
-  background: rgba(255, 255, 255, 0.12);
 }
 
 .primary:focus-visible,
@@ -228,8 +163,8 @@
 .compliance {
   display: flex;
   justify-content: center;
-  padding: var(--space-10) var(--pad-x);
-  background: #ffffff;
+  padding: var(--section-y) var(--pad-x);
+  background: var(--paper-dots), var(--paper);
 }
 
 .complianceCard {
@@ -238,14 +173,11 @@
   align-items: center;
   gap: 32px;
   width: 100%;
-  padding: 60px 50px;
-  overflow: hidden;
-  background: var(--grad-ink);
-  border-radius: 27px;
+  padding: 0;
 }
 
 .complianceCard h2 {
-  color: #ffffff;
+  color: var(--label);
   font-family: var(--font-heading);
   font-size: var(--fs-h2);
   font-weight: 400;
@@ -254,7 +186,9 @@
 }
 
 .complianceCard ul {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-4);
   width: 100%;
   margin: 0;
   padding: 0;
@@ -268,15 +202,23 @@
   align-items: center;
   gap: 12px;
   min-width: 0;
+  padding: var(--space-8) var(--space-5);
+  border: var(--card-line);
+  border-radius: var(--radius-card);
+  background: #ffffff;
 }
 
+/* The marks are drawn in white; seat them on an ink disc. */
 .complianceCard img {
-  width: 150px;
-  height: 150px;
+  width: 120px;
+  height: 120px;
+  padding: var(--space-3);
+  border-radius: 50%;
+  background: var(--label);
 }
 
 .complianceCard h3 {
-  color: #f7f9fa;
+  color: var(--label);
   font-family: var(--font-heading);
   font-size: var(--fs-h3);
   font-weight: 300;
@@ -287,7 +229,7 @@
 
 .complianceCard p {
   max-width: 350px;
-  color: rgba(247, 249, 250, 0.6);
+  color: var(--label-2);
   font-family: var(--font-body);
   font-size: var(--fs-small);
   font-weight: 400;
@@ -317,13 +259,12 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  color: var(--text-strong);
+  color: var(--accent-text);
   font-family: var(--font-heading);
   font-size: var(--fs-small);
-  font-weight: 400;
+  font-weight: 600;
   line-height: var(--lh-small);
-  letter-spacing: 0.44px;
-  text-transform: uppercase;
+  letter-spacing: 0;
 }
 
 .infrastructure .eyebrow {
@@ -331,9 +272,7 @@
 }
 
 .tag {
-  position: relative;
-  width: 28px;
-  height: 14px;
+  display: none;
 }
 
 .tagBar,
@@ -844,16 +783,6 @@
 }
 
 @media (max-width: 1200px) {
-  .hero {
-    flex-direction: column;
-    min-height: 0;
-    padding: 128px 24px 72px;
-  }
-
-  .heroCopy h1 {
-    font-size: var(--fs-display);
-    line-height: var(--lh-display);
-  }
 
   .visual {
     flex-basis: auto;
@@ -868,17 +797,8 @@
     padding-inline: 24px;
   }
 
-  .complianceCard {
-    padding: 40px 24px;
-  }
-
   .complianceCard ul {
-    flex-wrap: wrap;
-    gap: 32px;
-  }
-
-  .complianceCard li {
-    flex-basis: calc(50% - 16px);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .slideTitle {
@@ -952,27 +872,22 @@
 }
 
 @media (max-width: 720px) {
-  .complianceCard li {
-    flex-basis: 100%;
-  }
-
-  .heroActions {
-    flex-direction: column;
-    align-items: stretch;
-    width: 100%;
-    padding-inline: 0;
-  }
-
-  .secondary {
-    width: auto;
+  .complianceCard ul {
+    grid-template-columns: 1fr;
   }
 }
 
-/* Phones: footer links become full 44pt rows. */
+/* Phones: two tidy columns of links, each a comfortable tap target. */
 @media (max-width: 734px) {
+  .footerNav {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-7) var(--space-5);
+  }
+
   .footerNav a {
     display: block;
-    padding: 12px 0;
+    padding: 9px 0;
     color: #ffffff;
   }
 
@@ -982,4 +897,13 @@
     align-items: center;
     min-height: 44px;
   }
+}
+
+/* The lock visual inside the shared hero's ink art panel. */
+.visual {
+  flex: none;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+  max-height: 600px;
 }

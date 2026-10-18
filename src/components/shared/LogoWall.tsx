@@ -36,7 +36,7 @@ export function LogoWall({ items = partners, headingId, title }: { items?: Partn
         {items.map((item) => (
           <li key={item.name}>
             <span className={styles.mark}>
-              <img src={`/brand/partners/${item.logo}`} alt={item.name} style={{ width: item.width }} />
+              <img loading="lazy" decoding="async" src={`/brand/partners/${item.logo}`} alt={item.name} style={{ width: item.width }} />
             </span>
             <span className={styles.role}>{item.role}</span>
           </li>

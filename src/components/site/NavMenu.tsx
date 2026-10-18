@@ -244,7 +244,7 @@ export function NavMenu({
                   <a className={styles.item} href={item.href} tabIndex={open ? 0 : -1}>
                     {mega ? (
                       <>
-                        {item.icon ? <img className={styles.productIcon} src={item.icon} alt="" width={36} height={36} /> : null}
+                        {item.icon ? <img loading="lazy" decoding="async" className={styles.productIcon} src={item.icon} alt="" width={36} height={36} /> : null}
                         <span>
                           <strong>{item.title}</strong>
                           {item.desc ? <small>{item.desc}</small> : null}
@@ -253,7 +253,7 @@ export function NavMenu({
                     ) : rich ? (
                       <>
                         <span className={`${styles.icon} ${item.icon ? styles.brandIcon : ""}`} aria-hidden="true">
-                          {item.icon ? <img src={item.icon} alt="" width={54} height={54} /> : <CubeIcon />}
+                          {item.icon ? <img loading="lazy" decoding="async" src={item.icon} alt="" width={54} height={54} /> : <CubeIcon />}
                         </span>
                         <span>
                           <strong>{item.title}</strong>
@@ -319,7 +319,7 @@ export function NavMenu({
                 {feature.statLabel ? <small>{feature.statLabel}</small> : null}
               </span>
             ) : null}
-            {feature.image ? <img src={feature.image} alt="" /> : null}
+            {feature.image ? <img loading="lazy" decoding="async" src={feature.image} alt="" /> : null}
           </a>
         ) : null}
       </div>

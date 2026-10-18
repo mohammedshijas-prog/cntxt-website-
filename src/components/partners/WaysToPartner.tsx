@@ -1,70 +1,141 @@
 "use client";
 
 import { useState } from "react";
-import styles from "./partner.module.css";
+import styles from "./ways.module.css";
 
-const items = [
+/* Facts from docs/content-brief.md (partners, delivery, data, research). */
+const ways = [
   {
-    number: "01",
-    title: "Technology & cloud partners",
-    body: "We work with cloud and hardware providers so customers can run AI on infrastructure they control: on-premises, hybrid or cloud, with in-region hosting. Our technology partners today are Oracle, NVIDIA and AWS.",
+    tab: "Technology",
+    title: "Run AI on infrastructure customers control.",
+    points: ["On-premises, hybrid or cloud", "In-region hosting", "NVIDIA Inception member"],
+    href: "#apply",
   },
   {
-    number: "02",
-    title: "Commercial & delivery partners",
-    body: "Bring CNTXT into your client engagements. We work alongside your team from discovery through build to sign-off, on custom AI integrated with enterprise and government systems.",
+    tab: "Delivery",
+    title: "Bring CNTXT into your client work.",
+    points: ["Discovery to sign-off", "Enterprise and government systems", "Two build phases, reviewed"],
+    href: "#apply",
   },
   {
-    number: "03",
-    title: "Data partners",
-    body: "Help capture and label real-world data. Your teams record the work they already do, or annotate text, image, audio and video. Every submission is confirmed by human review.",
+    tab: "Data",
+    title: "Turn real work into training data.",
+    points: ["Text, image, audio and video", "Recorded with consent", "Every hour reviewed by a person"],
+    href: "#apply",
   },
   {
-    number: "04",
-    title: "Research partners",
-    body: "Joint research on Arabic speech, AI evaluation and physical AI data. Our research and ecosystem partners include the Technology Innovation Institute, AI71, Beam and Middlesex University Dubai.",
+    tab: "Research",
+    title: "Research Arabic AI with us.",
+    points: ["Arabic speech", "AI evaluation", "Physical AI data"],
+    href: "#apply",
   },
 ];
 
+const tech = ["oracle", "nvidia", "aws"];
+const research = ["tii", "ai71", "beam", "middlesex-university-dubai"];
+
+function Visual({ index }: { index: number }) {
+  if (index === 0) {
+    return (
+      <div className={styles.stack}>
+        <ul className={styles.logos}>
+          {tech.map((name) => (
+            <li key={name}>
+              <img src={`/brand/partners/${name}.svg`} alt={name} />
+            </li>
+          ))}
+        </ul>
+        <div className={styles.layers}>
+          {["On-premises", "Hybrid", "Cloud"].map((name, i) => (
+            <span key={name} style={{ animationDelay: `${i * 0.15}s` }}>
+              {name}
+            </span>
+          ))}
+        </div>
+        <p className={styles.badge}>In-region hosting</p>
+      </div>
+    );
+  }
+  if (index === 1) {
+    return (
+      <ol className={styles.timeline}>
+        {["Discovery", "Phase 1 build", "Review", "Phase 2 and sign-off"].map((step, i) => (
+          <li key={step} style={{ animationDelay: `${i * 0.15}s` }}>
+            <span>{String(i + 1).padStart(2, "0")}</span>
+            {step}
+            <em>{i === 3 ? "Signed off" : "Joint team"}</em>
+          </li>
+        ))}
+      </ol>
+    );
+  }
+  if (index === 2) {
+    return (
+      <div className={styles.types}>
+        {["Text", "Image", "Audio", "Video"].map((type, i) => (
+          <span key={type} style={{ animationDelay: `${i * 0.12}s` }}>
+            {type}
+            <b>✓ Reviewed</b>
+          </span>
+        ))}
+      </div>
+    );
+  }
+  return (
+    <ul className={`${styles.logos} ${styles.logosResearch}`}>
+      {research.map((name) => (
+        <li key={name}>
+          <img src={`/brand/partners/${name}.svg`} alt={name} />
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+/** Four ways to partner, one tab each. */
 export function WaysToPartner() {
-  const [open, setOpen] = useState(0);
+  const [active, setActive] = useState(0);
+  const way = ways[active];
 
   return (
-    <section className={styles.ways} aria-labelledby="ways-heading">
-      <div className={styles.waysIntro}>
-        <p className={styles.eyebrow}>
-          <span className={styles.tag} aria-hidden="true" />
-          Ways to partner
-        </p>
-        <h2 id="ways-heading">
-          Four ways to work with us,{" "}
-          <span>from infrastructure to research.</span>
-        </h2>
+    <section className={styles.section} aria-labelledby="ways-heading">
+      <header className={styles.head}>
+        <p className={styles.kicker}>Ways to partner</p>
+        <h2 id="ways-heading">Four ways to work with us.</h2>
+      </header>
+
+      <div className={styles.tabs} role="tablist" aria-label="Ways to partner">
+        {ways.map((item, index) => (
+          <button
+            key={item.tab}
+            type="button"
+            role="tab"
+            id={`way-tab-${index}`}
+            aria-selected={index === active}
+            aria-controls="way-panel"
+            className={index === active ? styles.on : ""}
+            onClick={() => setActive(index)}
+          >
+            {item.tab}
+          </button>
+        ))}
       </div>
-      <div className={styles.waysGrid}>
-        <div className={styles.accordion}>
-          {items.map((item, index) => {
-            const expanded = open === index;
-            return (
-              <div key={item.number} className={styles.accordionItem}>
-                <button
-                  type="button"
-                  aria-expanded={expanded}
-                  onClick={() => setOpen(expanded ? -1 : index)}
-                >
-                  <span>{item.number}</span>
-                  {item.title}
-                </button>
-                {expanded && item.body ? <p>{item.body}</p> : null}
-              </div>
-            );
-          })}
+
+      <div className={styles.panel} id="way-panel" role="tabpanel" aria-labelledby={`way-tab-${active}`}>
+        <div key={way.tab} className={styles.copy}>
+          <h3>{way.title}</h3>
+          <ul>
+            {way.points.map((point) => (
+              <li key={point}>{point}</li>
+            ))}
+          </ul>
+          <a className={styles.cta} href={way.href}>
+            Become a {way.tab.toLowerCase()} partner <span aria-hidden="true">→</span>
+          </a>
         </div>
-        <img
-          className={styles.waysArt}
-          src="/art/partners.svg"
-          alt="Product interface showing a company context check"
-        />
+        <div key={`${way.tab}-visual`} className={styles.visual} aria-hidden="true">
+          <Visual index={active} />
+        </div>
       </div>
     </section>
   );

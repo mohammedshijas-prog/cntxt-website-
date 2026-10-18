@@ -64,10 +64,18 @@
 }
 
 .heroCopy h1 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   font-family: var(--font-heading);
   font-size: var(--fs-display);
-  font-weight: 400;
-  line-height: var(--lh-display);
+  font-weight: 500;
+  letter-spacing: var(--ls-display);
+  line-height: 1.05;
+}
+
+.heroCopy h1 span + span {
+  color: var(--label-2);
 }
 
 .heroCopy p {
@@ -144,7 +152,8 @@
   display: flex;
   flex-direction: column;
   gap: 24px;
-  padding: var(--space-12) var(--pad-x);
+  padding: var(--section-y) var(--pad-x);
+  background: var(--paper-dots), var(--paper);
 }
 
 .catalog h2 {
@@ -299,7 +308,8 @@
   flex-direction: column;
   min-height: 332px;
   overflow: hidden;
-  border: 1px solid #eeeef0;
+  border: var(--card-line);
+  border-radius: var(--radius-card);
   background: #ffffff;
 }
 
@@ -411,9 +421,9 @@
   flex-direction: column;
   gap: 32px;
   align-items: center;
-  padding: 24px 15px;
-  border: 1.5px solid #eeeef0;
-  border-radius: 12px;
+  padding: var(--space-7) var(--space-5);
+  border: var(--card-line);
+  border-radius: var(--radius-card);
   background: #ffffff;
 }
 

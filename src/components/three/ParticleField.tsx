@@ -15,6 +15,9 @@ const vertex = /* glsl */ `
   uniform float uSize;
   uniform float uPixel;
   uniform float uFall;
+  uniform vec2 uMouse;
+  uniform float uRepel;
+  uniform float uAspect;
   attribute vec3 aFrom;
   attribute vec3 aTo;
   attribute float aSeed;
@@ -35,6 +38,17 @@ const vertex = /* glsl */ `
     p += 0.015 * vec3(sin(uTime * 0.7 + aSeed * 9.0), cos(uTime * 0.6 + aSeed * 7.0), 0.0);
     vec4 mv = modelViewMatrix * vec4(p, 1.0);
     gl_Position = projectionMatrix * mv;
+    // Hover scatter: points near the cursor are pushed away on screen, each a
+    // little differently, and spring back as the cursor leaves.
+    vec2 ndc = gl_Position.xy / gl_Position.w;
+    vec2 away = ndc - uMouse;
+    away.x *= uAspect;
+    float dist = length(away);
+    float push = uRepel * smoothstep(0.32, 0.0, dist) * (0.7 + fract(aSeed * 13.0) * 0.6);
+    vec2 dir = away / max(dist, 0.0001);
+    dir.x /= uAspect;
+    ndc += dir * push * 0.16;
+    gl_Position.xy = ndc * gl_Position.w;
     vFront = smoothstep(5.6, 3.0, -mv.z);
     gl_PointSize = uSize * uPixel * (0.55 + vFront * 0.9) / -mv.z;
   }
@@ -43,13 +57,14 @@ const vertex = /* glsl */ `
 const fragment = /* glsl */ `
   uniform vec3 uBack;
   uniform vec3 uFront;
+  uniform float uFloor;
   varying float vFront;
 
   void main() {
     float d = length(gl_PointCoord - 0.5);
     float soft = smoothstep(0.5, 0.0, d);
     vec3 colour = mix(uBack, uFront, vFront);
-    gl_FragColor = vec4(colour, soft * (0.2 + vFront * 0.8));
+    gl_FragColor = vec4(colour, soft * (uFloor + vFront * (1.0 - uFloor)));
   }
 `;
 
@@ -64,7 +79,9 @@ function Points({
   pointSize,
   fall,
   place,
+  light,
 }: {
+  light: boolean;
   shapes: Float32Array[];
   progress?: Ref;
   level?: Ref;
@@ -102,19 +119,24 @@ function Points({
         fragmentShader: fragment,
         transparent: true,
         depthWrite: false,
-        blending: THREE.AdditiveBlending,
+        // On a light page the dots are ink-violet and stack normally instead of glowing.
+        blending: light ? THREE.NormalBlending : THREE.AdditiveBlending,
         uniforms: {
           uTime: { value: 0 },
           uMorph: { value: 0 },
           uLevel: { value: 0.2 },
           uFall: { value: 0 },
+          uMouse: { value: new THREE.Vector2(9, 9) },
+          uRepel: { value: 0 },
+          uAspect: { value: 1 },
           uSize: { value: 26 },
           uPixel: { value: 1 },
-          uBack: { value: new THREE.Color("#4b2bb8") },
-          uFront: { value: new THREE.Color("#efe9ff") },
+          uBack: { value: new THREE.Color(light ? "#7d52f4" : "#4b2bb8") },
+          uFront: { value: new THREE.Color(light ? "#7d52f4" : "#efe9ff") },
+          uFloor: { value: 0.2 },
         },
       }),
-    [],
+    [light],
   );
 
   useEffect(
@@ -125,11 +147,43 @@ function Points({
     [geometry, material],
   );
 
+  // The canvas never takes pointer events, so follow the cursor on the window
+  // and map it into this canvas's clip space.
+  const pointer = useRef({ x: 9, y: 9, inside: false });
+  useEffect(() => {
+    const element = gl.domElement;
+    const move = (event: PointerEvent) => {
+      if (event.pointerType !== "mouse") return;
+      const box = element.getBoundingClientRect();
+      const x = ((event.clientX - box.left) / box.width) * 2 - 1;
+      const y = -(((event.clientY - box.top) / box.height) * 2 - 1);
+      pointer.current = { x, y, inside: Math.abs(x) <= 1 && Math.abs(y) <= 1 };
+    };
+    const leave = () => {
+      pointer.current.inside = false;
+    };
+    window.addEventListener("pointermove", move, { passive: true });
+    document.addEventListener("pointerleave", leave);
+    return () => {
+      window.removeEventListener("pointermove", move);
+      document.removeEventListener("pointerleave", leave);
+    };
+  }, [gl]);
+
   useFrame((_, delta) => {
     const points = cloud.current;
     if (!points) return;
     const s = smooth.current;
     const u = points.material.uniforms;
+    // Ease the scatter in and out, and let the hole trail the cursor slightly.
+    const p = pointer.current;
+    const mouse = u.uMouse.value as THREE.Vector2;
+    const follow = Math.min(1, delta * 10);
+    if (mouse.x > 5) mouse.set(p.x, p.y);
+    mouse.x += (p.x - mouse.x) * follow;
+    mouse.y += (p.y - mouse.y) * follow;
+    u.uRepel.value += ((p.inside ? 1 : 0) - u.uRepel.value) * Math.min(1, delta * 5);
+    u.uAspect.value = size.width / Math.max(1, size.height);
     const shape = points.geometry;
     u.uTime.value += delta;
     u.uPixel.value = gl.getPixelRatio();
@@ -200,6 +254,7 @@ export default function ParticleField({
   fall = false,
   place,
   paused = false,
+  light = false,
   className,
 }: {
   shapes: Float32Array[];
@@ -217,6 +272,8 @@ export default function ParticleField({
   place?: Place;
   /** Stop rendering, e.g. while the field is faded out. */
   paused?: boolean;
+  /** Draw for a light background. */
+  light?: boolean;
   scale?: number;
   className?: string;
 }) {
@@ -225,6 +282,7 @@ export default function ParticleField({
   const [reduced] = useState(
     () => typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches,
   );
+  const [phone] = useState(() => typeof window !== "undefined" && window.innerWidth <= 734);
 
   useEffect(() => {
     const node = box.current;
@@ -237,12 +295,12 @@ export default function ParticleField({
   return (
     <div ref={box} className={className} aria-hidden="true">
       <Canvas
-        dpr={[1, 1.75]}
+        dpr={[1, phone ? 1.5 : 1.75]}
         camera={{ position: [0, 0, 4.2], fov: 42 }}
         gl={{ alpha: true, antialias: false, powerPreference: "high-performance" }}
         frameloop={visible && !reduced && !paused ? "always" : "demand"}
       >
-        <Points shapes={shapes} progress={progress} level={level} spin={spin} sway={sway} yaw={yaw} scale={scale} pointSize={pointSize} fall={fall} place={place} />
+        <Points shapes={shapes} progress={progress} level={level} spin={spin} sway={sway} yaw={yaw} scale={scale} pointSize={pointSize} fall={fall} place={place} light={light} />
       </Canvas>
     </div>
   );

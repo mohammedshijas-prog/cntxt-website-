@@ -9,20 +9,16 @@
   align-items: center;
   justify-content: center;
   margin: 0;
-  color: var(--text-strong);
+  color: var(--accent-text);
   font-family: var(--font-heading);
   font-size: var(--fs-small);
-  font-weight: 500;
+  font-weight: 600;
   line-height: var(--lh-small);
-  letter-spacing: 0.44px;
-  text-transform: uppercase;
+  letter-spacing: 0;
 }
 
 .tag {
-  position: relative;
-  flex: none;
-  width: 28px;
-  height: 14px;
+  display: none;
 }
 
 .tag::before,
@@ -46,94 +42,10 @@
   transform: rotate(180deg);
 }
 
-.hero {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  align-items: center;
-  padding: calc(var(--section-y) + var(--space-12)) var(--pad-x) var(--space-12);
-}
-
-.hero h1 {
-  margin: 0;
-  color: var(--text-strong);
-  font-family: var(--font-heading);
-  font-size: var(--fs-display);
-  font-weight: 400;
-  line-height: var(--lh-display);
-  text-align: center;
-}
-
 .hero h1 span,
 .culture h2 span,
 .benefits h2 span {
   color: rgba(0, 0, 0, 0.6);
-}
-
-.hero p {
-  width: min(840px, 100%);
-  margin: 0;
-  color: var(--text-muted);
-  font-family: var(--font-body);
-  font-size: var(--fs-lead);
-  font-weight: 500;
-  line-height: var(--lh-lead);
-  text-align: center;
-}
-
-.photos {
-  display: flex;
-  align-items: flex-start;
-  width: min(1400px, 100%);
-  margin-top: 52px;
-}
-
-.photos > img {
-  display: block;
-  flex: none;
-  object-fit: cover;
-}
-
-.photos > img:nth-child(1),
-.photos > img:nth-child(5) {
-  width: 11.5%;
-  height: auto;
-  aspect-ratio: 161 / 163;
-}
-
-.photos > img:nth-child(2),
-.photos > img:nth-child(4) {
-  width: 22%;
-  height: auto;
-  aspect-ratio: 308 / 311;
-}
-
-.centerPhoto {
-  position: relative;
-  flex: none;
-  width: 33%;
-  aspect-ratio: 462 / 406;
-  overflow: hidden;
-}
-
-.centerPhoto img {
-  position: absolute;
-  display: block;
-  object-fit: cover;
-}
-
-.centerPhoto img:first-child {
-  top: 0.08%;
-  left: 0.06%;
-  width: 100.04%;
-  height: 115.06%;
-  max-width: none;
-}
-
-.centerPhoto img:last-child {
-  inset: 0;
-  width: 100%;
-  height: 100%;
 }
 
 .culture {
@@ -142,7 +54,18 @@
   gap: 12px;
   align-items: flex-start;
   padding: var(--section-y) var(--pad-x);
-  background: var(--bg-2);
+  background: var(--paper-dots), var(--paper);
+}
+
+.culture li {
+  padding: var(--space-3) var(--space-3) var(--space-5);
+  border: var(--card-line);
+  border-radius: var(--radius-card);
+  background: #ffffff;
+}
+
+.culture li p {
+  padding: 0 var(--space-2);
 }
 
 .culture .eyebrow,
@@ -179,6 +102,7 @@
   width: 100%;
   height: auto;
   aspect-ratio: 398 / 486;
+  border-radius: var(--radius-tile);
   object-fit: cover;
   background: #000000;
 }
@@ -441,20 +365,10 @@
     padding: var(--section-y) var(--pad-x) 64px;
   }
 
-  .hero h1 {
-    font-size: var(--fs-display);
-    line-height: var(--lh-display);
-  }
-
   .culture ul,
   .board,
   .benefitGrid {
     grid-template-columns: 1fr;
-  }
-
-  .photos > img:nth-child(1),
-  .photos > img:nth-child(5) {
-    display: none;
   }
 
   .benefitPhoto {
@@ -463,17 +377,16 @@
 }
 
 @media (max-width: 720px) {
-  .photos > img:nth-child(2),
-  .photos > img:nth-child(4) {
-    display: none;
-  }
-
-  .centerPhoto {
-    width: 100%;
-  }
 
   .roles li {
     align-items: flex-start;
     flex-direction: column;
   }
+}
+
+.heroWall {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
 }

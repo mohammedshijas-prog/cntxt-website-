@@ -31,7 +31,8 @@ export function MotionProvider() {
 
   // Smooth scroll lives for the whole visit.
   useEffect(() => {
-    if (reduced()) return;
+    // Touch screens keep native scrolling: it is what people expect there.
+    if (reduced() || !window.matchMedia("(pointer: fine)").matches) return;
     const lenis = new Lenis({ lerp: 0.11, anchors: { offset: -80 }, prevent: (node) => !!node.closest("[data-lenis-prevent]") });
     lenis.on("scroll", ScrollTrigger.update);
     const tick = (time: number) => lenis.raf(time * 1000);
@@ -49,6 +50,8 @@ export function MotionProvider() {
     const main = document.querySelector("main");
     if (!main) return;
     const splits: SplitText[] = [];
+    const counters: { el: HTMLElement; original: string }[] = [];
+    const observers: IntersectionObserver[] = [];
     // Items still waiting to reveal; anything left when the page bottoms out is shown.
     const pending: HTMLElement[] = [];
 
@@ -93,9 +96,9 @@ export function MotionProvider() {
             autoSplit: true,
             onSplit: (self) =>
               gsap.from(self.lines, {
-                yPercent: 100,
-                duration: 0.7,
-                stagger: 0.06,
+                yPercent: 105,
+                duration: 0.95,
+                stagger: 0.08,
                 ease: "expo.out",
                 scrollTrigger: { trigger: title, start: "top 88%", once: true },
               }),
@@ -112,31 +115,79 @@ export function MotionProvider() {
         if (items.length) {
           pending.push(...items);
           ScrollTrigger.batch(items, {
-            start: "top 96%",
+            start: "top 92%",
             once: true,
             onEnter: (batch) => {
               batch.forEach((el) => {
                 const at = pending.indexOf(el as HTMLElement);
                 if (at >= 0) pending.splice(at, 1);
               });
+              // Rise, de-blur and settle: each card lands like it has weight.
               return gsap.fromTo(
                 batch,
-                { autoAlpha: 0, y: 16 },
+                { autoAlpha: 0, y: 36, scale: 0.97, filter: "blur(6px)" },
                 {
                   autoAlpha: 1,
                   y: 0,
-                  duration: 0.5,
-                  stagger: 0.04,
-                  ease: "power3.out",
+                  scale: 1,
+                  filter: "blur(0px)",
+                  duration: 0.9,
+                  stagger: 0.08,
+                  ease: "expo.out",
                   overwrite: true,
                   // Hand control back to the page's own CSS states afterwards.
-                  clearProps: "opacity,visibility,transform",
+                  clearProps: "opacity,visibility,transform,filter",
                 },
               );
             },
           });
-          gsap.set(items, { autoAlpha: 0, y: 16 });
+          gsap.set(items, { autoAlpha: 0, y: 36, scale: 0.97 });
         }
+
+        // Big figures count up from zero the first time they are seen.
+        section.querySelectorAll<HTMLElement>("dt, [class*='stat'] strong, [class*='Stats'] strong, [class*='result'] strong").forEach((el) => {
+          if (!keep(el) || el.children.length || el.getBoundingClientRect().top < window.innerHeight) return;
+          const match = (el.textContent ?? "").match(/^([^0-9]*)([0-9][0-9,]*\.?[0-9]*)(.*)$/);
+          if (!match) return;
+          const [, prefix, digits, suffix] = match;
+          const target = parseFloat(digits.replace(/,/g, ""));
+          if (!Number.isFinite(target) || target === 0) return;
+          const decimals = digits.includes(".") ? digits.split(".")[1].length : 0;
+          const commas = digits.includes(",");
+          const format = (value: number) => {
+            const fixed = value.toFixed(decimals);
+            return commas ? Number(fixed).toLocaleString("en-GB", { minimumFractionDigits: decimals }) : fixed;
+          };
+          // Count with a plain timer, and always put the real figure back:
+          // a figure must never be left showing a partial or zero value.
+          const original = el.textContent ?? "";
+          counters.push({ el, original });
+          const seen = new IntersectionObserver(
+            ([entry]) => {
+              if (!entry.isIntersecting) return;
+              seen.disconnect();
+              const start = performance.now();
+              el.style.fontVariantNumeric = "tabular-nums";
+              const tick = (now: number) => {
+                const t = Math.min(1, Math.max(0, (now - start) / 1400));
+                const eased = 1 - Math.pow(1 - t, 3);
+                if (t < 1) {
+                  el.textContent = `${prefix}${format(target * eased)}${suffix}`;
+                  requestAnimationFrame(tick);
+                } else {
+                  el.textContent = original;
+                }
+              };
+              requestAnimationFrame(tick);
+              window.setTimeout(() => {
+                el.textContent = original;
+              }, 1800);
+            },
+            { threshold: 0.4 },
+          );
+          seen.observe(el);
+          observers.push(seen);
+        });
 
         // Images unmask and settle.
         section.querySelectorAll<HTMLImageElement>("img").forEach((img) => {
@@ -159,7 +210,7 @@ export function MotionProvider() {
         trigger: document.documentElement,
         start: "bottom bottom+=4",
         onEnter: () => {
-          if (pending.length) gsap.to(pending.splice(0), { autoAlpha: 1, y: 0, duration: 0.6, clearProps: "opacity,visibility,transform" });
+          if (pending.length) gsap.to(pending.splice(0), { autoAlpha: 1, y: 0, scale: 1, duration: 0.6, clearProps: "opacity,visibility,transform" });
         },
       });
     }, main);
@@ -173,7 +224,7 @@ export function MotionProvider() {
         const passed = pending.filter((el) => el.getBoundingClientRect().top < window.innerHeight);
         if (!passed.length) return;
         passed.forEach((el) => pending.splice(pending.indexOf(el), 1));
-        gsap.to(passed, { autoAlpha: 1, y: 0, duration: 0.3, overwrite: true, clearProps: "opacity,visibility,transform" });
+        gsap.to(passed, { autoAlpha: 1, y: 0, scale: 1, duration: 0.3, overwrite: true, clearProps: "opacity,visibility,transform" });
       }, 160);
     };
     window.addEventListener("scroll", catchUp, { passive: true });
@@ -185,6 +236,10 @@ export function MotionProvider() {
       window.clearTimeout(settle);
       window.removeEventListener("scroll", catchUp);
       splits.forEach((split) => split.revert());
+      observers.forEach((observer) => observer.disconnect());
+      counters.forEach(({ el, original }) => {
+        el.textContent = original;
+      });
       ctx.revert();
     };
   }, [pathname]);
@@ -210,6 +265,30 @@ export function MotionProvider() {
       window.removeEventListener("scroll", request);
       window.removeEventListener("resize", request);
     };
+  }, [pathname]);
+
+  // Cards marked data-tilt lean toward the cursor and catch a soft light.
+  useEffect(() => {
+    if (reduced() || !window.matchMedia("(pointer: fine)").matches) return;
+    let current: HTMLElement | null = null;
+    const move = (event: PointerEvent) => {
+      const card = (event.target as Element | null)?.closest<HTMLElement>("[data-tilt]") ?? null;
+      if (current && current !== card) {
+        current.style.removeProperty("--rx");
+        current.style.removeProperty("--ry");
+      }
+      current = card;
+      if (!card) return;
+      const box = card.getBoundingClientRect();
+      const x = (event.clientX - box.left) / box.width;
+      const y = (event.clientY - box.top) / box.height;
+      card.style.setProperty("--mx", `${(x * 100).toFixed(1)}%`);
+      card.style.setProperty("--my", `${(y * 100).toFixed(1)}%`);
+      card.style.setProperty("--rx", `${((0.5 - y) * 4).toFixed(2)}deg`);
+      card.style.setProperty("--ry", `${((x - 0.5) * 5).toFixed(2)}deg`);
+    };
+    document.addEventListener("pointermove", move, { passive: true });
+    return () => document.removeEventListener("pointermove", move);
   }, [pathname]);
 
   return <div id="scroll-progress" className={styles.progress} aria-hidden="true" />;

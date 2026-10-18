@@ -7,6 +7,15 @@ import styles from "./dataTypes.module.css";
 const modalities = [
   {
     name: "Text",
+    sample: `{
+  "text": "افتتح المعرض في دبي يوم الأحد",
+  "entities": [
+    { "span": "دبي", "type": "LOCATION" },
+    { "span": "يوم الأحد", "type": "DATE" }
+  ],
+  "sentiment": "neutral",
+  "reviewed_by": "native annotator"
+}`,
     image: "/brand/product/label-text.webp",
     summary: "Entities, sentiment, moderation and preference labels, in Arabic and English.",
     labels: ["Named entities", "Sentiment", "Content moderation", "Ranked model responses"],
@@ -15,6 +24,17 @@ const modalities = [
   },
   {
     name: "Speech & audio",
+    sample: `{
+  "audio": "call_0417.wav",
+  "dialect": "Emirati",
+  "segments": [
+    { "speaker": "A", "start": 0.4, "end": 2.1,
+      "text": "مرحبا، أبي أغيّر موعدي" },
+    { "speaker": "B", "start": 2.3, "end": 4.0,
+      "text": "Sure, which day suits you?",
+      "code_switch": true }
+  ]
+}`,
     image: "/brand/product/label-audio.webp",
     summary: "Arabic speech transcribed across 25+ dialects, the data behind Munsit.",
     labels: ["Transcription", "Speaker diarisation", "Word-level timestamps", "Arabic–English code-switching"],
@@ -23,6 +43,15 @@ const modalities = [
   },
   {
     name: "Image",
+    sample: `{
+  "image": "shelf_0912.jpg",
+  "objects": [
+    { "label": "carton", "bbox": [412, 96, 188, 164] },
+    { "label": "left hand", "bbox": [120, 210, 230, 190],
+      "mask": "polygon" }
+  ],
+  "qa": "passed"
+}`,
     image: "/brand/product/label-image.webp",
     summary: "Objects found and outlined by trained annotators, with human-in-the-loop quality checks.",
     labels: ["Bounding boxes", "Segmentation masks", "Classification"],
@@ -31,6 +60,16 @@ const modalities = [
   },
   {
     name: "Video",
+    sample: `{
+  "clip": "warehouse_pick_031.mp4",
+  "view": "first-person",
+  "actions": [
+    { "t": [0.0, 1.8], "step": "reach to the shelf" },
+    { "t": [1.8, 3.2], "step": "pick the carton" },
+    { "t": [3.2, 5.6], "step": "place on the bench" }
+  ],
+  "hands": "tracked", "consent": true
+}`,
     image: "/brand/product/label-video.webp",
     summary: "First-person video of real work, broken into the actions a robot has to learn.",
     labels: ["Action labels", "Hand and object marks", "Step segmentation", "Bounding boxes"],
@@ -39,6 +78,16 @@ const modalities = [
   },
   {
     name: "3D & LiDAR",
+    sample: `{
+  "sweep": "lidar_frame_2208.pcd",
+  "points": 118204,
+  "objects": [
+    { "label": "forklift", "box3d": {
+        "center": [4.2, -1.1, 0.9],
+        "size": [2.4, 1.2, 2.1], "yaw": 0.31 } }
+  ],
+  "synced_camera": "front_01.jpg"
+}`,
     image: "/art/lines/perception.webp",
     summary: "Point clouds labelled alongside camera frames for perception systems.",
     labels: ["LiDAR point clouds", "Bounding boxes", "Segmentation masks"],
@@ -47,6 +96,17 @@ const modalities = [
   },
   {
     name: "Documents",
+    sample: `{
+  "page": "form_scan_0021.png",
+  "language": "ar",
+  "handwriting": true,
+  "fields": {
+    "الاسم": "…",
+    "التاريخ": "…",
+    "رقم المرجع": "…"
+  },
+  "doc_type": "application form"
+}`,
     image: "/art/annotation.svg",
     summary: "Handwritten and printed pages turned into structured, searchable data.",
     labels: ["Handwriting transcription", "Field extraction", "Document classification"],
@@ -66,7 +126,6 @@ export function DataTypes() {
           <p className={styles.kicker}>Supported data types</p>
           <h2 id="types-heading">Every data type, labelled by people.</h2>
         </div>
-        <p className={styles.lead}>98% labelling accuracy, with human-in-the-loop quality checks on every project.</p>
       </header>
       <div className={styles.tabs} role="tablist" aria-label="Data types">
         {modalities.map((modality, index) => (
@@ -86,7 +145,7 @@ export function DataTypes() {
       </div>
       <div className={styles.panel} id="type-panel" role="tabpanel" aria-labelledby={`type-tab-${active}`}>
         <div key={item.name} className={styles.example}>
-          <img src={item.image} alt={`${item.name} labelling example`} />
+          <img loading="lazy" decoding="async" src={item.image} alt={`${item.name} labelling example`} />
         </div>
         <div key={`${item.name}-copy`} className={styles.copy}>
           <h3>{item.name}</h3>
@@ -97,12 +156,15 @@ export function DataTypes() {
               <li key={label}>{label}</li>
             ))}
           </ul>
-          <p className={styles.listTitle}>Example datasets</p>
-          <ul className={styles.datasets}>
-            {item.datasets.map((dataset) => (
-              <li key={dataset}>{dataset}</li>
-            ))}
-          </ul>
+          <div className={styles.record}>
+            <p>
+              <span>Sample record</span>
+              <em>Illustrative, not customer data</em>
+            </p>
+            <pre>
+              <code>{item.sample}</code>
+            </pre>
+          </div>
           <a href={`/data-hub?category=${encodeURIComponent(item.category)}`}>
             Explore {item.name.toLowerCase()} data <span aria-hidden="true">→</span>
           </a>
@@ -128,14 +190,13 @@ export function CaseStudies() {
       <header className={styles.head}>
         <div>
           <p className={styles.kicker}>Case studies</p>
-          <h2 id="cases-heading">Results from work already delivered.</h2>
+          <h2 id="cases-heading">Results already delivered.</h2>
         </div>
-        <p className={styles.lead}>Published outcomes from our projects, with clients unnamed.</p>
       </header>
-      <ul className={styles.cases}>
+      <ul className={styles.cases} data-rail>
         {cases.map((item) => (
           <li key={item.title}>
-            <a href={item.href}>
+            <a href={item.href} data-tilt>
               <span className={styles.sector}>{item.sector}</span>
               <strong>{item.title}</strong>
               <span className={styles.stats}>

@@ -4,6 +4,7 @@ import { SiteClose } from "../site/SiteClose";
 import { SiteNav } from "../site/SiteNav";
 import styles from "./about.module.css";
 import { CtaBand } from "../shared/CtaBand";
+import { PageHero } from "../shared/PageHero";
 
 // Portraits are the ones published on cntxt.tech. `avatar` is a small round
 // photo for people we only have a thumbnail of.
@@ -14,7 +15,6 @@ const leaders: { src?: string; avatar?: string; position?: string; name: string;
   { name: "Khalid Ghiboub", role: "VP of AI Models" },
   { src: "/brand/people/shameed-sait.webp", name: "Shameed Sait", role: "Director of AI & Engineering" },
   { src: "/brand/people/rym-bachouche.webp", name: "Rym Bachouche", role: "VP of Marketing" },
-  { src: "/brand/people/lathan-jacobs.webp", name: "Lathan Jacobs", role: "VP Operations & Commercial" },
 ];
 
 const stats = [
@@ -38,27 +38,17 @@ export function AboutPage() {
     <main className={styles.page}>
       <SiteNav />
 
-      <section className={styles.hero} aria-labelledby="about-heading">
-        <div className={styles.heroCopy}>
-          <Eyebrow>Why CNTXT</Eyebrow>
-          <h1 id="about-heading">
-            AI projects fail on data, not on models.{" "}
-            <span>That is why we built CNTXT.</span>
-          </h1>
-          <p>
-            CNTXT AI is a data and AI company headquartered in Abu Dhabi. We
-            help organisations build and run AI while keeping full control of
-            their data.
-          </p>
-        </div>
-        <div className={styles.photo}>
-          <img className={styles.texture} src="/about/texture.webp" alt="" />
-          <div className={styles.mark}>
-            <img src="/about/mark.svg" alt="" width={677} height={610} />
-          </div>
-          <img className={styles.team} src="/about/team.webp" alt="The CNTXT team" />
-        </div>
-      </section>
+      <PageHero
+        id="about-heading"
+        kicker="Why CNTXT"
+        title={["AI projects fail on data,", "not on models."]}
+        lead="That is why we built CNTXT. CNTXT AI is a data and AI company headquartered in Abu Dhabi. We help organisations build and run AI while keeping full control of their data."
+        actions={[
+          { label: "Book a demo", href: "/contact", primary: true },
+          { label: "Join the team", href: "/careers" },
+        ]}
+        art={<img className={styles.heroTeam} src="/about/team.webp" alt="The CNTXT team" />}
+      />
 
       <section className={styles.story} aria-labelledby="story-heading">
         <div className={styles.storyCopy}>
@@ -70,18 +60,12 @@ export function AboutPage() {
         </div>
         <div className={styles.storyBody}>
           <p>
-            Brothers Mohammad and Hassan Abu Sheikh founded CNTXT on one
-            observation: AI projects fail on messy data, not on models. Today
-            we capture and verify data from real work, train models on it,
-            such as Munsit for Arabic speech, and deploy AI on-premise so
-            organisations keep sovereign control of their data.
+            Founded by Mohammad and Hassan Abu Sheikh. Today we capture and verify data from real work,
+            train models like Munsit on it, and deploy AI on-premise.
           </p>
           <p>
-            Munsit ranks #1 on the Hugging Face Open Universal Arabic ASR
-            Leaderboard. In June 2026 we acquired Actualize, which builds
-            Arabic voice agents, and raised a $60M Series A co-led by AI71 and
-            BlueFive Capital. More than 250 enterprise and government
-            organisations have worked with us.
+            In June 2026 we acquired Actualize and raised a $60M Series A, co-led by AI71 and BlueFive
+            Capital.
           </p>
         </div>
       </section>
@@ -102,13 +86,13 @@ export function AboutPage() {
         </div>
         <ul className={styles.leaders}>
           {leaders.map((leader, index) => (
-            <li key={`${leader.role}-${index}`}>
+            <li key={`${leader.role}-${index}`} data-tilt>
               {leader.src ? (
-                <img src={leader.src} alt={leader.name} style={{ objectPosition: leader.position }} />
+                <img loading="lazy" decoding="async" src={leader.src} alt={leader.name} style={{ objectPosition: leader.position }} />
               ) : (
                 <span className={styles.monogram} aria-hidden="true">
                   {leader.avatar ? (
-                    <img src={leader.avatar} alt="" />
+                    <img loading="lazy" decoding="async" src={leader.avatar} alt="" />
                   ) : (
                     leader.name
                       .split(" ")

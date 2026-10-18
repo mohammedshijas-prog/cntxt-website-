@@ -1,5 +1,7 @@
 import { SiteClose } from "../site/SiteClose";
 import { SiteNav } from "../site/SiteNav";
+import { CtaBand } from "../shared/CtaBand";
+import { PageHero } from "../shared/PageHero";
 import { Practices } from "./Practices";
 import styles from "./security.module.css";
 import { faqs } from "../shared/faqs";
@@ -11,22 +13,22 @@ const certifications = [
   {
     name: "SOC 2 Type II",
     mark: "/brand/certs/soc2.svg",
-    copy: "CNTXT AI holds SOC 2 Type II. The controls behind it are published in our trust centre at cntxt.trust.site.",
+    copy: "Certified. Controls published in our trust centre.",
   },
   {
     name: "ISO 27001",
     mark: "/brand/certs/iso-27001.svg",
-    copy: "CNTXT AI holds ISO 27001, the international standard for managing information security across the organisation.",
+    copy: "Certified for information security management.",
   },
   {
     name: "GDPR",
     mark: "/brand/certs/gdpr.svg",
-    copy: "GDPR is listed in our trust centre. Hosting and processing stay in-region, with on-premises deployment available.",
+    copy: "Listed in our trust centre. Data stays in region.",
   },
   {
     name: "HIPAA",
     mark: "/brand/certs/hipaa.svg",
-    copy: "HIPAA is listed in our trust centre alongside the controls that cover product, data, network and endpoint security.",
+    copy: "Listed in our trust centre.",
   },
 ];
 
@@ -35,59 +37,54 @@ export function SecurityPage() {
   return (
     <main className={styles.page}>
       <SiteNav />
-      <section className={styles.hero} aria-labelledby="security-heading">
-        <div className={styles.heroCopy}>
-          <h1 id="security-heading">Security and data sovereignty, by design.</h1>
-          <p>
-            CNTXT AI holds SOC 2 Type II and ISO 27001, with GDPR
-            and HIPAA listed in our trust centre. Your data is hosted and processed in-region, and we
-            deploy on-premises, hybrid or in the cloud.
-          </p>
-          <div className={styles.heroActions}>
-            <a className={styles.primary} href="https://cntxt.trust.site">
-              Visit the trust centre
-            </a>
-            <a className={styles.secondary} href="/contact?topic=Security">
-              Contact security
-            </a>
-          </div>
-        </div>
-        <div className={styles.visual} aria-hidden="true">
-          {gridLayers.map((src) => (
-            <img key={src} className={styles.gridLine} src={src} alt="" />
-          ))}
-          <div className={styles.lockFrame}>
-            <img className={styles.lock} src="/security/lock.webp" alt="" />
-          </div>
-          <div className={styles.requestCard}>
-            <span className={styles.requestIcon}>
-              <img src="/security/shield.svg" alt="" />
-            </span>
-            <span>
-              <strong>Work request</strong>
-              <em>read, write or tool call</em>
-            </span>
-          </div>
-          <div className={styles.permissionCard}>
-            <span>
-              <i />
-              CHECK PERMISSION
-            </span>
-            <span>
-              <i />
-              RECORD OUTCOME
-            </span>
-          </div>
-        </div>
-      </section>
+      <PageHero
+        id="security-heading"
+        kicker="Security"
+        title={["Security and data", "sovereignty, by design."]}
+        lead="SOC 2 Type II and ISO 27001 certified. Your data is hosted and processed in region, on-premises, hybrid or in the cloud."
+        actions={[
+          { label: "Visit the trust centre", href: "https://cntxt.trust.site", primary: true },
+          { label: "Contact security", href: "/contact?topic=Security" },
+        ]}
+        dark
+        art={
+    <div className={styles.visual} aria-hidden="true">
+      {gridLayers.map((src) => (
+        <img loading="lazy" decoding="async" key={src} className={styles.gridLine} src={src} alt="" />
+      ))}
+      <div className={styles.lockFrame}>
+        <img loading="lazy" decoding="async" className={styles.lock} src="/security/lock.webp" alt="" />
+      </div>
+      <div className={styles.requestCard}>
+        <span className={styles.requestIcon}>
+          <img loading="lazy" decoding="async" src="/security/shield.svg" alt="" />
+        </span>
+        <span>
+          <strong>Work request</strong>
+          <em>read, write or tool call</em>
+        </span>
+      </div>
+      <div className={styles.permissionCard}>
+        <span>
+          <i />
+          CHECK PERMISSION
+        </span>
+        <span>
+          <i />
+          RECORD OUTCOME
+        </span>
+      </div>
+    </div>
+        }
+      />
 
       <section className={styles.compliance} aria-labelledby="compliance-heading">
         <div className={styles.complianceCard}>
           <h2 id="compliance-heading">Compliance and certifications</h2>
           <ul>
             {certifications.map(({ name, copy, mark }) => (
-              <li key={name}>
-                <img src={mark} alt={`${name} mark`} width={150} height={150} />
+              <li key={name} data-tilt>
+                <img loading="lazy" decoding="async" src={mark} alt={`${name} mark`} width={150} height={150} />
                 <h3>{name}</h3>
                 <p>{copy}</p>
               </li>
@@ -141,18 +138,21 @@ export function SecurityPage() {
                 Report a vulnerability
               </a>
             </div>
-            <img className={styles.folderLock} src="/security/disclosure-lock.webp" alt="" />
+            <img loading="lazy" decoding="async" className={styles.folderLock} src="/security/disclosure-lock.webp" alt="" />
           </div>
         </div>
       </section>
 
       <Faq items={faqs.security} topic="Security" />
 
-      <SiteClose
-        current="Security"
-        packHref="https://cntxt.trust.site"
-        procurementId="procurement"
+      <CtaBand
+        id="procurement"
+        title="Need documentation for procurement?"
+        body="Our certifications and policies are published in the trust centre, and the team can share the security documentation procurement needs."
+        primary={{ label: "See our security documentation", href: "https://cntxt.trust.site" }}
+        secondary={{ label: "Contact security", href: "/contact?topic=Security" }}
       />
+      <SiteClose current="Security" hideBand />
     </main>
   );
 }

@@ -58,7 +58,7 @@ export const verticals: Vertical[] = [
     problemTitle: "Lab demonstrations don't look like real work.",
     problem: "A few tidy tasks recorded in a lab leave robots unprepared for cluttered, busy floors that change every day. Manipulation models need the real thing, at volume.",
     capabilities: [
-      { icon: "camera", title: "Hands-free capture", body: "Phone head strap, head camera or Roboband wrist cameras, so both hands stay on the task." },
+      { icon: "camera", title: "Hands-free capture", body: "A phone on a head strap, the Roboband camera headband or the wristband camera, so both hands stay on the task." },
       { icon: "image", title: "Action-level labels", body: "Accepted clips are broken into the steps a robot has to learn, with hands and objects marked up." },
       shared.review,
       shared.consent,

@@ -33,32 +33,6 @@ export const faqs = {
     projectStart,
     deployment,
   ],
-  agentix: [
-    {
-      q: "Which channels can an agent work on?",
-      a: "Voice calls, WhatsApp, web chat, app, email and SMS. The same agent shares one knowledge base and history across all of them.",
-    },
-    {
-      q: "Which languages and dialects does it speak?",
-      a: "Arabic dialects including Emirati, Saudi, Kuwaiti, Qatari and Bahraini, plus English, Hindi and French. It handles Arabic and English mixed in one conversation.",
-    },
-    {
-      q: "Does it work with our phone system?",
-      a: "Yes. Agentix connects over SIP and WebRTC, works with PABX, Cisco and Avaya systems, and uses local UAE, Saudi and Qatar numbers.",
-    },
-    {
-      q: "What happens when the agent cannot help?",
-      a: "The live operations dashboard shows every conversation with its sentiment and intent, and hands the conversation to a person when needed.",
-    },
-    {
-      q: "How long does set-up take?",
-      a: "Standard onboarding takes less than two days. Custom integrations take longer.",
-    },
-    {
-      q: "Where can it run?",
-      a: "Cloud hosted in the GCC, in a private VPC, or on your own premises.",
-    },
-  ],
   physicalAi: [
     {
       q: "What kind of data do you capture?",
@@ -66,7 +40,7 @@ export const faqs = {
     },
     {
       q: "How is it recorded?",
-      a: "Hands-free, with a phone on a head strap, a head camera, or Roboband wrist cameras. Phone recording needs an iPhone 11, Pixel 6, Galaxy S21 or newer.",
+      a: "Hands-free, with a phone sideways on a head strap, the Roboband headband (up to eight synced cameras) or the wristband camera. Phone recording works on iPhone 11 to 17, Pixel 6 to 9, Galaxy S21 to S24 and more.",
     },
     {
       q: "How do you handle consent and privacy?",

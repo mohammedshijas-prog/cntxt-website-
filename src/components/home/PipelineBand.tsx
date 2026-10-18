@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import styles from "./pipelineBand.module.css";
 
-const stages = ["Real work", "Capture", "Verify", "Label", "Train", "Deploy"];
+const stages = ["Raw data", "Capture", "Verify", "Label", "Train", "Deploy"];
 
 /** How strongly each cell of a stage's zone is lit, before the sweep. */
 function pattern(zone: number, u: number, v: number, seed: number): number {
@@ -82,7 +82,7 @@ export function PipelineBand() {
           if (!a) continue;
           // Raw specks drift a little; everything after capture holds still.
           const jitter = x < cols / stages.length && !reduced ? Math.sin(time * 2 + y * 0.7 + x) * 1.2 : 0;
-          ctx.fillStyle = `rgba(214, 199, 255, ${(a * glow).toFixed(3)})`;
+          ctx.fillStyle = `rgba(125, 82, 244, ${(a * glow).toFixed(3)})`;
           ctx.fillRect(x * cell + jitter, y * cell, cell - 2, cell - 2);
         }
       }

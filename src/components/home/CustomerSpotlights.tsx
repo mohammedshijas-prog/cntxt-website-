@@ -116,7 +116,7 @@ export function CustomerSpotlights({ eyebrow }: { eyebrow: React.ReactNode }) {
             onClick={() => setActive(index)}
           >
             {spot.logo ? (
-              <img src={spot.logo} alt={spot.name} style={logoSize(spot.aspect, spot.weight)} />
+              <img loading="lazy" decoding="async" src={spot.logo} alt={spot.name} style={logoSize(spot.aspect, spot.weight)} />
             ) : (
               <span className={styles.logoText}>{spot.name}</span>
             )}
@@ -130,10 +130,10 @@ export function CustomerSpotlights({ eyebrow }: { eyebrow: React.ReactNode }) {
         aria-labelledby={`spot-tab-${active}`}
       >
         <div className={styles.brand}>
-          <img className={styles.brandBg} src="/healthcare/brand-bg.webp" alt="" />
+          <img loading="lazy" decoding="async" className={styles.brandBg} src="/healthcare/brand-bg.webp" alt="" />
           {item.logo ? (
             <span className={styles.brandCard}>
-              <img src={item.logo} alt={item.name} />
+              <img loading="lazy" decoding="async" src={item.logo} alt={item.name} />
             </span>
           ) : (
             <p className={styles.brandName}>{item.name}</p>

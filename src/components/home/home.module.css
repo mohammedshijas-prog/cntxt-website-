@@ -16,20 +16,16 @@
   align-items: center;
   justify-content: center;
   margin: 0 0 16px;
-  color: rgba(0, 0, 0, 0.6);
+  color: var(--accent-text);
   font-family: var(--font-heading);
   font-size: var(--fs-small);
-  font-weight: 500;
+  font-weight: 600;
   line-height: 20px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  letter-spacing: 0;
 }
 
 .tag {
-  position: relative;
-  flex: none;
-  width: 28px;
-  height: 14px;
+  display: none;
 }
 
 .tag::before,

@@ -230,11 +230,11 @@ function Menu({
         onClick={() => setOpen((current) => !current)}
       >
         {icon === "filter" ? (
-          <img src="/data-hub/filter.svg" alt="" width={20} height={20} />
+          <img loading="lazy" decoding="async" src="/data-hub/filter.svg" alt="" width={20} height={20} />
         ) : null}
         <span>{value}</span>
         {icon === "filter" ? null : (
-          <img src="/data-hub/caret.svg" alt="" width={20} height={20} />
+          <img loading="lazy" decoding="async" src="/data-hub/caret.svg" alt="" width={20} height={20} />
         )}
       </button>
       {open ? (
@@ -332,7 +332,10 @@ export function DataHubPage({ initialCategory }: { initialCategory?: string }) {
       <section className={styles.hero} aria-labelledby="data-hub-heading">
         <NumberField className={styles.heroArt} />
         <div className={styles.heroCopy}>
-          <h1 id="data-hub-heading">Request the data your model actually needs.</h1>
+          <h1 id="data-hub-heading">
+            <span>Request the data</span>
+            <span>your model actually needs.</span>
+          </h1>
           <p>
             Browse the kinds of data CNTXT captures and labels. Request a
             category or a custom collection.
@@ -345,7 +348,7 @@ export function DataHubPage({ initialCategory }: { initialCategory?: string }) {
             }}
           >
             <label>
-              <img src="/data-hub/search.svg" alt="" width={20} height={20} />
+              <img loading="lazy" decoding="async" src="/data-hub/search.svg" alt="" width={20} height={20} />
               <input
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
@@ -366,7 +369,7 @@ export function DataHubPage({ initialCategory }: { initialCategory?: string }) {
         </h2>
         <div className={styles.toolbar}>
           <label className={styles.search}>
-            <img src="/data-hub/search.svg" alt="" width={20} height={20} />
+            <img loading="lazy" decoding="async" src="/data-hub/search.svg" alt="" width={20} height={20} />
             <input
               value={query}
               onChange={(event) => setQuery(event.target.value)}
@@ -404,12 +407,12 @@ export function DataHubPage({ initialCategory }: { initialCategory?: string }) {
         {orderedCode.length > 0 ? (
           <ul className={styles.codeGrid}>
             {orderedCode.map((item) => (
-              <li key={item.id}>
+              <li key={item.id} data-tilt>
                 <Snippet item={item} />
                 <div className={styles.codeCopy}>
                   <div>
                     <h3>{item.title}</h3>
-                    <img src="/data-hub/arrow.svg" alt="" width={24} height={24} />
+                    <img loading="lazy" decoding="async" src="/data-hub/arrow.svg" alt="" width={24} height={24} />
                   </div>
                   <p>{item.blurb}</p>
                 </div>
@@ -442,9 +445,9 @@ export function DataHubPage({ initialCategory }: { initialCategory?: string }) {
             {orderedAgents.map((item) => {
               const isRequested = requested.includes(item.id);
               return (
-                <li key={item.id}>
+                <li key={item.id} data-tilt>
                   <p className={styles.tag}>
-                    <img src="/data-hub/dot.svg" alt="" width={8} height={8} />
+                    <img loading="lazy" decoding="async" src="/data-hub/dot.svg" alt="" width={8} height={8} />
                     {item.category}
                   </p>
                   <IconChip name={glyphs[item.category] ?? "floor"} />

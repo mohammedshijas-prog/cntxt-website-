@@ -16,20 +16,16 @@
   gap: 6px;
   align-items: center;
   margin-bottom: 21px;
-  color: var(--text-strong);
+  color: var(--accent-text);
   font-family: var(--font-heading);
   font-size: var(--fs-small);
-  font-weight: 500;
+  font-weight: 600;
   line-height: var(--lh-small);
-  letter-spacing: 0.44px;
-  text-transform: uppercase;
+  letter-spacing: 0;
 }
 
 .tag {
-  position: relative;
-  flex: none;
-  width: 28px;
-  height: 14px;
+  display: none;
 }
 
 .tag::before,
@@ -51,100 +47,6 @@
   right: 0;
   width: 88%;
   transform: rotate(180deg);
-}
-
-.nav nav img,
-.talk img,
-.cta img,
-.bandButton img {
-  display: block;
-}
-
-.talk span,
-.cta span,
-.bandButton span {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #ffffff;
-}
-
-.hero {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  min-height: 869px;
-  padding: calc(var(--section-y) + var(--space-12)) var(--pad-x) var(--section-y);
-}
-
-.heroCopy {
-  display: flex;
-  flex: 0 0 606px;
-  flex-direction: column;
-  gap: 32px;
-  justify-content: center;
-  width: min(606px, 100%);
-}
-
-.heroCopy .eyebrow {
-  margin-bottom: 0;
-}
-
-.heroCopy h1 {
-  width: min(545px, 100%);
-  margin-top: 21px;
-  color: var(--text-strong);
-  font-family: var(--font-heading);
-  font-size: var(--fs-display);
-  font-weight: 400;
-  line-height: var(--lh-display);
-}
-
-.heroCopy p {
-  width: min(482px, 100%);
-  margin-top: 12px;
-  color: var(--text-muted);
-  font-family: var(--font-body);
-  font-size: var(--fs-lead);
-  font-weight: 400;
-  line-height: var(--lh-lead);
-}
-
-.cta,
-.bandButton {
-  display: inline-flex;
-  gap: 8px;
-  align-items: center;
-  height: 49px;
-  padding: 5px 9px 5px 18px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 10px;
-  font-family: var(--font-heading);
-  font-size: var(--fs-button);
-  font-weight: 500;
-  line-height: 20px;
-  letter-spacing: -0.12px;
-}
-
-.cta {
-  align-self: flex-start;
-  background: var(--accent);
-  color: #ffffff;
-}
-
-.cta span,
-.bandButton span {
-  width: 33px;
-  height: 33px;
-  border-radius: 10px;
-}
-
-.heroArt {
-  flex: 1 1 0;
-  width: min(881px, 100%);
-  height: 494px;
-  object-fit: cover;
-  border-radius: 16px;
 }
 
 .ways {
@@ -337,7 +239,8 @@
   display: flex;
   gap: 12px;
   align-items: center;
-  padding: var(--space-11) var(--pad-x);
+  padding: var(--section-y) var(--pad-x);
+  background: var(--paper-dots), var(--paper);
 }
 
 .applyIntro,
@@ -346,7 +249,8 @@
   min-width: 0;
   height: 692px;
   overflow: hidden;
-  border-radius: 23px;
+  border: var(--card-line);
+  border-radius: var(--radius-card);
 }
 
 .applyIntro {
@@ -416,7 +320,6 @@
   align-items: center;
   padding: 56px;
   background: var(--bg);
-  border: 1px solid rgba(21, 17, 31, 0.1);
 }
 
 .formBody,
@@ -522,7 +425,7 @@
   width: 100%;
   height: 48px;
   padding: 11.5px 28px 12.5px;
-  background: var(--label);
+  background: var(--accent);
   color: var(--bg);
   font-family: var(--font-heading);
   font-size: var(--fs-button);
@@ -608,15 +511,6 @@
     display: flex;
   }
 
-  .hero {
-    min-height: 0;
-    padding-top: 140px;
-  }
-
-  .heroCopy {
-    flex-basis: auto;
-  }
-
   .heroArt,
   .waysArt,
   .mutedPanel,
@@ -625,10 +519,6 @@
   .formCard {
     width: 100%;
     height: auto;
-  }
-
-  .heroArt {
-    height: 320px;
   }
 
   .waysArt {
@@ -679,4 +569,65 @@
   .formCard {
     padding: 24px;
   }
+}
+
+/* Hero art: the real partner marks, in one colour. */
+.heroLogos {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
+  margin: 0;
+  padding: var(--space-4);
+  list-style: none;
+}
+
+.heroLogos li {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  align-items: center;
+  justify-content: center;
+  min-height: 112px;
+  border-radius: var(--radius-tile);
+  background: var(--paper);
+  transition: background 200ms ease, transform 300ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.heroLogos li:hover {
+  background: var(--accent-tint);
+  transform: translateY(-2px);
+}
+
+.heroLogos img {
+  height: auto;
+  max-height: 34px;
+  filter: brightness(0);
+  opacity: 0.85;
+}
+
+.heroLogos span {
+  color: var(--label-3);
+  font-family: var(--font-heading);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+@media (max-width: 1068px) {
+  .heroLogos {
+    width: auto;
+  }
+}
+
+/* HubSpot renders its own fields; give them room and let the card grow. */
+.hubspot {
+  width: 100%;
+  min-height: 420px;
+  font-family: var(--font-body);
+}
+
+.formCard:has(.hubspot) {
+  height: auto;
+  min-height: 692px;
+  align-items: stretch;
+  overflow: visible;
 }

@@ -25,14 +25,20 @@
   gap: 24px;
   align-items: center;
   justify-content: space-between;
-  padding: 8px 8px 8px 18px;
+  padding: 8px 8px 8px 22px;
   border: 1px solid rgba(0, 0, 0, 0.08);
-  border-radius: 14px;
+  /* One shape everywhere: a capsule, at rest and as glass. */
+  border-radius: 999px;
   background: rgba(255, 255, 255, 0.88);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
   backdrop-filter: blur(20px);
   pointer-events: auto;
-  transition: background-color 180ms ease, border-color 180ms ease;
+  transition:
+    background-color 300ms ease,
+    border-color 300ms ease,
+    border-radius 300ms ease,
+    box-shadow 300ms ease,
+    backdrop-filter 300ms ease;
 }
 
 .nav > a:first-child {
@@ -91,8 +97,8 @@
   gap: 10px;
   align-items: center;
   height: 36px;
-  padding: 0 7px 0 14px;
-  border-radius: 9px;
+  padding: 0 7px 0 16px;
+  border-radius: 999px;
   background: var(--accent);
   color: #ffffff;
   font-family: var(--font-heading);
@@ -127,46 +133,58 @@
   outline-offset: 2px;
 }
 
-/* Dark state: after scrolling, and on the home page once past the hero. */
-.dark .nav {
-  border-color: rgba(255, 255, 255, 0.1);
-  background: rgba(17, 17, 17, 0.88);
-  box-shadow: none;
+/* Liquid glass, after Apple's material: a clear capsule. Almost no frosting,
+   a lens that bends the content at the rim, a thin specular edge lit from the
+   top left, and a soft shadow that lifts it off the page. */
+.glass .nav {
+  border-color: transparent;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.42);
+  box-shadow:
+    inset 0 0 0 0.5px rgba(255, 255, 255, 0.6),
+    inset 1.5px 1.5px 0.5px -0.5px rgba(255, 255, 255, 0.95),
+    inset -1px -1px 0.5px -0.5px rgba(255, 255, 255, 0.7),
+    inset 0 0 14px 2px rgba(255, 255, 255, 0.28),
+    0 0 0 0.5px rgba(21, 17, 31, 0.08),
+    0 10px 30px -8px rgba(21, 17, 31, 0.18);
+  backdrop-filter: blur(10px) saturate(180%) brightness(1.04);
+  -webkit-backdrop-filter: blur(10px) saturate(180%) brightness(1.04);
 }
 
-.dark .link {
-  color: #ffffff;
+/* Chromium: the real lens. */
+.lens.glass .nav {
+  backdrop-filter: url(#cntxt-lens) saturate(170%) brightness(1.05);
 }
 
-.dark .link:hover {
-  background: rgba(255, 255, 255, 0.08);
+/* A faint caustic along the bottom rim, the light the lens gathers. */
+.nav::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.28) 0%, rgba(255, 255, 255, 0) 45%),
+    linear-gradient(0deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0) 30%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 300ms ease;
 }
 
-.dark .link[aria-current="page"] {
-  color: #b9a3ff;
+.glass .nav::before {
+  opacity: 1;
 }
 
-.dark .link img {
-  filter: brightness(0) invert(1);
+.nav > * {
+  position: relative;
+  z-index: 1;
 }
 
-.dark .talk {
-  padding: 0 14px;
-  background: #ffffff;
-  color: #111111;
+.glass .talk {
+  border-radius: 999px;
 }
 
-.dark .talk:hover {
-  background: #f4f0ff;
-}
-
-.dark .talk span {
-  display: none;
-}
-
-.dark .link:focus-visible,
-.dark .talk:focus-visible {
-  outline-color: #ffffff;
+.glass .link:hover {
+  background: rgba(255, 255, 255, 0.55);
 }
 
 .actions {

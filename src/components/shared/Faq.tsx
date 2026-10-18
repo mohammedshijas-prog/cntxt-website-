@@ -6,7 +6,7 @@ import styles from "./faq.module.css";
  * without script; the JSON-LD lets search engines show the answers.
  */
 export function Faq({
-  items,
+  items: allItems,
   title = "Questions buyers ask",
   topic,
 }: {
@@ -15,6 +15,8 @@ export function Faq({
   /** Contact-form topic for the "ask us" link. */
   topic?: string;
 }) {
+  // Four questions at most: the ones that decide a purchase. The rest go to "Ask the team".
+  const items = allItems.slice(0, 4);
   const schema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
