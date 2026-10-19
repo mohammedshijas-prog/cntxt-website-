@@ -1,4 +1,4 @@
-import { marked } from "marked";
+import { renderMarkdown } from "@/lib/markdown";
 import type { Post } from "@/lib/supabase/server";
 import { CtaBand } from "../shared/CtaBand";
 import { SiteClose } from "../site/SiteClose";
@@ -7,7 +7,7 @@ import styles from "./blog.module.css";
 
 /** A post written in the portal. The body is markdown written by allowlisted admins. */
 export function PostArticle({ post }: { post: Post }) {
-  const html = marked.parse(post.body, { async: false }) as string;
+  const html = renderMarkdown(post.body);
   const date = post.published_at
     ? new Date(post.published_at).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })
     : "";

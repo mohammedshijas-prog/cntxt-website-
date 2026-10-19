@@ -381,6 +381,27 @@
   .roles li {
     align-items: flex-start;
     flex-direction: column;
+    gap: var(--space-4);
+    padding: var(--space-6) var(--space-5);
+  }
+
+  .roles li button {
+    min-height: 44px;
+  }
+
+  .filter > button {
+    padding: var(--space-5);
+  }
+}
+
+/* Phones: the culture rail (globals [data-rail]) bleeds to both screen edges.
+   Its fixed 100% width kept the negative margins from widening it, so the
+   cards were clipped 48px short of the right edge. */
+@media (max-width: 734px) {
+  .culture ul {
+    align-self: stretch;
+    width: auto;
+    margin-top: var(--space-7);
   }
 }
 

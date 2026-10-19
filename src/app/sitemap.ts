@@ -11,6 +11,7 @@ const paths = [
   "/agentix",
   "/physical-ai",
   ...verticals.map((vertical) => `/physical-ai/${vertical.slug}`),
+  "/data-services",
   "/data-hub",
   "/solutions",
   "/healthcare",

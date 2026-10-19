@@ -1,6 +1,7 @@
 "use client";
 
 import { Canvas, useFrame } from "@react-three/fiber";
+import { liteDevice } from "@/lib/device";
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import * as THREE from "three";
 
@@ -1095,6 +1096,7 @@ export default function FactoryScene({
 }) {
   const box = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
+  const [lite] = useState(liteDevice);
   const [reduced] = useState(
     () => typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches,
   );
@@ -1115,9 +1117,9 @@ export default function FactoryScene({
     <div ref={box} className={className} aria-hidden="true">
       <Canvas
         orthographic
-        dpr={[1, typeof window !== "undefined" && window.innerWidth <= 734 ? 1.25 : 1.5]}
+        dpr={lite ? 1 : [1, typeof window !== "undefined" && window.innerWidth <= 734 ? 1.25 : 1.5]}
         camera={{ position: [10, 9, 10], zoom: 80, near: -100, far: 200 }}
-        gl={{ antialias: true, alpha: false }}
+        gl={{ antialias: !lite, alpha: false, powerPreference: lite ? "low-power" : "default" }}
         frameloop={visible && !reduced ? "always" : "demand"}
       >
         <color attach="background" args={[FLOOR]} />

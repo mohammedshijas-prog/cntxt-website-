@@ -43,8 +43,9 @@ export const menus: Record<MenuId, Menu> = {
       {
         heading: "Data-as-a-service",
         items: [
-          { title: "Data annotation", href: "/data-hub" },
+          { title: "Data services", href: "/data-services" },
           { title: "Physical AI data", href: "/physical-ai" },
+          { title: "Data catalogue", href: "/data-hub" },
           { title: "Custom AI solutions", href: "/solutions" },
         ],
       },

@@ -126,6 +126,8 @@
 
 .textLink {
   display: inline-flex;
+  /* Flex drops the leading space in the arrow span; restore it. */
+  gap: 0.35em;
   align-items: center;
   min-height: 48px;
   color: var(--accent-text);

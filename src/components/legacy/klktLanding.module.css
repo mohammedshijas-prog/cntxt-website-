@@ -380,4 +380,21 @@
   .final > div {
     padding: var(--space-7) var(--space-5);
   }
+
+  /* Card copy at body size on a phone; the heading sits close to its list. */
+  .reasons p {
+    font-size: var(--fs-body);
+  }
+
+  .reasons li {
+    padding: var(--space-6) var(--space-5);
+  }
+
+  .faq {
+    gap: var(--space-6);
+  }
+
+  .heroArt {
+    width: min(320px, 100%);
+  }
 }

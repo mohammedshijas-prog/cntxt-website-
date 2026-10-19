@@ -65,7 +65,8 @@
     width: auto;
     margin-right: var(--space-3);
     margin-left: var(--space-3);
-    padding: var(--space-10) var(--space-5);
+    gap: var(--space-6);
+    padding: var(--space-8) var(--space-5);
   }
 
   .flow {
@@ -74,7 +75,7 @@
 
   .canvas {
     position: relative;
-    height: 180px;
+    height: 150px;
   }
 
   /* Labels move under the matrix as a readable flow. */

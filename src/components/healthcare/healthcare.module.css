@@ -286,3 +286,17 @@
   .result { grid-template-columns: 1fr; }
   .metric, .result figure { min-height: 0; gap: 24px; }
 }
+
+@media (max-width: 734px) {
+  /* Use cases and offers share one paper background, so one section gap is enough. */
+  .offers { padding-top: 0; }
+
+  /* Stacked, the desktop column rules become row dividers. */
+  .brand { height: 300px; border-radius: var(--radius-tile); }
+  .metric,
+  .result figure {
+    padding: var(--space-7) 0;
+    border-right: 0;
+  }
+  .result figure { border-top: 1px solid #adadad; }
+}

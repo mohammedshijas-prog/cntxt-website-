@@ -17,7 +17,12 @@
   font-weight: 600;
 }
 
-.page h2 {
+/* Section headings only: a bare `.page h2` also restyled the footer column
+   titles and the CTA band, which live inside the same <main>. */
+.fixSection h2,
+.results h2,
+.story h2,
+.trust h2 {
   margin: 0;
   font-family: var(--font-heading);
   font-size: var(--fs-h2);
@@ -473,9 +478,10 @@
     padding: var(--space-7) var(--space-5);
   }
 
+  /* Same side margin as the case card above, so the two card edges line up. */
   .trust {
-    margin-right: var(--space-3);
-    margin-left: var(--space-3);
+    margin-right: var(--pad-x);
+    margin-left: var(--pad-x);
   }
 
   .studyCopy dl,
@@ -830,4 +836,76 @@
     border-left: 0;
     border-bottom: 1px solid var(--separator);
   }
+}
+
+/* The published case reads as one piece: heading, story, result and quote in one card. */
+.storyCard {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: var(--space-10) var(--space-9) var(--space-9);
+  border-radius: var(--radius-card);
+  background: var(--bg-2);
+}
+
+.storyCard .storyHead {
+  margin-bottom: var(--space-8);
+}
+
+.storyCard .storyLine {
+  padding: 0;
+  border-top: 0;
+  border-radius: var(--radius-tile);
+  background: #ffffff;
+  overflow: hidden;
+}
+
+.storyCard .storyLine > li {
+  padding: var(--space-7);
+}
+
+.storyCard .storyLine > li + li {
+  padding-left: var(--space-7);
+}
+
+.storyCard .storyQuote {
+  margin-top: var(--space-8);
+}
+
+@media (max-width: 1068px) {
+  .storyCard {
+    padding: var(--space-8) var(--space-5);
+  }
+
+  .storyCard .storyLine > li,
+  .storyCard .storyLine > li + li {
+    padding: var(--space-6);
+  }
+}
+
+@media (max-width: 734px) {
+  /* Hero photo: a squarer frame and tighter overlays so the photo still shows
+     between the result chip and the tags. */
+  .heroPhoto { aspect-ratio: 1 / 1; }
+  .heroChip {
+    top: var(--space-4);
+    left: var(--space-4);
+    padding: var(--space-3) var(--space-4);
+  }
+  .heroTags {
+    right: var(--space-4);
+    bottom: var(--space-4);
+    left: var(--space-4);
+    gap: 6px;
+  }
+  .heroTags li { padding: 6px var(--space-3); }
+
+  .fixHead { margin-bottom: var(--space-7); }
+
+  /* Result cards: the desktop padding makes three cards fill two screens. */
+  .results dl > div { padding: var(--space-7) var(--space-6); }
+
+  .storyCard { padding: var(--space-7) var(--space-4); }
+  .storyCard .storyHead { margin-bottom: var(--space-6); }
+  .storyCard .storyLine > li,
+  .storyCard .storyLine > li + li { padding: var(--space-5); }
 }

@@ -2,7 +2,7 @@
 
 import type { Session } from "@supabase/supabase-js";
 import Link from "next/link";
-import { marked } from "marked";
+import { renderMarkdown } from "@/lib/markdown";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { supabaseBrowser } from "@/lib/supabase/browser";
 import styles from "./admin.module.css";
@@ -508,7 +508,7 @@ function Editor({ initial, onDone }: { initial: Post; onDone: () => void }) {
             <span>Markdown: ## heading, **bold**, - list, [link](https://…)</span>
           </div>
           {preview ? (
-            <div className={styles.preview} dangerouslySetInnerHTML={{ __html: marked.parse(post.body || "_Nothing written yet._", { async: false }) as string }} />
+            <div className={styles.preview} dangerouslySetInnerHTML={{ __html: renderMarkdown(post.body || "_Nothing written yet._") }} />
           ) : (
             <textarea className={`${styles.input} ${styles.body}`} value={post.body} onChange={(event) => set("body", event.target.value)} placeholder="Write the article…" />
           )}

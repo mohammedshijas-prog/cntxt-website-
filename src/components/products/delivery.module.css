@@ -189,8 +189,22 @@
   }
 }
 
+/* Phones: keep 2 x 2. One column made four ~240px-tall phases in a row,
+   mostly empty space around a dot, a title and a pill. */
 @media (max-width: 734px) {
   .phases {
-    grid-template-columns: 1fr;
+    gap: var(--space-3);
+  }
+
+  .phases button {
+    padding: var(--space-5) var(--space-2) var(--space-4);
+  }
+
+  .phase {
+    margin-top: var(--space-4);
+  }
+
+  .get {
+    padding: var(--space-2) var(--space-3);
   }
 }

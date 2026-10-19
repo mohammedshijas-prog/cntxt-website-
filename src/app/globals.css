@@ -142,7 +142,7 @@
     --lh-lead: 1.42;
     --fs-body: 16px;
     --fs-button: 16px;
-    --section-y: 96px;
+    --section-y: 80px;
     --section-head-gap: 48px;
     --radius-card: 20px;
   }
@@ -155,6 +155,11 @@ html {
 html,
 body {
   max-width: 100vw;
+}
+
+/* Nothing (third-party banners included) may widen the page sideways; clip keeps sticky working. */
+body {
+  overflow-x: clip;
 }
 
 body {
@@ -307,6 +312,8 @@ h3 {
     margin-right: calc(var(--pad-x) * -1) !important;
     margin-left: calc(var(--pad-x) * -1) !important;
     padding: var(--space-2) var(--pad-x) var(--space-4) !important;
+    width: auto !important;
+    align-self: stretch;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     scroll-padding-left: var(--pad-x);

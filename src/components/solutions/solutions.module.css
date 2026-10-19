@@ -284,8 +284,9 @@
   .productCopy,
   .shot { position: static; width: auto; }
   .productCopy { width: 100%; margin: 16px 0 24px; }
-  /* Keep the screenshot positioned so its images stay inside it. */
-  .shot { position: relative; height: 280px; }
+  /* Keep the screenshot positioned so its images stay inside it, and clear
+     the desktop offsets, which would shift it down and left inside the card. */
+  .shot { position: relative; top: auto; right: auto; height: 280px; }
   .studies ul { grid-template-columns: 1fr 1fr; }
   .studies li img { height: 320px; }
 }
@@ -494,4 +495,13 @@
   from {
     transform: scaleX(0);
   }
+}
+
+@media (max-width: 734px) {
+  /* Match each screenshot to its art (4:3) instead of a fixed crop box. */
+  .shot { height: auto; aspect-ratio: 4 / 3; }
+
+  /* Products and case studies sit on the same background; trim the doubled gap. */
+  .productList { padding-bottom: 0; }
+  .products { padding-bottom: 0; }
 }

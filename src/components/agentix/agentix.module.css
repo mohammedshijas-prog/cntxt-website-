@@ -159,7 +159,51 @@
     grid-template-columns: 1fr;
   }
 
+  /* Phone: crop into the dashboard so it reads, and set the results
+     below it with their labels (bare percentages say nothing). */
+  .art > img {
+    aspect-ratio: 4 / 3;
+    padding-bottom: 0;
+    object-fit: cover;
+    object-position: left top;
+  }
+
+  .results {
+    position: static;
+    margin-top: var(--space-3);
+  }
+
+  .results > div {
+    padding: var(--space-3);
+  }
+
   .results dd {
-    display: none;
+    font-size: 12px;
+  }
+
+  /* Icon beside the title: eight stacked cards, so keep each one short. */
+  .grid li {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    column-gap: var(--space-4);
+    align-items: center;
+    padding: var(--space-6) var(--space-5);
+  }
+
+  .grid h3 {
+    margin: 0;
+  }
+
+  .grid p,
+  .grid .by {
+    grid-column: 1 / -1;
+  }
+
+  .grid p {
+    margin-top: var(--space-3);
+  }
+
+  .grid .by {
+    justify-self: start;
   }
 }

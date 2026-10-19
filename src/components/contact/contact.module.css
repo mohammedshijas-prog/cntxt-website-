@@ -338,10 +338,15 @@
     min-height: 0;
   }
 
+  /* The pixel figures are decoration: keep the intro card to about a screen. */
+  .people {
+    min-height: 220px;
+  }
+
   .people img {
     left: -24px;
     width: calc(100% + 48px);
-    height: 280px;
+    height: 230px;
   }
 
   .formCard {

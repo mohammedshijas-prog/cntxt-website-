@@ -13,7 +13,7 @@ export async function POST(request: Request) {
   const { data: caller } = await db.auth.getUser(token);
   const callerEmail = caller.user?.email?.toLowerCase();
   if (!callerEmail) return Response.json({ error: "Sign in first." }, { status: 401 });
-  const { data: allowed } = await db.from("admins").select("email").ilike("email", callerEmail).maybeSingle();
+  const { data: allowed } = await db.from("admins").select("email").eq("email", callerEmail).maybeSingle();
   if (!allowed) return Response.json({ error: "Only admins can add people." }, { status: 403 });
 
   const { email } = (await request.json().catch(() => ({}))) as { email?: string };
@@ -26,7 +26,8 @@ export async function POST(request: Request) {
   // Create the login if it does not exist yet; an existing one is fine.
   const { error: userError } = await db.auth.admin.createUser({ email: clean, email_confirm: true });
   if (userError && !/already|registered|exists/i.test(userError.message)) {
-    return Response.json({ error: userError.message }, { status: 500 });
+    console.error("invite: createUser failed", userError.message);
+    return Response.json({ error: "Could not create that login." }, { status: 500 });
   }
   return Response.json({ ok: true });
 }

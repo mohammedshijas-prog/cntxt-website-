@@ -359,9 +359,23 @@
     display: none;
   }
 
+  /* All four marks on one row instead of three plus an orphan. */
   .marks {
-    flex-wrap: wrap;
-    gap: var(--space-4);
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--space-3);
+    width: 100%;
+  }
+
+  .marks li {
+    text-align: center;
+  }
+
+  .marks img {
+    width: 100%;
+    max-width: 64px;
+    height: auto;
+    padding: 6px;
   }
 }
 

@@ -59,6 +59,21 @@ export const faqs = {
       a: "Yes. Our annotators label video actions frame by frame, and handle LiDAR, bounding boxes and segmentation masks.",
     },
   ],
+  dataServices: [
+    {
+      q: "How is this different from the data catalogue?",
+      a: "The catalogue lists ready-made data categories you can add to a request. Data services is a managed project: we source, label, review and evaluate data to your specification.",
+    },
+    {
+      q: "How accurate is the labelling?",
+      a: "Text, image, video and audio are labelled at 98% accuracy, with human-in-the-loop quality assurance on every project.",
+    },
+    {
+      q: "Who does the work?",
+      a: "Native Arabic annotators across 25+ dialects, domain experts in finance, healthcare, logistics and government, and human AI evaluators in biology, medicine, finance, coding and bilingual work.",
+    },
+    projectStart,
+  ],
   dataHub: [
     {
       q: "How do I request data?",

@@ -249,8 +249,14 @@
 
 @media (max-width: 1068px) {
   .panel {
-    grid-template-columns: 1fr;
+    /* minmax(0, 1fr): the record's <pre> must not widen the column. */
+    grid-template-columns: minmax(0, 1fr);
     padding: var(--space-6);
+  }
+
+  .example,
+  .copy {
+    min-width: 0;
   }
 
   .example {

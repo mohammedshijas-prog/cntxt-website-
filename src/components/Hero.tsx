@@ -5,6 +5,7 @@ import { useEffect, useRef } from "react";
 import { MobileMenu } from "./site/MobileMenu";
 import { NavMenu, menuOrder, menus } from "./site/NavMenu";
 import { VideoToggle, isUserPaused } from "./shared/VideoToggle";
+import { slowNetwork } from "@/lib/device";
 import styles from "./Hero.module.css";
 
 
@@ -22,6 +23,8 @@ export function Hero() {
     const hero = sectionRef.current;
     const video = videoRef.current;
     if (!hero || !video) return;
+    // On Data Saver or a 2G/3G connection the poster stands in for the 1.5 MB clip.
+    if (!slowNetwork() && !video.getAttribute("src")) video.src = "/home/hero-video.mp4";
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
     let frame = 0;
     let last = -1;
@@ -75,7 +78,6 @@ export function Hero() {
         poster="/hero-bg.webp"
         aria-hidden="true"
       >
-        <source src="/home/hero-video.mp4" type="video/mp4" />
       </video>
       <VideoToggle video={videoRef} />
       <div ref={fadeRef} className={styles.fade}>

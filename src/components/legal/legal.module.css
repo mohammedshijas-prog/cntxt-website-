@@ -112,3 +112,79 @@
   text-align: left;
   vertical-align: top;
 }
+
+/* Long hostnames and cookie names may break anywhere rather than widen the page. */
+.doc :global(td),
+.doc :global(th) {
+  overflow-wrap: anywhere;
+}
+
+/* Phones: the five-column cookie tables (Name, Provider, Purpose, Duration,
+   Type) were 650px wide. Each cookie becomes a small card instead, with the
+   column headings repeated as labels. */
+@media (max-width: 734px) {
+  .doc {
+    overflow-wrap: anywhere;
+  }
+
+  .doc :global(table.table_main),
+  .doc :global(.table_main tbody),
+  .doc :global(.table_main tr),
+  .doc :global(.table_main td) {
+    display: block;
+    width: 100%;
+  }
+
+  .doc :global(.table_main thead) {
+    display: none;
+  }
+
+  .doc :global(.table_main tr) {
+    margin-bottom: var(--space-3);
+    padding: var(--space-4);
+    border: 1px solid var(--separator);
+    border-radius: var(--radius-tile);
+  }
+
+  .doc :global(.table_main td) {
+    padding: 0;
+    border: 0;
+  }
+
+  .doc :global(.table_main td + td) {
+    margin-top: var(--space-2);
+  }
+
+  .doc :global(.table_main td:first-child) {
+    color: var(--label);
+    font-family: var(--font-heading);
+    font-size: 16px;
+    font-weight: 500;
+  }
+
+  .doc :global(.table_main td:nth-child(n + 2))::before {
+    display: block;
+    color: var(--label-3);
+    font-family: var(--font-heading);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .doc :global(.table_main td:nth-child(2))::before {
+    content: "Provider";
+  }
+
+  .doc :global(.table_main td:nth-child(3))::before {
+    content: "Purpose";
+  }
+
+  .doc :global(.table_main td:nth-child(4))::before {
+    content: "Maximum storage duration";
+  }
+
+  .doc :global(.table_main td:nth-child(5))::before {
+    content: "Type";
+  }
+}

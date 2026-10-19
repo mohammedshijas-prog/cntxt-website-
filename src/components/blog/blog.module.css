@@ -469,3 +469,23 @@
     position: static;
   }
 }
+
+@media (max-width: 734px) {
+  /* Related topics: full-width rows tall enough to tap. */
+  .topics li + li {
+    margin-top: 0;
+  }
+
+  .topics button {
+    min-height: 44px;
+    padding: 11px 0;
+  }
+
+  .next {
+    padding-top: var(--space-10);
+  }
+
+  .next ul {
+    gap: var(--space-7);
+  }
+}

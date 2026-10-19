@@ -567,6 +567,46 @@
   }
 }
 
+@media (max-width: 734px) {
+  /* Category chips: 40px tap height. */
+  .chips button {
+    min-height: 40px;
+  }
+
+  /* Code cards: shorter preview, and the badge moves under the code
+     instead of sitting on top of the "capture" line. */
+  .codeGrid li {
+    min-height: 0;
+  }
+
+  .preview {
+    height: 176px;
+  }
+
+  .snippet {
+    margin: 20px 0 0 20px;
+  }
+
+  .badge {
+    top: auto;
+    bottom: 12px;
+  }
+
+  /* Agent cards: tag and icon share the first row, so each card loses
+     its empty middle band. */
+  .agentGrid > li {
+    flex-flow: row wrap;
+    gap: var(--space-5);
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-6) var(--space-5);
+  }
+
+  .agentGrid > li > .tag {
+    align-self: center;
+  }
+}
+
 /* Appears once a category is added: carries the selection to the contact form. */
 .requestBar {
   position: sticky;

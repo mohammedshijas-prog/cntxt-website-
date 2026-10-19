@@ -274,9 +274,9 @@
   }
 
   .card {
-    right: var(--space-3);
-    bottom: var(--space-3);
-    left: var(--space-3);
+    right: var(--space-4);
+    bottom: calc(var(--space-4) + env(safe-area-inset-bottom, 0px));
+    left: var(--space-4);
     width: auto;
     padding: var(--space-6) var(--space-5) var(--space-5);
   }
@@ -291,6 +291,11 @@
 
   .rail {
     flex-wrap: wrap;
+  }
+
+  /* Phone tap target: 40px+ tall chips. */
+  .rail button {
+    min-height: 40px;
   }
 }
 

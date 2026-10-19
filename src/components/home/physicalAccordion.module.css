@@ -185,6 +185,10 @@
 
 /* Phones: a vertical accordion with horizontal titles. */
 @media (max-width: 734px) {
+  .head p {
+    margin-bottom: var(--space-7);
+  }
+
   .cards {
     flex-direction: column;
     height: auto;
@@ -210,6 +214,7 @@
     bottom: auto;
     left: var(--space-5);
     font-size: 19px;
+    line-height: 1.2;
     white-space: normal;
     writing-mode: horizontal-tb;
     transform: translateY(-50%);
@@ -217,6 +222,12 @@
 
   .art {
     height: 58%;
+  }
+
+  /* Collapsed rows are only 76px tall: the line art becomes noise behind
+     the title, so it waits until the row opens. */
+  .cards li:not(.open) .art {
+    opacity: 0;
   }
 
   .body {

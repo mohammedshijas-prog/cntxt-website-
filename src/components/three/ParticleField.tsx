@@ -1,6 +1,7 @@
 "use client";
 
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { liteDevice } from "@/lib/device";
 import { useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 
@@ -279,6 +280,7 @@ export default function ParticleField({
 }) {
   const box = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
+  const [lite] = useState(liteDevice);
   const [reduced] = useState(
     () => typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches,
   );
@@ -295,7 +297,7 @@ export default function ParticleField({
   return (
     <div ref={box} className={className} aria-hidden="true">
       <Canvas
-        dpr={[1, phone ? 1.5 : 1.75]}
+        dpr={lite ? 1 : [1, phone ? 1.5 : 1.75]}
         camera={{ position: [0, 0, 4.2], fov: 42 }}
         gl={{ alpha: true, antialias: false, powerPreference: "high-performance" }}
         frameloop={visible && !reduced && !paused ? "always" : "demand"}

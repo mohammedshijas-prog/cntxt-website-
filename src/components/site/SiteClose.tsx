@@ -4,7 +4,7 @@ import styles from "../security/security.module.css";
 const footerColumns = [
   { title: "Products", links: ["AI Lab", "Agentix", "Munsit", "KLKT"] },
   { title: "Industries", links: ["Financial services", "Public sector", "Healthcare", "Real estate", "Insurance"] },
-  { title: "Solutions", links: ["Enterprise", "Physical AI data", "Data Hub"] },
+  { title: "Solutions", links: ["Enterprise", "Data services", "Physical AI data", "Data Hub"] },
   { title: "Company", links: ["About", "Careers", "Security", "Contact us"] },
   { title: "Resources", links: ["Blog", "Documentation", "Partners"] },
 ];
@@ -43,7 +43,8 @@ const hrefs: Record<string, string> = {
   Documentation: "/documentation",
   Partners: "/partners",
   "Data Hub": "/data-hub",
-  "Data labelling": "/data-hub",
+  "Data services": "/data-services",
+  "Data labelling": "/data-services",
   "Physical AI data": "/physical-ai",
   "Arabic speech AI": "https://munsit.com",
   "Enterprise agents": "/solutions",
@@ -77,6 +78,7 @@ export function SiteClose({
     | "Blog"
     | "About"
     | "Browse datasets"
+    | "Data services"
     | "Healthcare"
     | "Enterprises"
     | "Build AI";

@@ -536,6 +536,14 @@
   .applyIntro {
     min-height: 560px;
   }
+
+  /* Stacked, the cards must size to their content: with flex-basis 0 the
+     explicit min-height capped them, and the HubSpot form's Submit spilled
+     out of the card onto the footer. */
+  .applyIntro,
+  .formCard {
+    flex: none;
+  }
 }
 
 @media (max-width: 720px) {
@@ -568,6 +576,24 @@
 
   .formCard {
     padding: 24px;
+  }
+
+  /* HubSpot's frame pads its own fields; double padding left them ~210px wide. */
+  .formCard:has(.hubspot) {
+    min-height: 0;
+    padding: var(--space-3) var(--space-2);
+  }
+
+  /* Sections were 190px+ apart on a phone. */
+  .compare {
+    gap: var(--space-10);
+    padding-top: var(--space-10);
+  }
+
+  .mutedPanel li,
+  .colorPanel li {
+    min-height: 0;
+    padding: var(--space-4) var(--space-5);
   }
 }
 

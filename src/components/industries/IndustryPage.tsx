@@ -55,7 +55,7 @@ export function IndustryPage({ industry }: { industry: Industry }) {
         ]}
         art={
           <div className={styles.heroPhoto}>
-            <img loading="lazy" decoding="async" src={industry.image} alt="" />
+            <img fetchPriority="high" decoding="async" src={industry.image} alt="" />
             <div className={styles.heroChip}>
               <strong>{lead.value}</strong>
               <span>{lead.label}</span>
@@ -130,6 +130,7 @@ export function IndustryPage({ industry }: { industry: Industry }) {
 
       {/* Proof: the published case, told as one line from challenge to result. */}
       <section className={styles.story} aria-labelledby="study-heading">
+        <div className={styles.storyCard}>
         <header className={styles.storyHead}>
           <p className={styles.kicker}>Published case · {industry.study.sector}</p>
           <h2 id="study-heading">{industry.study.title}</h2>
@@ -166,6 +167,7 @@ export function IndustryPage({ industry }: { industry: Industry }) {
             </figcaption>
           </figure>
         ) : null}
+        </div>
       </section>
 
       {/* Where the data stays. */}
