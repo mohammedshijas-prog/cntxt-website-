@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { JsonLd, organization, website } from "@/lib/seo";
 import { Host_Grotesk, Manrope } from "next/font/google";
 import "lenis/dist/lenis.css";
 import "./globals.css";
@@ -75,6 +76,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         {children}
         <MotionProvider />
         <PhoneDock />
+        <JsonLd data={[organization, website]} />
         {/* Cookie banner, as on the current site */}
         <script
           src="https://cookie-consent-cdn-prod.pages.dev/cookie-consent/3.0.33/cookie-consent.js"

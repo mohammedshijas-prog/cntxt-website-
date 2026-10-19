@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   title: "AI Lab",
   alternates: { canonical: "/products" },
   description:
-    "CNTXT AI Lab: the full stack in three layers: data captured and verified from real work, models trained on it, and agents deployed on-premises, hybrid or in the cloud.",
+    "CNTXT AI Lab, the full stack: data captured and verified from real work, models trained on it, and agents deployed on-premises, hybrid or in the cloud.",
 };
 
 export default function Products() {

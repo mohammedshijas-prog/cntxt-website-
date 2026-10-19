@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { JsonLd, breadcrumbs, service } from "@/lib/seo";
 import { notFound } from "next/navigation";
 import { IndustryPage } from "@/components/industries/IndustryPage";
 import { findIndustry, industries } from "@/components/industries/industries";
@@ -34,6 +35,15 @@ export default async function Industry({
   return (
     <div>
       <IndustryPage industry={industry} />
+      <JsonLd
+        data={[
+          breadcrumbs([
+            { name: "Solutions", path: "/solutions" },
+            { name: industry.name, path: `/industries/${industry.slug}` },
+          ]),
+          service({ name: `AI for ${industry.name.toLowerCase()}`, description: industry.description, path: `/industries/${industry.slug}` }),
+        ]}
+      />
     </div>
   );
 }

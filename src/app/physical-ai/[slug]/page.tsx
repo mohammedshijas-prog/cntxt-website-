@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { JsonLd, breadcrumbs, service } from "@/lib/seo";
 import { notFound } from "next/navigation";
 import { VerticalPage } from "@/components/physical-ai/VerticalPage";
 import { findVertical, verticals } from "@/components/physical-ai/verticals";
@@ -30,5 +31,18 @@ export default async function Vertical({
   const { slug } = await params;
   const vertical = findVertical(slug);
   if (!vertical) notFound();
-  return <VerticalPage vertical={vertical} />;
+  return (
+    <>
+      <VerticalPage vertical={vertical} />
+      <JsonLd
+        data={[
+          breadcrumbs([
+            { name: "Physical AI", path: "/physical-ai" },
+            { name: vertical.name, path: `/physical-ai/${vertical.slug}` },
+          ]),
+          service({ name: `${vertical.name} training data`, description: vertical.lead, path: `/physical-ai/${vertical.slug}` }),
+        ]}
+      />
+    </>
+  );
 }

@@ -10,7 +10,8 @@ import styles from "./legal.module.css";
  * App store listings link to these URLs, so they must not move.
  */
 export function LegalPage({ title, file, kicker = "Legal" }: { title: string; file: string; kicker?: string }) {
-  const html = readFileSync(path.join(process.cwd(), "src/content/legacy", file), "utf8");
+  // The page title is the only h1; headings inside the legacy text step down a level.
+  const html = readFileSync(path.join(process.cwd(), "src/content/legacy", file), "utf8").replace(/<(\/?)h1\b/gi, "<$1h2");
   return (
     <main className={styles.page}>
       <SiteNav />

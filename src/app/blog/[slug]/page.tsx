@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { JsonLd, article as articleLd, breadcrumbs } from "@/lib/seo";
 import { notFound } from "next/navigation";
 import { BlogArticle } from "@/components/blog/BlogArticle";
 import { article, articleSlug } from "@/components/blog/posts";
@@ -45,12 +46,47 @@ export default async function ArticlePage({
   if (slug !== articleSlug) {
     const post = await publishedPost(slug);
     if (!post) notFound();
-    return <PostArticle post={post} />;
+    return (
+      <>
+        <PostArticle post={post} />
+        <JsonLd
+          data={[
+            breadcrumbs([
+              { name: "Blog", path: "/blog" },
+              { name: post.title, path: `/blog/${post.slug}` },
+            ]),
+            articleLd({
+              title: post.title,
+              description: post.excerpt,
+              path: `/blog/${post.slug}`,
+              image: post.cover_url,
+              published: post.published_at,
+              modified: post.updated_at,
+              author: post.author || undefined,
+            }),
+          ]}
+        />
+      </>
+    );
   }
 
   return (
     <div>
       <BlogArticle />
+      <JsonLd
+        data={[
+          breadcrumbs([
+            { name: "Blog", path: "/blog" },
+            { name: "Why Arabic voice AI needs 25 dialects, not one", path: `/blog/${articleSlug}` },
+          ]),
+          articleLd({
+            title: "Why Arabic voice AI needs 25 dialects, not one",
+            description: article.description,
+            path: `/blog/${articleSlug}`,
+            image: "/brand/product/munsit-app.webp",
+          }),
+        ]}
+      />
     </div>
   );
 }

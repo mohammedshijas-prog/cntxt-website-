@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import Lenis from "lenis";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { liteDevice } from "@/lib/device";
 import { SplitText } from "gsap/SplitText";
 import styles from "./motion.module.css";
 
@@ -56,6 +57,8 @@ export function MotionProvider() {
     const pending: HTMLElement[] = [];
 
     const phone = window.matchMedia("(max-width: 734px)").matches;
+    // Slow phones and networks get the content as-is: no hidden-then-revealed items.
+    const lite = liteDevice();
     const ctx = gsap.context(() => {
       const sections = [...main.querySelectorAll<HTMLElement>(":scope > section, :scope > div > section, :scope > footer, :scope > section ~ div")];
       const hero = sections[0];
@@ -89,7 +92,7 @@ export function MotionProvider() {
 
         // Section titles: lines rise from behind a mask.
         section.querySelectorAll<HTMLElement>("h2").forEach((title) => {
-          if (!keep(title) || title.getBoundingClientRect().top < window.innerHeight * 0.9) return;
+          if (lite || !keep(title) || title.getBoundingClientRect().top < window.innerHeight * 0.9) return;
           const split = SplitText.create(title, {
             type: "lines",
             mask: "lines",
@@ -97,10 +100,10 @@ export function MotionProvider() {
             onSplit: (self) =>
               gsap.from(self.lines, {
                 yPercent: 105,
-                duration: 0.95,
-                stagger: 0.08,
+                duration: 0.7,
+                stagger: 0.06,
                 ease: "expo.out",
-                scrollTrigger: { trigger: title, start: "top 88%", once: true },
+                scrollTrigger: { trigger: title, start: "top 96%", once: true },
               }),
           });
           splits.push(split);
@@ -111,37 +114,37 @@ export function MotionProvider() {
           ...section.querySelectorAll<HTMLElement>(
             "h2 ~ p, [class*='eyebrow'], [class*='dek'], :scope ul > li, :scope ol > li, :scope dl > div, article, details",
           ),
-        ].filter((el) => keep(el) && el.getBoundingClientRect().top > window.innerHeight * 0.92);
+        ].filter((el) => !lite && keep(el) && el.getBoundingClientRect().top > window.innerHeight * 0.92);
         if (items.length) {
           pending.push(...items);
           ScrollTrigger.batch(items, {
-            start: "top 92%",
+            // Start as soon as an item peeks in, so nothing sits blank on screen.
+            start: "top 100%",
             once: true,
             onEnter: (batch) => {
               batch.forEach((el) => {
                 const at = pending.indexOf(el as HTMLElement);
                 if (at >= 0) pending.splice(at, 1);
               });
-              // Rise, de-blur and settle: each card lands like it has weight.
+              // Rise and settle. Short, and the whole group lands within 0.3s of the first card.
               return gsap.fromTo(
                 batch,
-                { autoAlpha: 0, y: 36, scale: 0.97, filter: "blur(6px)" },
+                { autoAlpha: 0, y: 24, scale: 0.98 },
                 {
                   autoAlpha: 1,
                   y: 0,
                   scale: 1,
-                  filter: "blur(0px)",
-                  duration: 0.9,
-                  stagger: 0.08,
+                  duration: phone ? 0.45 : 0.6,
+                  stagger: batch.length > 5 ? { amount: 0.3 } : 0.06,
                   ease: "expo.out",
                   overwrite: true,
                   // Hand control back to the page's own CSS states afterwards.
-                  clearProps: "opacity,visibility,transform,filter",
+                  clearProps: "opacity,visibility,transform",
                 },
               );
             },
           });
-          gsap.set(items, { autoAlpha: 0, y: 36, scale: 0.97 });
+          gsap.set(items, { autoAlpha: 0, y: 24, scale: 0.98 });
         }
 
         // Big figures count up from zero the first time they are seen.
@@ -191,7 +194,7 @@ export function MotionProvider() {
 
         // Images unmask and settle.
         section.querySelectorAll<HTMLImageElement>("img").forEach((img) => {
-          if (!keep(img) || img.width < 160 || img.getBoundingClientRect().top < window.innerHeight) return;
+          if (lite || !keep(img) || img.width < 160 || img.getBoundingClientRect().top < window.innerHeight) return;
           gsap.fromTo(
             img,
             { clipPath: "inset(6% 4% 6% 4% round 18px)", scale: 1.04 },
@@ -201,7 +204,7 @@ export function MotionProvider() {
               duration: 0.7,
               ease: "expo.out",
               clearProps: "clipPath,transform",
-              scrollTrigger: { trigger: img, start: "top 88%", once: true },
+              scrollTrigger: { trigger: img, start: "top 98%", once: true },
             },
           );
         });
@@ -225,7 +228,7 @@ export function MotionProvider() {
         if (!passed.length) return;
         passed.forEach((el) => pending.splice(pending.indexOf(el), 1));
         gsap.to(passed, { autoAlpha: 1, y: 0, scale: 1, duration: 0.3, overwrite: true, clearProps: "opacity,visibility,transform" });
-      }, 160);
+      }, 80);
     };
     window.addEventListener("scroll", catchUp, { passive: true });
 

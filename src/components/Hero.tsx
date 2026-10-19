@@ -111,7 +111,7 @@ export function Hero() {
           href="https://www.wamda.com/2026/06/cntxt-ai-closes-60-million-series-deploy-secure-ai-infrastructure-worldwide"
         >
           <span>News</span>
-          CNTXT AI raises a $60M Series A, co-led by AI71 and BlueFive Capital
+          <span className={styles.newsText}>CNTXT AI raises a $60M Series A, co-led by AI71 and BlueFive Capital</span>
           <span aria-hidden="true">→</span>
         </a>
         <h1 id="hero-heading">Real-world AI, from data to deployment.</h1>
