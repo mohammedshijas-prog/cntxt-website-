@@ -15,7 +15,7 @@ export function CtaBand({
   secondary?: { label: string; href: string };
 }) {
   return (
-    <section className={styles.band} aria-labelledby={id}>
+    <section className={styles.band} aria-labelledby={id} data-dock="off">
       <div className={styles.mapEdge} aria-hidden="true">
         <img loading="lazy" decoding="async" src="/security/map-left.webp" alt="" />
       </div>

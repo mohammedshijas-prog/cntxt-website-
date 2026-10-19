@@ -3,6 +3,7 @@
 import dynamic from "next/dynamic";
 import { useEffect, useRef, useState } from "react";
 import type { Shot } from "../three/FactoryScene";
+import { useSwipe } from "@/lib/useSwipe";
 import styles from "./factoryWalkthrough.module.css";
 
 const FactoryScene = dynamic(() => import("../three/FactoryScene"), { ssr: false });
@@ -196,12 +197,18 @@ export function PhysicalWorld() {
     window.scrollTo({ top: box.top + window.scrollY + range * t, behavior: "smooth" });
   };
 
+  // On a phone, a sideways swipe on the card turns the page of the walkthrough.
+  const swipe = useSwipe(
+    () => go(Math.min(last, active + 1)),
+    () => go(Math.max(1, active - 1)),
+  );
+
   const chapter = chapters[active];
   const inGroup = chapters.filter((item) => item.group === chapter.group);
   const position = inGroup.indexOf(chapter) + 1;
 
   return (
-    <section ref={section} className={styles.world} aria-labelledby="physical-heading" data-motion="off">
+    <section ref={section} className={styles.world} aria-labelledby="physical-heading" data-motion="off" data-dock="off">
       <div className={styles.sticky}>
         <FactoryScene className={styles.scene} progress={progress} activity={[a0, a1, a2, a3]} shots={shots} />
 
@@ -231,7 +238,7 @@ export function PhysicalWorld() {
           ) : null}
         </div>
 
-        <div className={`${styles.card} ${active === 0 ? styles.hidden : ""}`} aria-live="polite">
+        <div className={`${styles.card} ${active === 0 ? styles.hidden : ""}`} aria-live="polite" {...swipe}>
           {chapter.image ? (
             <div key={chapter.image} className={`${styles.cardImage} ${chapter.imageFit === "contain" ? styles.cardImageContain : ""}`}>
               <img loading="lazy" decoding="async" src={chapter.image} alt="" />

@@ -93,6 +93,7 @@ export function SiteClose({
         className={styles.procurement}
         id={procurementId}
         aria-labelledby="procurement-heading"
+        data-dock="off"
       >
         <div className={styles.mapEdge} aria-hidden="true">
           <img loading="lazy" decoding="async" src="/security/map-left.webp" alt="" />

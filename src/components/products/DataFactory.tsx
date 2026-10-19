@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { iconPaths } from "../shared/graphics";
+import { useSwipe } from "@/lib/useSwipe";
 import styles from "./dataFactory.module.css";
 
 type Glyph = string;
@@ -88,6 +89,16 @@ export function FactoryLine() {
   }, [auto, inView]);
 
   const station = stations[active];
+  const swipe = useSwipe(
+    () => {
+      setActive((value) => Math.min(stations.length - 1, value + 1));
+      setAuto(false);
+    },
+    () => {
+      setActive((value) => Math.max(0, value - 1));
+      setAuto(false);
+    },
+  );
   const at = (active / (stations.length - 1)) * 100;
 
   return (
@@ -127,7 +138,7 @@ export function FactoryLine() {
         ))}
       </div>
 
-      <div className={styles.panel} id="station-panel" role="tabpanel" aria-labelledby={`station-${station.key}`}>
+      <div className={styles.panel} id="station-panel" role="tabpanel" aria-labelledby={`station-${station.key}`} {...swipe}>
         <div key={station.key} className={styles.panelCopy}>
           <h3>{station.title}</h3>
           <p>{station.body}</p>

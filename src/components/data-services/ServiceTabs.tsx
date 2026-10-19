@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useSwipe } from "@/lib/useSwipe";
 import styles from "./dataServices.module.css";
 
 /* Every line below restates docs/content-brief.md (data sourcing, preparation, TestAI, KLKT). */
@@ -124,6 +125,10 @@ function Sample({ kind }: { kind: (typeof services)[number]["sample"] }) {
 export function ServiceTabs() {
   const [active, setActive] = useState(0);
   const service = services[active];
+  const swipe = useSwipe(
+    () => setActive((value) => Math.min(services.length - 1, value + 1)),
+    () => setActive((value) => Math.max(0, value - 1)),
+  );
 
   return (
     <section className={styles.section} aria-labelledby="services-heading">
@@ -149,7 +154,7 @@ export function ServiceTabs() {
         ))}
       </div>
 
-      <div className={styles.panel} id="service-panel" role="tabpanel" aria-labelledby={`service-tab-${active}`}>
+      <div className={styles.panel} id="service-panel" role="tabpanel" aria-labelledby={`service-tab-${active}`} {...swipe}>
         <div key={service.tab} className={styles.copy}>
           <h3>{service.title}</h3>
           <ul>

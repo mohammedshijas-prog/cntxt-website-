@@ -308,3 +308,20 @@
     animation: none;
   }
 }
+
+/* Phones: the card turns with a sideways swipe; say so once, quietly. */
+@media (max-width: 734px) and (pointer: coarse) {
+  .card {
+    touch-action: pan-y;
+  }
+
+  .card::after {
+    content: "Swipe for the next step  ›";
+    display: block;
+    margin-top: var(--space-3);
+    color: var(--label-3);
+    font-family: var(--font-heading);
+    font-size: var(--fs-xs);
+    text-align: center;
+  }
+}

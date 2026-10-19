@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useSwipe } from "@/lib/useSwipe";
 import styles from "./ways.module.css";
 
 /* Facts from docs/content-brief.md (partners, delivery, data, research). */
@@ -96,6 +97,10 @@ function Visual({ index }: { index: number }) {
 export function WaysToPartner() {
   const [active, setActive] = useState(0);
   const way = ways[active];
+  const swipe = useSwipe(
+    () => setActive((value) => Math.min(ways.length - 1, value + 1)),
+    () => setActive((value) => Math.max(0, value - 1)),
+  );
 
   return (
     <section className={styles.section} aria-labelledby="ways-heading">
@@ -121,7 +126,7 @@ export function WaysToPartner() {
         ))}
       </div>
 
-      <div className={styles.panel} id="way-panel" role="tabpanel" aria-labelledby={`way-tab-${active}`}>
+      <div className={styles.panel} id="way-panel" role="tabpanel" aria-labelledby={`way-tab-${active}`} {...swipe}>
         <div key={way.tab} className={styles.copy}>
           <h3>{way.title}</h3>
           <ul>

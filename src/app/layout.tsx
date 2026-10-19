@@ -3,6 +3,7 @@ import { Host_Grotesk, Manrope } from "next/font/google";
 import "lenis/dist/lenis.css";
 import "./globals.css";
 import { MotionProvider } from "../components/motion/MotionProvider";
+import { PhoneDock } from "../components/site/PhoneDock";
 
 // Site-wide type: Host Grotesk for titles and UI, Manrope for descriptions.
 const host = Host_Grotesk({
@@ -73,6 +74,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         {/* End Google Tag Manager (noscript) */}
         {children}
         <MotionProvider />
+        <PhoneDock />
         {/* Cookie banner, as on the current site */}
         <script
           src="https://cookie-consent-cdn-prod.pages.dev/cookie-consent/3.0.33/cookie-consent.js"

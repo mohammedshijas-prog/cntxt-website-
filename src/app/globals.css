@@ -332,4 +332,30 @@ h3 {
   [data-rail] img {
     max-height: 220px;
   }
+
+  /* A thin bar under each rail shows how far along it is, so people know it swipes. */
+  @supports (animation-timeline: scroll()) {
+    [data-rail] {
+      background:
+        linear-gradient(var(--accent), var(--accent)) var(--pad-x) 100% / 18% 3px no-repeat,
+        linear-gradient(var(--separator), var(--separator)) var(--pad-x) 100% / calc(100% - var(--pad-x) * 2) 3px no-repeat;
+      animation: rail-progress linear both;
+      animation-timeline: scroll(self inline);
+    }
+  }
+
+  /* Form fields at 16px: iOS zooms the page into anything smaller. */
+  input,
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+}
+
+@keyframes rail-progress {
+  to {
+    background-size:
+      calc(100% - var(--pad-x) * 2) 3px,
+      calc(100% - var(--pad-x) * 2) 3px;
+  }
 }
