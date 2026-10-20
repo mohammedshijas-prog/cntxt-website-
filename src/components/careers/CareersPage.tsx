@@ -9,7 +9,6 @@ import styles from "./careers.module.css";
 import { faqs } from "../shared/faqs";
 import { Faq } from "../shared/Faq";
 
-const applyHref = "https://www.cntxt.tech/career";
 
 const culture = [
   {
@@ -34,61 +33,34 @@ const culture = [
   },
 ];
 
-const photos = [
-  { src: "/about/team.webp", width: 161, height: 163 },
-  { src: "/security/practice-a.png", width: 308, height: 311 },
-  { src: "/industries/hospitality.jpg", width: 308, height: 311 },
-  { src: "/industries/government.jpg", width: 161, height: 163 },
-];
 
-const remote = { location: "Remote", terms: "Hourly contract" };
 
-const roles = [
-  { id: "eval-biology", title: "AI evaluator, Biology", department: "AI evaluation", ...remote },
-  { id: "eval-medical", title: "AI evaluator, Medical", department: "AI evaluation", ...remote },
-  { id: "eval-financial", title: "AI evaluator, Financial", department: "AI evaluation", ...remote },
-  { id: "coding-cpp", title: "Coding expert, C++", department: "Coding", ...remote },
-  { id: "coding-python", title: "Coding expert, Python", department: "Coding", ...remote },
-  {
-    id: "annotator-es-en",
-    title: "Bilingual annotator, Spanish/English",
-    department: "Data annotation",
-    ...remote,
-  },
-  {
-    id: "annotator-de-en",
-    title: "Bilingual annotator, German/English",
-    department: "Data annotation",
-    ...remote,
-  },
-  {
-    id: "robotics-data",
-    title: "Robotics data collector",
-    department: "Robotics data collection",
-    location: "Multiple countries",
-    terms: "Details on the application page",
-  },
-];
+/** A role as the careers board shows it; the list comes from the portal (Supabase). */
+export type RoleCard = { slug: string; title: string; department: string; location: string; terms: string };
 
 const benefits = [
   {
     number: "01",
     title: "Mentorship",
+    image: "/about/team.webp",
     body: "You work alongside people who have done the job before and who make time to show you how.",
   },
   {
     number: "02",
     title: "Hands-on projects",
+    image: "/brand/product/label-video.webp",
     body: "You work on live projects from the start: data collection, annotation, model evaluation and custom AI builds.",
   },
   {
     number: "03",
     title: "Professional certifications",
+    image: "/security/practice-a.webp",
     body: "We support professional certifications that are relevant to your role.",
   },
   {
     number: "04",
     title: "Remote and on-site options",
+    image: "/industries/government.jpg",
     body: "Some roles are fully remote and some are on site. Each listing says which.",
   },
 ];
@@ -163,18 +135,18 @@ function Filter({
   );
 }
 
-export function CareersPage() {
+export function CareersPage({ roles }: { roles: RoleCard[] }) {
   const [location, setLocation] = useState("all");
   const [department, setDepartment] = useState("all");
   const [openBenefit, setOpenBenefit] = useState(0);
 
   const locations = useMemo(
     () => [...new Set(roles.map((role) => role.location))],
-    [],
+    [roles],
   );
   const departments = useMemo(
     () => [...new Set(roles.map((role) => role.department))],
-    [],
+    [roles],
   );
   const visible = roles.filter(
     (role) =>
@@ -237,23 +209,19 @@ export function CareersPage() {
           </div>
           <ul className={styles.roles}>
             {visible.length === 0 ? (
-              <li className={styles.empty}>No open roles match these filters.</li>
+              <li className={styles.empty}>{roles.length ? "No open roles match these filters." : "No open roles right now. Check back soon."}</li>
             ) : (
               visible.map((role) => (
-                <li key={role.id}>
+                <li key={role.slug}>
                   <div>
                     <h3>{role.title}</h3>
                     <p>
                       {role.location} · {role.terms}
                     </p>
                   </div>
-                  <button
-                    type="button"
-                    aria-label={`Apply for ${role.title} on cntxt.tech (opens in a new tab)`}
-                    onClick={() => window.open(applyHref, "_blank", "noopener,noreferrer")}
-                  >
+                  <a className={styles.apply} href={`/careers/${role.slug}`} aria-label={`Apply for ${role.title}`}>
                     Apply for role
-                  </button>
+                  </a>
                 </li>
               ))
             )}
@@ -287,7 +255,14 @@ export function CareersPage() {
             })}
           </div>
           <div className={styles.benefitPhoto}>
-            <img loading="lazy" decoding="async" src="/partners/hero.webp" alt="" />
+            {/* Each benefit has its own photo; it swaps with the open item. */}
+            <img
+              key={benefits[Math.max(openBenefit, 0)].image}
+              loading="lazy"
+              decoding="async"
+              src={benefits[Math.max(openBenefit, 0)].image}
+              alt=""
+            />
             <span>{benefits[Math.max(openBenefit, 0)].number}</span>
           </div>
         </div>

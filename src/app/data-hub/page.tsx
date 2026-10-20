@@ -1,6 +1,7 @@
 import { Geist_Mono } from "next/font/google";
 import type { Metadata } from "next";
 import { DataHubPage } from "@/components/data-hub/DataHubPage";
+import { publishedDatasets } from "@/lib/supabase/server";
 
 const geistMono = Geist_Mono({
   subsets: ["latin"],
@@ -22,9 +23,21 @@ export default async function DataHub({
 }) {
   // Menu links such as /data-hub?category=Audio open with that category chosen.
   const { category } = await searchParams;
+  // The catalogue is managed in the portal.
+  const datasets = (await publishedDatasets()).map(({ id, title, kind, category: modality, blurb, capture, labels, sample_url, sample_name }) => ({
+    id,
+    title,
+    kind,
+    category: modality,
+    blurb,
+    capture,
+    labels,
+    sample_url,
+    sample_name,
+  }));
   return (
     <div className={geistMono.variable}>
-      <DataHubPage initialCategory={typeof category === "string" ? category : undefined} />
+      <DataHubPage initialCategory={typeof category === "string" ? category : undefined} datasets={datasets} />
     </div>
   );
 }

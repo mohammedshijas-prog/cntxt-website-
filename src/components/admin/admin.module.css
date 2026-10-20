@@ -583,3 +583,107 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* ---------------------------------------------------------- Careers and catalogue */
+.tabs {
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.tabs button {
+  flex: none;
+  white-space: nowrap;
+}
+
+.reviewing,
+.scoping,
+.draft {
+  background: var(--accent-tint);
+  color: var(--accent-text);
+}
+
+.interview,
+.offer {
+  background: #e6f0ff;
+  color: #1f56b8;
+}
+
+.hired,
+.delivered,
+.open,
+.published {
+  background: #e7f9ef;
+  color: #1c7a4a;
+}
+
+.rejected {
+  background: #f3f1f6;
+  color: #6b6478;
+}
+
+.stages {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--separator);
+}
+
+.notesField {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 10px 0;
+  font-family: var(--font-heading);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.countBadge {
+  display: grid;
+  flex: none;
+  min-width: 44px;
+  height: 44px;
+  padding: 0 8px;
+  place-items: center;
+  border-radius: 12px;
+  background: var(--bg-2);
+  color: var(--accent-text);
+  font-family: var(--font-heading);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.demand {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 16px;
+  padding: 0;
+  list-style: none;
+}
+
+.demand li {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  padding: 6px 12px 6px 6px;
+  border-radius: 999px;
+  background: var(--bg-2);
+  font-family: var(--font-heading);
+  font-size: 13px;
+}
+
+.demand strong {
+  display: grid;
+  min-width: 26px;
+  height: 26px;
+  place-items: center;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #ffffff;
+  font-size: 12px;
+}

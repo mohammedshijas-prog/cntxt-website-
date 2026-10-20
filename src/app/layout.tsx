@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { JsonLd, organization, website } from "@/lib/seo";
 import { Host_Grotesk, Manrope } from "next/font/google";
 import "lenis/dist/lenis.css";
@@ -40,6 +40,12 @@ export const metadata: Metadata = {
     description,
     images: ["/og.png"],
   },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: "#ffffff",
 };
 
 /*

@@ -23,8 +23,11 @@ export function Hero() {
     const hero = sectionRef.current;
     const video = videoRef.current;
     if (!hero || !video) return;
-    // On Data Saver or a 2G/3G connection the poster stands in for the 1.5 MB clip.
-    if (!slowNetwork() && !video.getAttribute("src")) video.src = "/home/hero-video.mp4";
+    // On Data Saver or a 2G/3G connection the poster stands in for the clip. Phones get a
+    // portrait centre-crop (675 KB) instead of the full-width 1.5 MB file they would mostly crop away.
+    if (!slowNetwork() && !video.getAttribute("src")) {
+      video.src = window.matchMedia("(max-width: 734px)").matches ? "/home/hero-video-m.mp4" : "/home/hero-video.mp4";
+    }
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
     let frame = 0;
     let last = -1;

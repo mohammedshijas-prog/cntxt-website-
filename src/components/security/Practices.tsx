@@ -7,7 +7,7 @@ const slides = [
   {
     category: "Access",
     title: "Access control and logging",
-    image: "/security/practice-a.png",
+    image: "/security/practice-a.webp",
     body: "Role-based access, and every access logged.",
   },
   {

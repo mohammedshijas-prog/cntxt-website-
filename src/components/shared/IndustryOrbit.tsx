@@ -21,18 +21,18 @@ type Industry = {
 const industries: Industry[] = [
   // Left side
   { label: "AI labs", href: "/physical-ai", image: "/art/cover-12.svg", x: 3, y: 6, size: 132, drift: 10, speed: 0.9, phase: 0 },
-  { label: "Government", href: "/industries/public-sector", image: "/industries/government.jpg", x: 19, y: 3, size: 116, drift: 10, speed: 1.05, phase: 1.7 },
-  { label: "Energy", href: "/solutions", image: "/healthcare/tile-energy.webp", x: 13, y: 33, size: 128, drift: 11, speed: 0.85, phase: 3.1 },
-  { label: "Finance", href: "/industries/financial-services", image: "/healthcare/tile-chart.webp", x: 2, y: 55, size: 112, drift: 10, speed: 1.1, phase: 0.8 },
-  { label: "Healthcare", href: "/healthcare", image: "/healthcare/tile-lab.webp", x: 20, y: 64, size: 124, drift: 11, speed: 0.95, phase: 2.4 },
-  { label: "Insurance", href: "/industries/insurance", image: "/security/practice-a.png", x: 6, y: 80, size: 108, drift: 10, speed: 1, phase: 4.6 },
+  { label: "Government", href: "/industries/public-sector", image: "/home/tiles/government.webp", x: 19, y: 3, size: 116, drift: 10, speed: 1.05, phase: 1.7 },
+  { label: "Energy", href: "/solutions", image: "/home/tiles/tile-energy.webp", x: 13, y: 33, size: 128, drift: 11, speed: 0.85, phase: 3.1 },
+  { label: "Finance", href: "/industries/financial-services", image: "/home/tiles/tile-chart.webp", x: 2, y: 55, size: 112, drift: 10, speed: 1.1, phase: 0.8 },
+  { label: "Healthcare", href: "/healthcare", image: "/home/tiles/tile-lab.webp", x: 20, y: 64, size: 124, drift: 11, speed: 0.95, phase: 2.4 },
+  { label: "Insurance", href: "/industries/insurance", image: "/home/tiles/practice-a.webp", x: 6, y: 80, size: 108, drift: 10, speed: 1, phase: 4.6 },
   // Right side
-  { label: "Logistics", href: "/solutions", image: "/healthcare/tile-ship.webp", x: 72, y: 3, size: 120, drift: 10, speed: 1, phase: 4.4 },
-  { label: "Hospitality", href: "/solutions", image: "/industries/hospitality.jpg", x: 88, y: 8, size: 128, drift: 11, speed: 0.95, phase: 2.2 },
-  { label: "Robotics", href: "/physical-ai", image: "/healthcare/tile-robot.webp", x: 79, y: 36, size: 132, drift: 11, speed: 0.75, phase: 5.1 },
-  { label: "Real estate", href: "/industries/real-estate", image: "/solutions/study-4.webp", x: 90, y: 56, size: 108, drift: 10, speed: 1.05, phase: 1.1 },
-  { label: "Retail", href: "/solutions", image: "/security/practice-b.png", x: 73, y: 66, size: 120, drift: 10, speed: 1.1, phase: 3.6 },
-  { label: "Aviation", href: "/solutions", image: "/solutions/study-3.webp", x: 87, y: 81, size: 108, drift: 10, speed: 0.9, phase: 0.4 },
+  { label: "Logistics", href: "/solutions", image: "/home/tiles/tile-ship.webp", x: 72, y: 3, size: 120, drift: 10, speed: 1, phase: 4.4 },
+  { label: "Hospitality", href: "/solutions", image: "/home/tiles/hospitality.webp", x: 88, y: 8, size: 128, drift: 11, speed: 0.95, phase: 2.2 },
+  { label: "Robotics", href: "/physical-ai", image: "/home/tiles/tile-robot.webp", x: 79, y: 36, size: 132, drift: 11, speed: 0.75, phase: 5.1 },
+  { label: "Real estate", href: "/industries/real-estate", image: "/home/tiles/study-4.webp", x: 90, y: 56, size: 108, drift: 10, speed: 1.05, phase: 1.1 },
+  { label: "Retail", href: "/solutions", image: "/home/tiles/practice-b.webp", x: 73, y: 66, size: 120, drift: 10, speed: 1.1, phase: 3.6 },
+  { label: "Aviation", href: "/solutions", image: "/home/tiles/study-3.webp", x: 87, y: 81, size: 108, drift: 10, speed: 0.9, phase: 0.4 },
 ];
 
 /** Meeting points where the two sides join, above and below the copy (% of the section). */

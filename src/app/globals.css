@@ -359,3 +359,12 @@ h3 {
       calc(100% - var(--pad-x) * 2) 3px;
   }
 }
+
+/* Touch: no double-tap zoom wait on controls, and no grey flash; :active states give the feedback. */
+a,
+button,
+summary,
+[role="tab"] {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}

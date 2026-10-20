@@ -204,7 +204,7 @@ export const industries: Industry[] = [
     name: "Insurance",
     topic: "Custom AI solutions",
     eyebrow: "Insurance",
-    image: "/security/practice-a.png",
+    image: "/security/practice-a.webp",
     title: "Claims that are right the first time.",
     lead: "Real-time AI validation catches errors while a claim is being submitted, so fewer are rejected and reviewers spend their time on the hard cases.",
     description:

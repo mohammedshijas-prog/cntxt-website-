@@ -109,7 +109,7 @@ const sectors = [
   { group: "Government", name: "Public sector", line: "Sovereign AI trained on policies, regulations and official records.", href: "/industries/public-sector", image: "/industries/government.jpg" },
   { group: "Enterprise", name: "Healthcare", line: "Medical evaluation, healthcare annotation and Arabic clinical speech.", href: "/healthcare", image: "/healthcare/tile-lab.webp" },
   { group: "Enterprise", name: "Real estate", line: "One data foundation for sales, finance, HR and marketing.", href: "/industries/real-estate", image: "/solutions/study-4.webp" },
-  { group: "Enterprise", name: "Insurance", line: "Claims validated in real time, before they are submitted.", href: "/industries/insurance", image: "/security/practice-a.png" },
+  { group: "Enterprise", name: "Insurance", line: "Claims validated in real time, before they are submitted.", href: "/industries/insurance", image: "/security/practice-a.webp" },
   { group: "Physical AI", name: "Robotics", line: "First-person video of real work, recorded with consent and labelled.", href: "/physical-ai", image: "/healthcare/tile-robot.webp" },
 ];
 

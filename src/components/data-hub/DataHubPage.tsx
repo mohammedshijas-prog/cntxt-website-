@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { SiteClose } from "../site/SiteClose";
 import { SiteNav } from "../site/SiteNav";
 import { NumberField } from "./NumberField";
+import { RequestPanel, SampleLink } from "./RequestPanel";
 import { IconChip } from "../shared/graphics";
 import styles from "./data-hub.module.css";
 import { CtaBand } from "../shared/CtaBand";
@@ -39,7 +40,9 @@ const categories = [
 const sorts = ["A to Z", "Z to A"];
 const kinds = ["All types", "Captured data", "Labelled data"];
 
-type CodeSet = {
+type Sample = { sample_url?: string | null; sample_name?: string | null };
+
+type CodeSet = Sample & {
   id: string;
   kind: "code";
   title: string;
@@ -50,7 +53,7 @@ type CodeSet = {
   age: number;
 };
 
-type AgentSet = {
+type AgentSet = Sample & {
   id: string;
   kind: "agent";
   title: string;
@@ -60,137 +63,19 @@ type AgentSet = {
   age: number;
 };
 
-// Data CNTXT captures itself. `age` only fixes the display order.
-const codeSets: CodeSet[] = [
-  {
-    id: "code-1",
-    kind: "code",
-    title: "Arabic conversational speech",
-    category: "Audio",
-    badge: "Audio",
-    blurb:
-      "Recorded conversations across Arabic dialects, transcribed and checked by native Arabic annotators.",
-    capture: "Recorded conversation",
-    age: 1,
-  },
-  {
-    id: "code-2",
-    kind: "code",
-    title: "Handwritten Arabic pages",
-    category: "Document",
-    badge: "Document",
-    blurb:
-      "Photographs of handwritten Arabic pages, submitted through the KLKT app and accepted only after human review.",
-    capture: "Phone photograph",
-    age: 2,
-  },
-  {
-    id: "code-3",
-    kind: "code",
-    title: "First-person video of warehouse work",
-    category: "Video",
-    badge: "Video",
-    blurb:
-      "Head- and wrist-camera recordings of picking, packing and shelf stocking, made by consenting workers for robotics training.",
-    capture: "Head and wrist cameras",
-    age: 3,
-  },
-  {
-    id: "code-4",
-    kind: "code",
-    title: "First-person video of service work",
-    category: "Video",
-    badge: "Video",
-    blurb:
-      "Hands-free recordings of kitchen work, housekeeping, laundry, cleaning and hospital portering, each confirmed by human review.",
-    capture: "Head and wrist cameras",
-    age: 4,
-  },
-];
 
-// Labelling and evaluation work CNTXT carries out on request.
-const agentSets: AgentSet[] = [
-  {
-    id: "agent-1",
-    kind: "agent",
-    title: "Transcribed audio",
-    category: "Audio",
-    blurb:
-      "Audio transcribed, timestamped and split by speaker. Native Arabic annotators cover more than 25 dialects.",
-    labels: ["Transcription", "Diarisation"],
-    age: 1,
-  },
-  {
-    id: "agent-2",
-    kind: "agent",
-    title: "Sentiment and entity labels",
-    category: "Text",
-    blurb:
-      "Text labelled for sentiment and named entities, with human-in-the-loop quality assurance at 98% labelling accuracy.",
-    labels: ["Sentiment", "Entities"],
-    age: 2,
-  },
-  {
-    id: "agent-3",
-    kind: "agent",
-    title: "Content moderation labels",
-    category: "Text",
-    blurb:
-      "Text reviewed and labelled against your moderation policy, in Arabic and English, with human quality assurance.",
-    labels: ["Moderation", "Policy review"],
-    age: 3,
-  },
-  {
-    id: "agent-4",
-    kind: "agent",
-    title: "Ranked model responses",
-    category: "Text",
-    blurb:
-      "Prompts annotated and model responses ranked by people, for fine-tuning and evaluation.",
-    labels: ["Eval ranking", "Prompt annotation"],
-    age: 4,
-  },
-  {
-    id: "agent-5",
-    kind: "agent",
-    title: "Annotated images",
-    category: "Image",
-    blurb:
-      "Images labelled with bounding boxes and segmentation masks, with human-in-the-loop quality assurance at 98% labelling accuracy.",
-    labels: ["Bounding boxes", "Segmentation"],
-    age: 5,
-  },
-  {
-    id: "agent-6",
-    kind: "agent",
-    title: "Action-labelled video",
-    category: "Video",
-    blurb:
-      "Video labelled frame by frame with the actions it shows, including first-person recordings of real work.",
-    labels: ["Action labels", "Frame by frame"],
-    age: 6,
-  },
-  {
-    id: "agent-7",
-    kind: "agent",
-    title: "Annotated LiDAR",
-    category: "3D",
-    blurb:
-      "LiDAR scans annotated for perception models, with human review before delivery.",
-    labels: ["LiDAR", "Human review"],
-    age: 7,
-  },
-  {
-    id: "agent-8",
-    kind: "agent",
-    title: "Expert evaluation sets",
-    category: "Evaluation",
-    blurb:
-      "Test sets written and graded by domain experts in fields such as finance, healthcare, logistics and government.",
-    labels: ["Domain experts", "Model evaluation"],
-    age: 7,
-  },
-];
+/** A dataset as the catalogue receives it from the portal (Supabase). */
+export type CatalogueItem = {
+  id: string;
+  title: string;
+  kind: "captured" | "labelled";
+  category: string;
+  blurb: string;
+  capture: string;
+  labels: string[];
+  sample_url: string | null;
+  sample_name: string | null;
+};
 
 function matchesQuery(text: string, query: string) {
   return text.toLowerCase().includes(query.trim().toLowerCase());
@@ -288,7 +173,16 @@ function Snippet({ item }: { item: CodeSet }) {
   );
 }
 
-export function DataHubPage({ initialCategory }: { initialCategory?: string }) {
+export function DataHubPage({ initialCategory, datasets }: { initialCategory?: string; datasets: CatalogueItem[] }) {
+  const codeSets: CodeSet[] = datasets
+    .filter((item) => item.kind === "captured")
+    .map((item, age) => ({ ...item, kind: "code", badge: item.category, age }));
+  const agentSets: AgentSet[] = datasets
+    .filter((item) => item.kind === "labelled")
+    .map((item, age) => ({ ...item, kind: "agent", labels: [item.labels[0] ?? "", item.labels[1] ?? ""], age }));
+  const [asking, setAsking] = useState(false);
+  const toggle = (id: string) =>
+    setRequested((current) => (current.includes(id) ? current.filter((item) => item !== id) : [...current, id]));
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState(
     initialCategory && categories.includes(initialCategory) ? initialCategory : "All",
@@ -415,6 +309,12 @@ export function DataHubPage({ initialCategory }: { initialCategory?: string }) {
                     <img loading="lazy" decoding="async" src="/data-hub/arrow.svg" alt="" width={24} height={24} />
                   </div>
                   <p>{item.blurb}</p>
+                  <div className={styles.cardActions}>
+                    <button type="button" aria-pressed={requested.includes(item.id)} onClick={() => toggle(item.id)}>
+                      {requested.includes(item.id) ? "Added ✓" : "Add to request"}
+                    </button>
+                    <SampleLink item={item} />
+                  </div>
                 </div>
               </li>
             ))}
@@ -424,19 +324,14 @@ export function DataHubPage({ initialCategory }: { initialCategory?: string }) {
         {requested.length > 0 ? (
           <div className={styles.requestBar} role="status">
             <p>
-              <strong>{requested.length}</strong> {requested.length === 1 ? "category" : "categories"} in your request
+              <strong>{requested.length}</strong> {requested.length === 1 ? "dataset" : "datasets"} in your request
             </p>
             <button type="button" className={styles.requestClear} onClick={() => setRequested([])}>
               Clear
             </button>
-            <a
-              href={`/contact?${new URLSearchParams({
-                topic: "Data services",
-                about: agentSets.filter((item) => requested.includes(item.id)).map((item) => item.title).join(", "),
-              })}`}
-            >
+            <button type="button" className={styles.requestGo} onClick={() => setAsking(true)}>
               Request these →
-            </a>
+            </button>
           </div>
         ) : null}
 
@@ -458,19 +353,12 @@ export function DataHubPage({ initialCategory }: { initialCategory?: string }) {
                       <li>{item.labels[0]}</li>
                       <li>{item.labels[1]}</li>
                     </ul>
-                    <button
-                      type="button"
-                      aria-pressed={isRequested}
-                      onClick={() =>
-                        setRequested((current) =>
-                          current.includes(item.id)
-                            ? current.filter((id) => id !== item.id)
-                            : [...current, item.id],
-                        )
-                      }
-                    >
-                      {isRequested ? "Added ✓" : "Add to request"}
-                    </button>
+                    <div className={styles.cardActions}>
+                      <button type="button" aria-pressed={isRequested} onClick={() => toggle(item.id)}>
+                        {isRequested ? "Added ✓" : "Add to request"}
+                      </button>
+                      <SampleLink item={item} />
+                    </div>
                   </div>
                 </li>
               );
@@ -478,6 +366,14 @@ export function DataHubPage({ initialCategory }: { initialCategory?: string }) {
           </ul>
         ) : null}
       </section>
+
+      {asking ? (
+        <RequestPanel
+          items={datasets.filter((item) => requested.includes(item.id))}
+          onClose={() => setAsking(false)}
+          onSent={() => setRequested([])}
+        />
+      ) : null}
 
       <Faq items={faqs.dataHub} topic="Data services" />
 

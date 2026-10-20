@@ -5,6 +5,9 @@ import Link from "next/link";
 import { renderMarkdown } from "@/lib/markdown";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { supabaseBrowser } from "@/lib/supabase/browser";
+import { Applications, Roles } from "./AdminCareers";
+import { Catalogue, DataRequests } from "./AdminCatalogue";
+import { slugify, when } from "./shared";
 import styles from "./admin.module.css";
 
 type Submission = {
@@ -38,16 +41,25 @@ type Post = {
 
 const categories = ["Arabic AI", "Data", "Evaluation", "Agents", "Industry"];
 const blank: Post = { slug: "", title: "", excerpt: "", category: "Data", cover_url: null, body: "", author: "CNTXT AI", status: "draft", published_at: null };
-const slugify = (text: string) => text.toLowerCase().trim().replace(/[^a-z0-9\s-]/g, "").replace(/\s+/g, "-").replace(/-+/g, "-").replace(/^-|-$/g, "").slice(0, 80);
-const when = (iso: string) => new Date(iso).toLocaleString("en-GB", { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" });
 
-/** The CNTXT portal: form submissions, blog publishing and the team allowlist. */
+const tabs = {
+  submissions: "Form submissions",
+  applications: "Applications",
+  roles: "Roles",
+  requests: "Data requests",
+  catalogue: "Catalogue",
+  posts: "Blog posts",
+  team: "Team",
+} as const;
+type Tab = keyof typeof tabs;
+
+/** The CNTXT portal: submissions, job applications, dataset requests, roles, the catalogue, blog posts and the team. */
 export function AdminPortal() {
   const db = useMemo(() => supabaseBrowser(), []);
   const [session, setSession] = useState<Session | null>(null);
   const [ready, setReady] = useState(false);
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
-  const [tab, setTab] = useState<"submissions" | "posts" | "team">("submissions");
+  const [tab, setTab] = useState<Tab>("submissions");
 
   useEffect(() => {
     db.auth.getSession().then(({ data }) => {
@@ -88,9 +100,9 @@ export function AdminPortal() {
           <span>Portal</span>
         </Link>
         <nav className={styles.tabs} aria-label="Portal sections">
-          {(["submissions", "posts", "team"] as const).map((item) => (
+          {(Object.keys(tabs) as Tab[]).map((item) => (
             <button key={item} className={tab === item ? styles.tabOn : ""} onClick={() => setTab(item)}>
-              {item === "submissions" ? "Form submissions" : item === "posts" ? "Blog posts" : "Team"}
+              {tabs[item]}
             </button>
           ))}
         </nav>
@@ -104,6 +116,10 @@ export function AdminPortal() {
       <main className={styles.main}>
         {tab === "submissions" ? <Submissions /> : null}
         {tab === "posts" ? <Posts /> : null}
+        {tab === "applications" ? <Applications /> : null}
+        {tab === "roles" ? <Roles /> : null}
+        {tab === "requests" ? <DataRequests /> : null}
+        {tab === "catalogue" ? <Catalogue /> : null}
         {tab === "team" ? <Team session={session} /> : null}
       </main>
     </div>
@@ -539,7 +555,7 @@ function Team({ session }: { session: Session }) {
       <div className={styles.head}>
         <div>
           <h1>Team</h1>
-          <p>People on this list can sign in, see submissions and publish posts.</p>
+          <p>People on this list can sign in and manage everything in the portal.</p>
         </div>
       </div>
       <form
