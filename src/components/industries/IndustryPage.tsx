@@ -128,24 +128,43 @@ export function IndustryPage({ industry }: { industry: Industry }) {
       </section>
       ) : null}
 
-      {/* Proof: the published case, told as one line from challenge to result. */}
+      {/* Proof: the published case. The story on the left, the result beside it. */}
       <section className={styles.story} aria-labelledby="study-heading">
-        <div className={styles.storyCard}>
-        <header className={styles.storyHead}>
-          <p className={styles.kicker}>Published case · {industry.study.sector}</p>
-          <h2 id="study-heading">{industry.study.title}</h2>
-        </header>
-        <ol className={styles.storyLine}>
-          <li>
-            <span className={styles.storyStep}>01 · The challenge</span>
-            <p>{industry.study.challenge}</p>
-          </li>
-          <li>
-            <span className={styles.storyStep}>02 · What we did</span>
-            <p>{industry.study.solution}</p>
-          </li>
-          <li className={styles.storyResult}>
-            <span className={styles.storyStep}>03 · The result</span>
+        <div className={styles.caseCard}>
+          <div className={styles.caseMain}>
+            <p className={styles.kicker}>Published case · {industry.study.sector}</p>
+            <h2 id="study-heading">{industry.study.title}</h2>
+            <ol className={styles.caseSteps}>
+              <li>
+                <span>01</span>
+                <div>
+                  <h3>The challenge</h3>
+                  <p>{industry.study.challenge}</p>
+                </div>
+              </li>
+              <li>
+                <span>02</span>
+                <div>
+                  <h3>What we did</h3>
+                  <p>{industry.study.solution}</p>
+                </div>
+              </li>
+            </ol>
+            {industry.quote ? (
+              <figure className={styles.caseQuote}>
+                <blockquote>“{industry.quote.text}”</blockquote>
+                <figcaption>
+                  <img loading="lazy" decoding="async" src={industry.quote.photo} alt="" width={40} height={40} />
+                  <span>
+                    <strong>{industry.quote.name}</strong>
+                    {industry.quote.role}
+                  </span>
+                </figcaption>
+              </figure>
+            ) : null}
+          </div>
+          <aside className={styles.caseResults} aria-label="The result">
+            <p>03 · The result</p>
             <dl>
               {industry.study.stats.map((stat) => (
                 <div key={stat.label}>
@@ -154,19 +173,7 @@ export function IndustryPage({ industry }: { industry: Industry }) {
                 </div>
               ))}
             </dl>
-          </li>
-        </ol>
-        {industry.quote ? (
-          <figure className={styles.storyQuote}>
-            <blockquote>“{industry.quote.text}”</blockquote>
-            <figcaption>
-              <img loading="lazy" decoding="async" src={industry.quote.photo} alt="" width={40} height={40} />
-              <span>
-                <strong>{industry.quote.name}</strong> · {industry.quote.role}
-              </span>
-            </figcaption>
-          </figure>
-        ) : null}
+          </aside>
         </div>
       </section>
 
