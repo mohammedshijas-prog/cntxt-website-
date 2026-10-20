@@ -471,3 +471,9 @@
   position: absolute;
   inset: 0;
 }
+
+/* How we work uses the shared tall-card accordion; give it the page's soft band. */
+.cultureCards {
+  padding-bottom: var(--section-y);
+  background: var(--bg-2);
+}

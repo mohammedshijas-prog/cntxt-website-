@@ -154,6 +154,24 @@ export const faqs = {
       a: "Use the form on this page: tell us what you do, where you operate and how you would like to work together.",
     },
   ],
+  agentix: [
+    {
+      q: "Which languages and dialects does Agentix speak?",
+      a: "Arabic dialects, with Khaleeji, Emirati, Najdi and Hijazi voices on Faseeh Arabic speech models, plus English, Hindi and French.",
+    },
+    {
+      q: "Which channels does it answer on?",
+      a: "Voice on UAE, KSA, Qatar and international numbers over SIP and WebRTC, plus WhatsApp, web chat, app, email and SMS, in one conversation.",
+    },
+    {
+      q: "Will it work with our phone system?",
+      a: "Yes. Agentix is SIP, PABX, Cisco and Avaya compatible, and works with providers such as Maqsam, 3CX, Telnyx, Twilio and Yeastar.",
+    },
+    {
+      q: "Where does it run, and how long does setup take?",
+      a: "In GCC cloud, a private VPC or on-premises. Standard onboarding takes under two days.",
+    },
+  ],
   careers: [
     {
       q: "Are the roles remote?",

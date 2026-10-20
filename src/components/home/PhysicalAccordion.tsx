@@ -13,6 +13,8 @@ export type Segment = {
   tone: "lilac" | "mist" | "violet" | "pearl";
   /** A photograph rather than line art: shown full-bleed under a soft fade. */
   photo?: boolean;
+  /** Link text on the open card; "Read more" when not set. */
+  cta?: string;
 };
 
 const segments: Segment[] = [
@@ -109,7 +111,7 @@ export function PhysicalAccordion({
                 <strong>{item.name}</strong>
                 <span>{item.body}</span>
                 <em>
-                  Read more <span aria-hidden="true">→</span>
+                  {item.cta ?? "Read more"} <span aria-hidden="true">→</span>
                 </em>
               </span>
             </a>

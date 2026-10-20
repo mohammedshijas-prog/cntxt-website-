@@ -7,31 +7,45 @@ import { CtaBand } from "../shared/CtaBand";
 import { SiteNav } from "../site/SiteNav";
 import dynamic from "next/dynamic";
 import { CareerDots } from "./CareerDots";
+import { PhysicalAccordion, type Segment } from "../home/PhysicalAccordion";
 import styles from "./careers.module.css";
 import { faqs } from "../shared/faqs";
 import { Faq } from "../shared/Faq";
 
 
-const culture = [
+/* How we work, as the site's tall line-art cards (the "Built for physical AI" pattern). */
+const culture: Segment[] = [
   {
-    src: "/careers/culture-1.webp",
-    title: "Culture is delivery.",
+    name: "Culture is delivery",
     body: "We judge work by what reaches the people who use it.",
+    art: "/art/lines/culture-1.webp",
+    href: "/about",
+    cta: "About CNTXT",
+    tone: "lilac",
   },
   {
-    src: "/careers/culture-2.webp",
-    title: "Built for real problems.",
+    name: "Built for real problems",
     body: "We start from real workplaces, not lab demos.",
+    art: "/art/lines/culture-2.webp",
+    href: "/solutions",
+    cta: "See what we build",
+    tone: "mist",
   },
   {
-    src: "/careers/culture-3.webp",
-    title: "Work hard. Play bold.",
+    name: "Work hard. Play bold.",
     body: "Say what you think, try the bold option, own the result.",
+    art: "/art/lines/culture-3.webp",
+    href: "#openings",
+    cta: "See open roles",
+    tone: "violet",
   },
   {
-    src: "/careers/culture-4.webp",
-    title: "Room to grow.",
+    name: "Room to grow",
     body: "Mentorship, real projects and certifications, remote or on site.",
+    art: "/art/lines/culture-4.webp",
+    href: "#benefits-heading",
+    cta: "See the benefits",
+    tone: "pearl",
   },
 ];
 
@@ -174,22 +188,15 @@ export function CareersPage({ roles }: { roles: RoleCard[] }) {
         }
       />
 
-      <section className={styles.culture} aria-labelledby="culture-heading">
-        <Eyebrow>Culture</Eyebrow>
-        <h2 id="culture-heading">
-          How we <span>work</span>
-        </h2>
-        <ul data-rail>
-          {culture.map((item) => (
-            <li key={item.src} data-tilt>
-              <img loading="lazy" decoding="async" src={item.src} alt="" />
-              <p>
-                <strong>{item.title}</strong> {item.body}
-              </p>
-            </li>
-          ))}
-        </ul>
-      </section>
+      <div className={styles.cultureCards}>
+        <PhysicalAccordion
+          items={culture}
+          headingId="culture-heading"
+          title="How we work"
+          body="What working at CNTXT is like."
+          button={false}
+        />
+      </div>
 
       <section className={styles.openings} id="openings" aria-labelledby="openings-heading">
         <h2 id="openings-heading">
