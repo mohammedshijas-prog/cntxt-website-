@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { renderMarkdown } from "@/lib/markdown";
 import { supabaseBrowser } from "@/lib/supabase/browser";
+import type { PortalRole } from "./AdminPortal";
 import { downloadCsv, slugify, when } from "./shared";
 import styles from "./admin.module.css";
 
@@ -68,7 +69,8 @@ const stages: Application["status"][] = ["new", "reviewing", "interview", "offer
 const blankRole: Role = { slug: "", title: "", department: "", location: "Remote", terms: "", summary: "", description: "", status: "draft", sort: 100 };
 
 /* ------------------------------------------------------------ Applications */
-export function Applications() {
+export function Applications({ role: me }: { role: PortalRole }) {
+  const canDelete = me === "admin" || me === "hr_head";
   const db = useMemo(() => supabaseBrowser(), []);
   const [rows, setRows] = useState<Application[]>([]);
   const [query, setQuery] = useState("");
@@ -237,9 +239,11 @@ export function Applications() {
                     <button className={styles.secondary} onClick={() => saveNotes(row.id)}>
                       Save notes
                     </button>
-                    <button className={styles.danger} onClick={() => remove(row.id, row.cv_path)}>
-                      Delete
-                    </button>
+                    {canDelete ? (
+                      <button className={styles.danger} onClick={() => remove(row.id, row.cv_path)}>
+                        Delete
+                      </button>
+                    ) : null}
                   </div>
                   <div className={styles.stages} role="group" aria-label="Move to stage">
                     {stages.map((item) => (
@@ -259,7 +263,7 @@ export function Applications() {
 }
 
 /* ------------------------------------------------------------ Roles */
-export function Roles() {
+export function Roles({ role: me }: { role: PortalRole }) {
   const db = useMemo(() => supabaseBrowser(), []);
   const [roles, setRoles] = useState<Role[]>([]);
   const [counts, setCounts] = useState<Record<string, number>>({});
@@ -283,6 +287,7 @@ export function Roles() {
   if (editing) {
     return (
       <RoleEditor
+        me={me}
         initial={editing}
         onDone={() => {
           setEditing(null);
@@ -328,7 +333,9 @@ export function Roles() {
   );
 }
 
-function RoleEditor({ initial, onDone }: { initial: Role; onDone: () => void }) {
+function RoleEditor({ initial, onDone, me }: { initial: Role; onDone: () => void; me: PortalRole }) {
+  // Recruiting managers draft; the head of HR (or an admin) opens, closes and deletes.
+  const publisher = me === "admin" || me === "hr_head";
   const db = useMemo(() => supabaseBrowser(), []);
   const [role, setRole] = useState<Role>(initial);
   const [slugTouched, setSlugTouched] = useState(Boolean(initial.id));
@@ -374,25 +381,34 @@ function RoleEditor({ initial, onDone }: { initial: Role; onDone: () => void }) 
           ← All roles
         </button>
         <div className={styles.actions}>
-          {role.id ? (
+          {role.id && publisher ? (
             <button className={styles.danger} onClick={remove}>
               Delete
             </button>
           ) : null}
-          <button className={styles.secondary} disabled={busy} onClick={() => save("draft")}>
-            Save draft
-          </button>
-          {role.status === "open" ? (
+          {publisher || role.status === "draft" ? (
+            <button className={publisher ? styles.secondary : styles.primary} disabled={busy} onClick={() => save(publisher ? "draft" : role.status)}>
+              {publisher ? "Save draft" : "Save"}
+            </button>
+          ) : (
+            <button className={styles.primary} disabled={busy} onClick={() => save(role.status)}>
+              Save changes
+            </button>
+          )}
+          {publisher && role.status === "open" ? (
             <button className={styles.secondary} disabled={busy} onClick={() => save("closed")}>
               Close role
             </button>
           ) : null}
-          <button className={styles.primary} disabled={busy} onClick={() => save("open")}>
-            {role.status === "open" ? "Update" : "Open role"}
-          </button>
+          {publisher ? (
+            <button className={styles.primary} disabled={busy} onClick={() => save("open")}>
+              {role.status === "open" ? "Update" : "Open role"}
+            </button>
+          ) : null}
         </div>
       </div>
       {note ? <p className={styles.note}>{note}</p> : null}
+      {!publisher ? <p className={styles.hint}>You can draft and edit roles. The head of HR opens and closes them on the careers page.</p> : null}
       <div className={styles.editor}>
         <div className={styles.fields}>
           <label>

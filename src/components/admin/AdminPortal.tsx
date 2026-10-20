@@ -53,13 +53,29 @@ const tabs = {
 } as const;
 type Tab = keyof typeof tabs;
 
+/** What each role can open. The database enforces the same split. */
+export type PortalRole = "admin" | "marketing" | "hr_head" | "recruiter";
+export const roleNames: Record<PortalRole, string> = {
+  admin: "Admin",
+  marketing: "Marketing",
+  hr_head: "Head of HR",
+  recruiter: "Recruiting manager",
+};
+const access: Record<PortalRole, Tab[]> = {
+  admin: ["submissions", "applications", "roles", "requests", "catalogue", "posts", "team"],
+  marketing: ["submissions", "requests", "catalogue", "posts"],
+  hr_head: ["applications", "roles", "team"],
+  recruiter: ["applications", "roles"],
+};
+
 /** The CNTXT portal: submissions, job applications, dataset requests, roles, the catalogue, blog posts and the team. */
 export function AdminPortal() {
   const db = useMemo(() => supabaseBrowser(), []);
   const [session, setSession] = useState<Session | null>(null);
   const [ready, setReady] = useState(false);
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
-  const [tab, setTab] = useState<Tab>("submissions");
+  const [role, setRole] = useState<PortalRole | null>(null);
+  const [chosen, setTab] = useState<Tab | null>(null);
 
   useEffect(() => {
     db.auth.getSession().then(({ data }) => {
@@ -72,7 +88,10 @@ export function AdminPortal() {
 
   useEffect(() => {
     if (!session) return;
-    db.rpc("is_admin").then(({ data }) => setIsAdmin(Boolean(data)));
+    db.rpc("portal_role").then(({ data }) => {
+      setRole((data as PortalRole | null) ?? null);
+      setIsAdmin(Boolean(data));
+    });
   }, [db, session]);
 
   if (!ready) return <div className={styles.center}>Loading…</div>;
@@ -92,6 +111,9 @@ export function AdminPortal() {
     );
   }
 
+  const allowed = access[role ?? "recruiter"];
+  const tab: Tab = chosen && allowed.includes(chosen) ? chosen : allowed[0];
+
   return (
     <div className={styles.shell}>
       <header className={styles.top}>
@@ -100,14 +122,17 @@ export function AdminPortal() {
           <span>Portal</span>
         </Link>
         <nav className={styles.tabs} aria-label="Portal sections">
-          {(Object.keys(tabs) as Tab[]).map((item) => (
+          {allowed.map((item) => (
             <button key={item} className={tab === item ? styles.tabOn : ""} onClick={() => setTab(item)}>
               {tabs[item]}
             </button>
           ))}
         </nav>
         <div className={styles.who}>
-          <span>{session.user.email}</span>
+          <span>
+            {session.user.email}
+            {role ? <b className={styles.roleBadge}>{roleNames[role]}</b> : null}
+          </span>
           <button className={styles.link} onClick={() => db.auth.signOut()}>
             Sign out
           </button>
@@ -116,11 +141,11 @@ export function AdminPortal() {
       <main className={styles.main}>
         {tab === "submissions" ? <Submissions /> : null}
         {tab === "posts" ? <Posts /> : null}
-        {tab === "applications" ? <Applications /> : null}
-        {tab === "roles" ? <Roles /> : null}
+        {tab === "applications" ? <Applications role={role ?? "recruiter"} /> : null}
+        {tab === "roles" ? <Roles role={role ?? "recruiter"} /> : null}
         {tab === "requests" ? <DataRequests /> : null}
         {tab === "catalogue" ? <Catalogue /> : null}
-        {tab === "team" ? <Team session={session} /> : null}
+        {tab === "team" ? <Team session={session} role={role ?? "recruiter"} /> : null}
       </main>
     </div>
   );
@@ -535,57 +560,151 @@ function Editor({ initial, onDone }: { initial: Post; onDone: () => void }) {
 }
 
 /* ------------------------------------------------------------ Team */
-function Team({ session }: { session: Session }) {
+type Member = { email: string; name: string | null; role: PortalRole };
+
+/** Who may give each role: admins give any; the head of HR adds recruiting managers. */
+const canGrant: Record<PortalRole, PortalRole[]> = {
+  admin: ["admin", "marketing", "hr_head", "recruiter"],
+  marketing: [],
+  hr_head: ["recruiter"],
+  recruiter: [],
+};
+
+const departments: { name: string; roles: PortalRole[]; note: string }[] = [
+  { name: "Admin", roles: ["admin"], note: "Everything, including the team." },
+  { name: "Marketing", roles: ["marketing"], note: "Form submissions, blog posts, data requests and the catalogue." },
+  { name: "HR", roles: ["hr_head", "recruiter"], note: "Roles and applications. Only the head of HR opens or closes roles and deletes applications." },
+];
+
+function Team({ session, role }: { session: Session; role: PortalRole }) {
   const db = useMemo(() => supabaseBrowser(), []);
-  const [emails, setEmails] = useState<string[]>([]);
+  const grantable = canGrant[role];
+  const [members, setMembers] = useState<Member[]>([]);
   const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
+  const [newRole, setNewRole] = useState<PortalRole>(grantable[grantable.length - 1] ?? "recruiter");
   const [note, setNote] = useState("");
 
   const load = useCallback(async () => {
-    const { data } = await db.from("admins").select("email").order("created_at");
-    setEmails(((data as { email: string }[]) ?? []).map((row) => row.email));
+    const { data } = await db.from("admins").select("email, name, role").order("created_at");
+    setMembers((data as Member[]) ?? []);
   }, [db]);
 
   useEffect(() => {
     queueMicrotask(load);
   }, [load]);
 
+  const call = async (method: "POST" | "PATCH" | "DELETE", body: object) => {
+    const response = await fetch("/api/admin/invite", {
+      method,
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${session.access_token}` },
+      body: JSON.stringify(body),
+    });
+    const result = (await response.json().catch(() => ({}))) as { error?: string };
+    return response.ok ? null : result.error || "Something went wrong.";
+  };
+
   return (
     <section>
       <div className={styles.head}>
         <div>
           <h1>Team</h1>
-          <p>People on this list can sign in and manage everything in the portal.</p>
+          <p>{role === "admin" ? "Add people and choose what each of them can see." : "Add recruiting managers to help with applications."}</p>
         </div>
       </div>
-      <form
-        className={styles.filters}
-        onSubmit={async (event) => {
-          event.preventDefault();
-          setNote("");
-          const response = await fetch("/api/admin/invite", {
-            method: "POST",
-            headers: { "Content-Type": "application/json", Authorization: `Bearer ${session.access_token}` },
-            body: JSON.stringify({ email }),
-          });
-          const result = await response.json().catch(() => ({}));
-          if (!response.ok) setNote(result.error || "Could not add that person.");
-          else {
-            setNote(`${email} can now sign in at /admin.`);
-            setEmail("");
-            load();
-          }
-        }}
-      >
-        <input className={styles.input} type="email" required placeholder="colleague@cntxt.tech" value={email} onChange={(event) => setEmail(event.target.value)} />
-        <button className={styles.primary}>Add to the portal</button>
-      </form>
+      {grantable.length ? (
+        <form
+          className={styles.filters}
+          onSubmit={async (event) => {
+            event.preventDefault();
+            setNote("");
+            const error = await call("POST", { email, name, role: newRole });
+            if (error) setNote(error);
+            else {
+              setNote(`${email} can now sign in at /admin as ${roleNames[newRole]}.`);
+              setEmail("");
+              setName("");
+              load();
+            }
+          }}
+        >
+          <input className={styles.input} placeholder="Name (optional)" value={name} onChange={(event) => setName(event.target.value)} />
+          <input className={styles.input} type="email" required placeholder="colleague@cntxt.tech" value={email} onChange={(event) => setEmail(event.target.value)} />
+          <select className={styles.input} value={newRole} onChange={(event) => setNewRole(event.target.value as PortalRole)}>
+            {grantable.map((item) => (
+              <option key={item} value={item}>
+                {roleNames[item]}
+              </option>
+            ))}
+          </select>
+          <button className={styles.primary}>Add to the portal</button>
+        </form>
+      ) : null}
       {note ? <p className={styles.note}>{note}</p> : null}
-      <ul className={styles.team}>
-        {emails.map((item) => (
-          <li key={item}>{item}</li>
-        ))}
-      </ul>
+      <div className={styles.departments}>
+        {departments.map((department) => {
+          const people = members.filter((member) => department.roles.includes(member.role));
+          if (!people.length && role !== "admin") return null;
+          return (
+            <section key={department.name} className={styles.department}>
+              <header>
+                <h2>{department.name}</h2>
+                <p>{department.note}</p>
+              </header>
+              {people.length === 0 ? <p className={styles.emptySmall}>No one yet.</p> : null}
+              <ul className={styles.members}>
+                {people.map((member) => {
+                  const mine = member.email === session.user.email?.toLowerCase();
+                  const manageable = !mine && grantable.includes(member.role);
+                  return (
+                    <li key={member.email}>
+                      <span>
+                        <strong>{member.name || member.email}</strong>
+                        {member.name ? <em>{member.email}</em> : null}
+                      </span>
+                      {manageable && grantable.length > 1 ? (
+                        <select
+                          className={styles.input}
+                          value={member.role}
+                          onChange={async (event) => {
+                            const next = event.target.value as PortalRole;
+                            const error = await call("PATCH", { email: member.email, role: next });
+                            setNote(error ?? `${member.email} is now ${roleNames[next]}.`);
+                            load();
+                          }}
+                        >
+                          {grantable.map((item) => (
+                            <option key={item} value={item}>
+                              {roleNames[item]}
+                            </option>
+                          ))}
+                        </select>
+                      ) : (
+                        <b className={styles.roleBadge}>{roleNames[member.role]}</b>
+                      )}
+                      {manageable ? (
+                        <button
+                          className={styles.link}
+                          onClick={async () => {
+                            if (!window.confirm(`Remove ${member.email} from the portal?`)) return;
+                            const error = await call("DELETE", { email: member.email });
+                            setNote(error ?? `${member.email} no longer has access.`);
+                            load();
+                          }}
+                        >
+                          Remove
+                        </button>
+                      ) : mine ? (
+                        <em className={styles.you}>You</em>
+                      ) : null}
+                    </li>
+                  );
+                })}
+              </ul>
+            </section>
+          );
+        })}
+      </div>
     </section>
   );
 }
