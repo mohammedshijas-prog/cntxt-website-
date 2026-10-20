@@ -5,6 +5,8 @@ import { faqs } from "../shared/faqs";
 import { PageHero } from "../shared/PageHero";
 import { SiteClose } from "../site/SiteClose";
 import { SiteNav } from "../site/SiteNav";
+import { DataTypes } from "../products/DataTypes";
+import { DataDots } from "./DataDots";
 import { ServiceTabs } from "./ServiceTabs";
 import styles from "./dataServices.module.css";
 
@@ -15,7 +17,6 @@ const stats = [
   { value: "25+", label: "Arabic dialects" },
 ];
 
-const modalities = ["Audio", "Text", "Image", "Video", "LiDAR", "Documents"];
 
 /* The AI Lab delivery process, told for a data project. */
 const steps = [
@@ -25,15 +26,12 @@ const steps = [
   { name: "Scale and deliver", body: "The full set, delivered into your training run, kept in region." },
 ];
 
-const trust = [
-  { value: "98%", title: "Labelling accuracy", body: "Human-in-the-loop quality checks on every project." },
-  { value: "In region", title: "Hosting and processing", body: "Delivered on-premises, hybrid or in the cloud." },
-  {
-    value: "SOC 2 · ISO",
-    title: "SOC 2 Type II and ISO 27001",
-    body: "With GDPR and HIPAA listed in our trust centre.",
-    href: "https://cntxt.trust.site",
-  },
+/* Four reasons, after Scale's "best in the business" grid. Facts from docs/content-brief.md. */
+const proof = [
+  { title: "Quality", body: "Labelled at 98% accuracy, with human-in-the-loop checks on every project.", mark: "#7d52f4" },
+  { title: "Scale", body: "30M+ data points annotated for 250+ enterprise and government organisations.", mark: "#b79cff" },
+  { title: "Arabic depth", body: "Native annotators across 25+ dialects, with domain experts in finance, healthcare, logistics and government.", mark: "#15111f" },
+  { title: "Kept in region", body: "Hosted and processed in region: on-premises, hybrid or in the cloud. SOC 2 Type II and ISO 27001.", mark: "#5b3fd1" },
 ];
 
 /** Data-as-a-service: a managed data project, separate from the ready-made catalogue at /data-hub. */
@@ -54,32 +52,37 @@ export function DataServicesPage() {
           { label: "Browse the data catalogue", href: "/data-hub" },
         ]}
         art={
-          <div className={styles.heroArt}>
-            <p className={styles.order}>Data project · in progress</p>
-            <ul className={styles.chips}>
-              {modalities.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
-            <ol className={styles.track}>
-              {["Sourced", "Labelled", "Reviewed", "Delivered"].map((stage, i) => (
-                <li key={stage} style={{ animationDelay: `${300 + i * 250}ms` }}>
-                  <span aria-hidden="true">✓</span>
-                  {stage}
-                </li>
-              ))}
-            </ol>
-            <dl className={styles.stats}>
-              {stats.map((stat) => (
-                <div key={stat.label}>
-                  <dt>{stat.value}</dt>
-                  <dd>{stat.label}</dd>
-                </div>
-              ))}
-            </dl>
+          <div className={styles.heroDots} role="img" aria-label="An abstract ribbon of purple dots: data flowing from source to model">
+            <DataDots form="ribbon" className={styles.dotsFill} />
+            {stats.map((stat, i) => (
+              <span key={stat.label} className={styles.heroTag} data-at={i}>
+                <b>{stat.value}</b> {stat.label}
+              </span>
+            ))}
           </div>
         }
       />
+
+      <section className={styles.proof} aria-labelledby="proof-heading">
+        <div className={styles.proofPanel}>
+          <div className={styles.proofLead}>
+            <h2 id="proof-heading">Training data, done properly.</h2>
+            <p>Sourced, labelled and checked by people who know the language and the domain, then delivered where it has to stay.</p>
+            <DataDots form="terrain" className={styles.proofDots} />
+          </div>
+          <ul className={styles.proofCards}>
+            {proof.map((item) => (
+              <li key={item.title} data-tilt>
+                <span className={styles.mark} style={{ color: item.mark }} aria-hidden="true" />
+                <h3>{item.title}</h3>
+                <p>{item.body}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      <DataTypes />
 
       <ServiceTabs />
 
@@ -104,26 +107,6 @@ export function DataServicesPage() {
 
       <FactoryCrew />
 
-      <section className={styles.section} aria-labelledby="trust-heading">
-        <header className={styles.head}>
-          <p className={styles.kicker}>Quality and security</p>
-          <h2 id="trust-heading">Checked by people. Kept where it has to stay.</h2>
-        </header>
-        <ul className={styles.trust}>
-          {trust.map((item) => (
-            <li key={item.title}>
-              <strong>{item.value}</strong>
-              <h3>{item.title}</h3>
-              <p>{item.body}</p>
-              {item.href ? (
-                <a href={item.href}>
-                  Visit the trust centre <span aria-hidden="true">→</span>
-                </a>
-              ) : null}
-            </li>
-          ))}
-        </ul>
-      </section>
 
       <section className={styles.catalogue} aria-labelledby="catalogue-heading">
         <div>

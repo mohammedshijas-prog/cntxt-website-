@@ -351,3 +351,47 @@ export function briefcase(count: number) {
     71,
   );
 }
+
+/* ------------------------------------------------------------------ */
+/* Data services: abstract forms in dots.                              */
+/* ------------------------------------------------------------------ */
+
+/** A twisted ribbon of rows: data flowing and turning, end to end. */
+export function ribbon(count: number) {
+  const rows = 26;
+  const perRow = Math.ceil(count / rows);
+  const out = new Float32Array(count * 3);
+  for (let i = 0; i < count; i++) {
+    const row = i % rows;
+    const t = Math.floor(i / rows) / Math.max(1, perRow - 1);
+    const s = row / (rows - 1) - 0.5;
+    const twist = Math.PI * 1.6 * t + 0.4;
+    const cx = (t - 0.5) * 4.2;
+    const cy = 0.45 * Math.sin(Math.PI * 2 * t * 0.9);
+    const cz = 0.35 * Math.cos(Math.PI * 2 * t);
+    out[i * 3] = cx;
+    out[i * 3 + 1] = cy + s * 1.1 * Math.cos(twist);
+    out[i * 3 + 2] = cz + s * 1.1 * Math.sin(twist);
+  }
+  return out;
+}
+
+/** A rolling surface drawn as contour rows, tilted toward the viewer. */
+export function terrain(count: number) {
+  const rows = 34;
+  const perRow = Math.ceil(count / rows);
+  const out = new Float32Array(count * 3);
+  const tilt = -0.85;
+  for (let i = 0; i < count; i++) {
+    const row = i % rows;
+    const u = Math.floor(i / rows) / Math.max(1, perRow - 1);
+    const x = (u - 0.5) * 3.6;
+    const z = (row / (rows - 1) - 0.5) * 2.4;
+    const y = 0.38 * Math.sin(1.7 * x + 0.6) * Math.cos(1.4 * z) + 0.22 * Math.sin(2.6 * x + 1.3 * z) + 0.12 * Math.cos(3.1 * z - x);
+    // Tilt the sheet so its folds read from the front.
+    out[i * 3] = x;
+    out[i * 3 + 1] = y * Math.cos(tilt) - z * Math.sin(tilt);
+    out[i * 3 + 2] = y * Math.sin(tilt) + z * Math.cos(tilt);
+  }
+  return out;
+}
