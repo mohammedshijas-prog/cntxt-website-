@@ -6,6 +6,7 @@ import { PageHero } from "../shared/PageHero";
 import { CtaBand } from "../shared/CtaBand";
 import { SiteNav } from "../site/SiteNav";
 import dynamic from "next/dynamic";
+import { CareerDots } from "./CareerDots";
 import styles from "./careers.module.css";
 import { faqs } from "../shared/faqs";
 import { Faq } from "../shared/Faq";
@@ -167,11 +168,9 @@ export function CareersPage({ roles }: { roles: RoleCard[] }) {
           { label: "How we work", href: "#culture-heading" },
         ]}
         art={
-          <img
-            className={styles.heroWall}
-            src="/careers/culture-wall.webp"
-            alt="Two CNTXT colleagues talking in front of the “Culture is Delivery” wall"
-          />
+          <div className={styles.heroDots} role="img" aria-label="A team of people, a rising staircase and a briefcase, drawn in purple dots">
+            <CareerDots className={styles.heroField} />
+          </div>
         }
       />
 

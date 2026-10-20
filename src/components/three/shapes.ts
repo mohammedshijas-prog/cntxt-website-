@@ -289,3 +289,65 @@ export function agentHub(count: number) {
   });
   return build(count, parts, 61);
 }
+
+/* ------------------------------------------------------------------ */
+/* Careers: people, growth and the work itself.                        */
+/* ------------------------------------------------------------------ */
+
+/** One standing person at (x, z), `s` tall-ish, optionally waving. */
+function personParts(x: number, z: number, s: number, wave = false): Part[] {
+  const v = (px: number, py: number, pz: number): V => [x + px * s, py * s, z + pz * s];
+  return [
+    { weight: 6 * s, sample: sphereAt(v(0, 1.18, 0), 0.2 * s) },
+    { weight: 13 * s, sample: capsule(v(0, 0.86, 0), v(0, 0.14, 0), 0.25 * s) },
+    { weight: 4 * s, sample: capsule(v(-0.3, 0.82, 0), v(-0.38, 0.18, 0.04), 0.07 * s) },
+    wave
+      ? { weight: 4 * s, sample: capsule(v(0.3, 0.82, 0), v(0.52, 1.45, 0.05), 0.07 * s) }
+      : { weight: 4 * s, sample: capsule(v(0.3, 0.82, 0), v(0.38, 0.18, 0.04), 0.07 * s) },
+    { weight: 7 * s, sample: capsule(v(-0.12, 0.12, 0), v(-0.14, -1.15, 0), 0.1 * s) },
+    { weight: 7 * s, sample: capsule(v(0.12, 0.12, 0), v(0.14, -1.15, 0), 0.1 * s) },
+  ];
+}
+
+/** A team: three colleagues side by side, the one in front waving hello. */
+export function team(count: number) {
+  return build(count, [...personParts(-1.05, -0.35, 0.82), ...personParts(1.05, -0.35, 0.82), ...personParts(0, 0.25, 0.95, true)], 61);
+}
+
+/** Growth: a person on the top step of a rising staircase. */
+export function growth(count: number) {
+  const parts: Part[] = [];
+  [0, 1, 2, 3].forEach((i) => {
+    const h = 0.32 + i * 0.32;
+    parts.push({ weight: 7, sample: box([-1.35 + i * 0.72, -1.3 + h / 2, 0], [0.7, h, 0.7]) });
+  });
+  // On the top step, arm raised.
+  const top = -1.3 + 0.32 * 4;
+  personParts(0.81, 0, 0.62, true).forEach((part) => {
+    parts.push({ weight: part.weight, sample: (rand) => { const p = part.sample(rand); return [p[0], p[1] + top + 0.72, p[2]]; } });
+  });
+  // Shrink and centre it so the climber's raised hand stays inside the frame.
+  const out = build(count, parts, 67);
+  for (let i = 0; i < out.length; i += 3) {
+    out[i] = out[i] * 0.74 + 0.2;
+    out[i + 1] = out[i + 1] * 0.74 - 0.05;
+    out[i + 2] *= 0.74;
+  }
+  return out;
+}
+
+/** The work: a briefcase with its handle and clasp. */
+export function briefcase(count: number) {
+  return build(
+    count,
+    [
+      { weight: 40, sample: box([0, -0.3, 0], [2.2, 1.5, 0.6]) },
+      { weight: 5, sample: line([-1.1, 0.1, 0.31], [1.1, 0.1, 0.31], 0.01) },
+      { weight: 3, sample: box([0, 0.1, 0.32], [0.3, 0.2, 0.06]) },
+      { weight: 3, sample: capsule([-0.45, 0.45, 0], [-0.45, 0.8, 0], 0.06) },
+      { weight: 3, sample: capsule([0.45, 0.45, 0], [0.45, 0.8, 0], 0.06) },
+      { weight: 5, sample: capsule([-0.45, 0.8, 0], [0.45, 0.8, 0], 0.06) },
+    ],
+    71,
+  );
+}

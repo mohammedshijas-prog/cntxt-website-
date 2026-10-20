@@ -452,3 +452,22 @@
   border-color: rgba(21, 17, 31, 0.35) !important;
   color: var(--label) !important;
 }
+
+/* Hero art: the careers forms drawn in the site's purple dots, on dotted paper. */
+.heroDots {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: var(--radius-card);
+  background:
+    radial-gradient(circle at 50% 45%, rgba(125, 82, 244, 0.1), transparent 62%),
+    radial-gradient(rgba(125, 82, 244, 0.16) 1px, transparent 1.4px) 0 0 / 18px 18px,
+    #ffffff;
+  box-shadow: 0 30px 60px -36px rgba(45, 25, 110, 0.35);
+}
+
+.heroField {
+  position: absolute;
+  inset: 0;
+}

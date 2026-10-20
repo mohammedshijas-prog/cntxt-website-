@@ -36,6 +36,34 @@ type Application = {
   created_at: string;
 };
 
+/** The public link to a role, on whatever domain the portal is open on. */
+const roleUrl = (slug: string) => `${window.location.origin}/careers/${slug}`;
+
+/** Copies a role's public link, with a moment of "Copied ✓" feedback. */
+function CopyLink({ slug, status }: { slug: string; status: Role["status"] }) {
+  const [copied, setCopied] = useState(false);
+  const live = status === "open";
+  return (
+    <button
+      type="button"
+      className={styles.copyLink}
+      disabled={!slug}
+      title={live ? roleUrl(slug) : "Only open roles are public. Open the role first, or copy now to share later."}
+      onClick={async () => {
+        try {
+          await navigator.clipboard.writeText(roleUrl(slug));
+        } catch {
+          window.prompt("Copy this link", roleUrl(slug));
+        }
+        setCopied(true);
+        window.setTimeout(() => setCopied(false), 1600);
+      }}
+    >
+      {copied ? "Copied ✓" : live ? "Copy link" : "Copy link (not live)"}
+    </button>
+  );
+}
+
 const stages: Application["status"][] = ["new", "reviewing", "interview", "offer", "hired", "rejected"];
 const blankRole: Role = { slug: "", title: "", department: "", location: "Remote", terms: "", summary: "", description: "", status: "draft", sort: 100 };
 
@@ -280,7 +308,8 @@ export function Roles() {
       ) : (
         <ul className={styles.postList}>
           {roles.map((role) => (
-            <li key={role.id}>
+            <li key={role.id} className={styles.roleRow}>
+              <CopyLink slug={role.slug} status={role.status} />
               <button onClick={() => setEditing(role)}>
                 <span className={styles.countBadge}>{counts[role.id ?? ""] ?? 0}</span>
                 <span>
@@ -379,7 +408,10 @@ function RoleEditor({ initial, onDone }: { initial: Role; onDone: () => void }) 
             />
           </label>
           <label>
-            URL
+            <span className={styles.labelRow}>
+              URL
+              {role.id ? <CopyLink slug={role.slug} status={role.status} /> : null}
+            </span>
             <span className={styles.slug}>
               /careers/
               <input

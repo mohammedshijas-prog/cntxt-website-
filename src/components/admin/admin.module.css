@@ -687,3 +687,66 @@
   color: #ffffff;
   font-size: 12px;
 }
+
+/* Roles: a copy-link button sits on top of each row's right edge. */
+.roleRow {
+  position: relative;
+}
+
+.roleRow > button:last-child {
+  padding-right: 230px;
+}
+
+.copyLink {
+  position: absolute;
+  top: 50%;
+  right: 110px;
+  z-index: 1;
+  display: inline-flex !important;
+  width: auto !important;
+  min-height: 36px;
+  padding: 0 14px !important;
+  align-items: center;
+  border: 1px solid var(--separator) !important;
+  border-radius: 999px !important;
+  background: #ffffff !important;
+  box-shadow: none !important;
+  color: var(--accent-text);
+  font-family: var(--font-heading);
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
+.copyLink:hover {
+  border-color: var(--accent) !important;
+}
+
+.labelRow {
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.labelRow .copyLink {
+  position: static;
+  transform: none;
+}
+
+@media (max-width: 734px) {
+  .roleRow > button:last-child {
+    padding-right: var(--space-3);
+    padding-bottom: 56px;
+  }
+
+  .copyLink {
+    top: auto;
+    right: auto;
+    bottom: 10px;
+    left: 120px;
+    transform: none;
+  }
+}
