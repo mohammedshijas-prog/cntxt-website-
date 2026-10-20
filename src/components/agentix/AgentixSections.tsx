@@ -162,7 +162,7 @@ const branches = [
 export function Offering() {
   const [mode, setMode] = useState<"voice" | "chat">("voice");
   return (
-    <section className={styles.offering} aria-labelledby="offering-heading">
+    <section className={styles.offering} aria-labelledby="offering-heading" data-motion="off">
       <header className={styles.headSplit}>
         <h2 id="offering-heading">Design, launch and watch every agent, from one platform.</h2>
       </header>
@@ -237,6 +237,14 @@ export function Offering() {
         <article className={styles.tile}>
           <h3>Start from a ready-made agent</h3>
           <p>Pre-trained agents you adjust instead of building from nothing.</p>
+          <div className={styles.agentCard} aria-hidden="true">
+            <i />
+            <span>
+              <strong>Receptionist</strong>
+              Emirati voice · Voice and WhatsApp
+            </span>
+            <em>Live</em>
+          </div>
           <ul className={styles.agents}>
             {["Receptionist", "Booking confirmation", "Sales agent", "Order and payment follow-up"].map((item) => (
               <li key={item}>
@@ -259,6 +267,25 @@ export function Offering() {
           <p className={styles.big}>
             &lt;150<small>ms</small>
           </p>
+        </article>
+
+        <article className={styles.tile}>
+          <h3>On GCC phone lines</h3>
+          <p>Local numbers your customers already trust, over SIP and WebRTC.</p>
+          <ul className={styles.numbers}>
+            {[
+              ["UAE", "+971"],
+              ["KSA", "+966"],
+              ["Qatar", "+974"],
+              ["International", "+"],
+            ].map(([country, code]) => (
+              <li key={country}>
+                <b>{code}</b>
+                {country}
+                <span aria-hidden="true">●</span>
+              </li>
+            ))}
+          </ul>
         </article>
 
         <article className={styles.tile}>

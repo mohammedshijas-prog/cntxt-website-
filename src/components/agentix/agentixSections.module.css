@@ -356,7 +356,7 @@
 
 .bento {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(6, minmax(0, 1fr));
   gap: 16px;
   max-width: 1240px;
   margin: 0 auto;
@@ -364,6 +364,7 @@
 
 .tile {
   display: flex;
+  grid-column: span 2;
   min-height: 360px;
   flex-direction: column;
   overflow: hidden;
@@ -373,7 +374,7 @@
 }
 
 .wide {
-  grid-column: span 2;
+  grid-column: span 4;
 }
 
 .tile h3 {
@@ -923,6 +924,14 @@
 
 /* ---------------------------------------------------------- Responsive */
 @media (max-width: 1068px) {
+  .tile {
+    grid-column: span 3;
+  }
+
+  .tile.wide {
+    grid-column: 1 / -1;
+  }
+
   .headSplit,
   .integrations {
     grid-template-columns: 1fr;
@@ -930,11 +939,7 @@
   }
 
   .bento {
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .wide {
-    grid-column: span 2;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
   }
 
   .gridRow {
@@ -1015,7 +1020,8 @@
     grid-template-columns: 1fr;
   }
 
-  .wide {
+  .tile,
+  .tile.wide {
     grid-column: auto;
   }
 
@@ -1077,4 +1083,98 @@
   .wave i {
     animation: none;
   }
+}
+
+/* GCC numbers: a small list of live lines. */
+.numbers {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: auto 0 0;
+  padding: var(--space-6) 0 0;
+  list-style: none;
+}
+
+.numbers li {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 10px 14px;
+  border-radius: 14px;
+  background: #ffffff;
+  font-family: var(--font-heading);
+  font-size: 15px;
+}
+
+.numbers b {
+  min-width: 48px;
+  color: var(--accent-text);
+  font-weight: 600;
+}
+
+.numbers span {
+  margin-left: auto;
+  color: #3fc98a;
+  font-size: 10px;
+}
+
+@media (max-width: 1068px) and (min-width: 735px) {
+  .bento > .tile:last-child {
+    grid-column: 1 / -1;
+  }
+}
+
+/* The agent you start from, live on a line. */
+.agentCard {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-top: auto;
+  padding: 14px;
+  border: 1px solid rgba(125, 82, 244, 0.25);
+  border-radius: 18px;
+  background: #ffffff;
+  box-shadow: 0 16px 30px -22px rgba(76, 40, 190, 0.5);
+}
+
+.agentCard i {
+  flex: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.85), transparent 45%),
+    radial-gradient(circle, #cbbcff, #7d52f4 75%);
+}
+
+.agentCard span {
+  display: flex;
+  flex-direction: column;
+  color: var(--label-3);
+  font-family: var(--font-body);
+  font-size: 13px;
+}
+
+.agentCard strong {
+  color: var(--label);
+  font-family: var(--font-heading);
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.agentCard em {
+  margin-left: auto;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: #e7f9ef;
+  color: #1c7a4a;
+  font-family: var(--font-heading);
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 600;
+}
+
+.agentCard + .agents {
+  margin-top: 10px;
+  padding-top: 0;
 }
