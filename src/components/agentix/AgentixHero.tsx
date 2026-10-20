@@ -1,11 +1,8 @@
 "use client";
 
-import dynamic from "next/dynamic";
 import { useEffect, useRef, useState, type PointerEvent } from "react";
-import { sphere } from "../three/shapes";
 import styles from "./agentixHero.module.css";
 
-const ParticleField = dynamic(() => import("../three/ParticleField"), { ssr: false });
 
 const channels = ["Voice", "Chat", "WhatsApp", "SMS"];
 
@@ -29,8 +26,6 @@ export function AgentixHero({
   results: { value: string; label: string }[];
 }) {
   const [word, setWord] = useState(0);
-  const [shapes] = useState(() => [sphere(typeof window !== "undefined" && window.innerWidth <= 734 ? 2600 : 5200, 1)]);
-  const level = useRef(0.25);
   const section = useRef<HTMLElement>(null);
   const [coords, setCoords] = useState({ x: 50, y: 50 });
 
@@ -49,11 +44,12 @@ export function AgentixHero({
 
   return (
     <section ref={section} className={styles.hero} aria-labelledby="agentix-heading" onPointerMove={track} data-motion="off">
+      {/* The GCC from orbit at night, its cities linked by calls. */}
+      <picture className={styles.earth} aria-hidden="true">
+        <source media="(max-width: 734px)" srcSet="/agentix/hero-gulf-m.webp" />
+        <img src="/agentix/hero-gulf.webp" alt="" fetchPriority="high" decoding="async" />
+      </picture>
       <div className={styles.sky} aria-hidden="true" />
-      <div className={styles.planet} aria-hidden="true">
-        <ParticleField shapes={shapes} level={level} spin={0.05} pointSize={20} />
-      </div>
-      <div className={styles.glow} aria-hidden="true" />
 
       <div className={styles.copy}>
         <p className={styles.kicker}>Agentix · Arabic voice and chat agents</p>
