@@ -46,8 +46,8 @@ export function AgentixHero({
     <section ref={section} className={styles.hero} aria-labelledby="agentix-heading" onPointerMove={track} data-motion="off">
       {/* The GCC from orbit at night, its cities linked by calls. */}
       <picture className={styles.earth} aria-hidden="true">
-        <source media="(max-width: 734px)" srcSet="/agentix/hero-gulf-light-m.webp" />
-        <img src="/agentix/hero-gulf-light.webp" alt="" fetchPriority="high" decoding="async" />
+        <source media="(max-width: 734px)" srcSet="/agentix/hero-gulf-m.webp" />
+        <img src="/agentix/hero-gulf.webp" alt="" fetchPriority="high" decoding="async" />
       </picture>
       <div className={styles.sky} aria-hidden="true" />
 
@@ -62,9 +62,9 @@ export function AgentixHero({
                   {channel}
                 </span>
               ))}
-              {/* The widest word holds the space so the line never jumps. */}
+              {/* The current word sets the width, so the brackets hug it. */}
               <span className={styles.wordSizer} aria-hidden="true">
-                WhatsApp
+                {channels[word]}
               </span>
             </span>
             <span aria-hidden="true">]</span>
