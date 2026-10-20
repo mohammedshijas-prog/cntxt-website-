@@ -432,3 +432,23 @@
   display: inline-flex;
   align-items: center;
 }
+
+/* The 3D benefits world fills the panel; the floor colour shows while it loads. */
+.benefitPhoto {
+  background: #f3f1f8;
+}
+
+.benefitScene {
+  position: absolute;
+  inset: 0;
+}
+
+.benefitScene canvas {
+  display: block;
+}
+
+.benefitPhoto span {
+  z-index: 1;
+  border-color: rgba(21, 17, 31, 0.35) !important;
+  color: var(--label) !important;
+}

@@ -5,6 +5,7 @@ import { SiteClose } from "../site/SiteClose";
 import { PageHero } from "../shared/PageHero";
 import { CtaBand } from "../shared/CtaBand";
 import { SiteNav } from "../site/SiteNav";
+import dynamic from "next/dynamic";
 import styles from "./careers.module.css";
 import { faqs } from "../shared/faqs";
 import { Faq } from "../shared/Faq";
@@ -35,6 +36,8 @@ const culture = [
 
 
 
+const BenefitScene = dynamic(() => import("../three/BenefitScene"), { ssr: false });
+
 /** A role as the careers board shows it; the list comes from the portal (Supabase). */
 export type RoleCard = { slug: string; title: string; department: string; location: string; terms: string };
 
@@ -42,25 +45,21 @@ const benefits = [
   {
     number: "01",
     title: "Mentorship",
-    image: "/about/team.webp",
     body: "You work alongside people who have done the job before and who make time to show you how.",
   },
   {
     number: "02",
     title: "Hands-on projects",
-    image: "/brand/product/label-video.webp",
     body: "You work on live projects from the start: data collection, annotation, model evaluation and custom AI builds.",
   },
   {
     number: "03",
     title: "Professional certifications",
-    image: "/security/practice-a.webp",
     body: "We support professional certifications that are relevant to your role.",
   },
   {
     number: "04",
     title: "Remote and on-site options",
-    image: "/industries/government.jpg",
     body: "Some roles are fully remote and some are on site. Each listing says which.",
   },
 ];
@@ -255,14 +254,8 @@ export function CareersPage({ roles }: { roles: RoleCard[] }) {
             })}
           </div>
           <div className={styles.benefitPhoto}>
-            {/* Each benefit has its own photo; it swaps with the open item. */}
-            <img
-              key={benefits[Math.max(openBenefit, 0)].image}
-              loading="lazy"
-              decoding="async"
-              src={benefits[Math.max(openBenefit, 0)].image}
-              alt=""
-            />
+            {/* One small 3D world; the camera moves to the open benefit's corner. */}
+            <BenefitScene className={styles.benefitScene} active={Math.max(openBenefit, 0)} />
             <span>{benefits[Math.max(openBenefit, 0)].number}</span>
           </div>
         </div>
