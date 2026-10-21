@@ -11,6 +11,19 @@ export async function generateStaticParams() {
   return (await openRoles()).map((role) => ({ slug: role.slug }));
 }
 
+/** A search snippet of 120-160 characters, built only from what the listing says. */
+function roleDescription(role: { title: string; summary: string; department: string; location: string; terms: string }) {
+  const where = `${role.location}${role.terms ? `, ${role.terms.toLowerCase()}` : ""}.`;
+  const parts = [role.summary || `Join CNTXT AI as ${role.title}.`, where, `Join the ${role.department || "CNTXT"} team at CNTXT AI.`, "Mentorship and live projects from day one."];
+  let text = "";
+  for (const part of parts) {
+    const next = text ? `${text} ${part}` : part;
+    if (next.length > 160) break;
+    text = next;
+  }
+  return text;
+}
+
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const role = await openRole(slug);
@@ -18,7 +31,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   return {
     title: `${role.title} · Careers`,
     // 120-160 characters reads best in search results.
-    description: `${role.summary || `Join CNTXT AI as ${role.title}.`} ${role.location}${role.terms ? `, ${role.terms.toLowerCase()}` : ""}. Apply online at CNTXT AI.`.slice(0, 160),
+    description: roleDescription(role),
     alternates: { canonical: `/careers/${role.slug}` },
   };
 }

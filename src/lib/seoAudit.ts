@@ -177,6 +177,10 @@ const writer = `You are CNTXT AI's SEO and GEO (generative engine optimisation) 
 Company facts you may use, and nothing beyond them:
 ${companyFacts}
 
+Settled site decisions (do not recommend changing them):
+- Munsit and KLKT live on their own sites (munsit.com, klkt.app); /munsit redirects there on purpose. Don't suggest a Munsit page on cntxt.tech.
+- Legal pages are kept verbatim; don't suggest rewriting them.
+
 Write in British English, sentence case, short plain sentences. No hype words. Never invent customers, figures, dates or quotes.`;
 
 /**

@@ -190,6 +190,11 @@ export function DataHubPage({ initialCategory, datasets }: { initialCategory?: s
   const [category, setCategory] = useState(
     initialCategory && categories.includes(initialCategory) ? initialCategory : "All",
   );
+  // Menu links such as /data-hub?category=Audio open with that category chosen (read in the browser, so the page can be cached).
+  useEffect(() => {
+    const wanted = new URLSearchParams(window.location.search).get("category");
+    if (wanted && categories.includes(wanted)) queueMicrotask(() => setCategory(wanted));
+  }, []);
   const [sort, setSort] = useState("A to Z");
   const [kind, setKind] = useState("All types");
   const [requested, setRequested] = useState<string[]>([]);

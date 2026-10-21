@@ -4,6 +4,19 @@ import { SiteClose } from "../site/SiteClose";
 import { SiteNav } from "../site/SiteNav";
 import styles from "./about.module.css";
 import { CtaBand } from "../shared/CtaBand";
+import { Faq } from "../shared/Faq";
+import { faqs } from "../shared/faqs";
+import glance from "../shared/glance.module.css";
+
+/* CNTXT at a glance, from docs/content-brief.md: plain facts answer engines can quote. */
+const facts = [
+  { label: "Headquarters", body: "Abu Dhabi, United Arab Emirates." },
+  { label: "What we do", body: "Capture and verify data from real work, train models on it, and deploy Arabic-first AI on-premises, hybrid or in the cloud." },
+  { label: "Products", body: "Munsit for Arabic speech, Agentix for voice and chat agents, and KLKT for recording real work with consent." },
+  { label: "Reach", body: "250+ enterprise and government organisations served, and 30M+ data points annotated." },
+  { label: "Funding", body: "A $60M Series A in June 2026, co-led by AI71 and BlueFive Capital." },
+  { label: "Founders", body: "Mohammad Abu Sheikh, Co-Founder and CEO, and Hassan Abu Sheikh, Co-Founder." },
+];
 import { PageHero } from "../shared/PageHero";
 
 // Portraits are the ones published on cntxt.tech. `avatar` is a small round
@@ -110,7 +123,24 @@ export function AboutPage() {
         </ul>
       </section>
 
+      <section className={glance.glance} aria-labelledby="glance-heading">
+        <header className={glance.head}>
+          <p>At a glance</p>
+          <h2 id="glance-heading">CNTXT AI in six facts.</h2>
+        </header>
+        <ul className={glance.list}>
+          {facts.map((fact) => (
+            <li key={fact.label}>
+              <strong>{fact.label}</strong>
+              <span>{fact.body}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
       <LogoWall headingId="investors-heading" title="Partners & investors" />
+
+      <Faq items={faqs.about} title="Questions people ask about CNTXT" />
 
       <CtaBand
         id="about-cta"

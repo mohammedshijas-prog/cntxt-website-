@@ -1,0 +1,80 @@
+/* A short, factual list for search and AI answer engines to quote. */
+.glance {
+  padding: var(--section-y) var(--pad-x) 0;
+}
+
+.head {
+  max-width: 760px;
+  margin: 0 auto var(--space-8);
+  text-align: center;
+}
+
+.head p {
+  margin: 0 0 var(--space-3);
+  color: var(--accent-text);
+  font-family: var(--font-heading);
+  font-size: var(--fs-small);
+  font-weight: 600;
+}
+
+.head h2 {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: var(--fs-h2);
+  font-weight: 500;
+  letter-spacing: var(--ls-h2);
+  line-height: var(--lh-h2);
+}
+
+.list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-4);
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0;
+  list-style: none;
+}
+
+.list li {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-6);
+  border-radius: var(--radius-card);
+  background: var(--bg-2);
+}
+
+.list strong {
+  font-family: var(--font-heading);
+  font-size: var(--fs-h4);
+  font-weight: 500;
+}
+
+.list span {
+  color: var(--label-2);
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+}
+
+.list a {
+  margin-top: auto;
+  padding-top: var(--space-2);
+  color: var(--accent-text);
+  font-family: var(--font-heading);
+  font-size: var(--fs-body);
+  font-weight: 500;
+}
+
+@media (max-width: 1068px) {
+  .list {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 734px) {
+  .list {
+    grid-template-columns: 1fr;
+  }
+}

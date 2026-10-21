@@ -17,13 +17,10 @@ export const metadata: Metadata = {
     "Arabic speech, handwritten pages, first-person video of everyday work, and labelled text, image, video and LiDAR data. Request a category or a custom collection.",
 };
 
-export default async function DataHub({
-  searchParams,
-}: {
-  searchParams: Promise<{ category?: string | string[] }>;
-}) {
-  // Menu links such as /data-hub?category=Audio open with that category chosen.
-  const { category } = await searchParams;
+// Cached and refreshed every minute, instead of a database call on every visit.
+export const revalidate = 60;
+
+export default async function DataHub() {
   // The catalogue is managed in the portal.
   const datasets = (await publishedDatasets()).map(({ id, title, kind, category: modality, blurb, capture, labels, sample_url, sample_name }) => ({
     id,
@@ -38,7 +35,7 @@ export default async function DataHub({
   }));
   return (
     <div className={geistMono.variable}>
-      <DataHubPage initialCategory={typeof category === "string" ? category : undefined} datasets={datasets} />
+      <DataHubPage datasets={datasets} />
       <JsonLd
         data={[
           breadcrumbs([{ name: "Data catalogue", path: "/data-hub" }]),

@@ -58,7 +58,7 @@ const reasons = [
   },
 ];
 
-const faqs: { q: string; a: React.ReactNode }[] = [
+export const faqs: { q: string; a: React.ReactNode }[] = [
   {
     q: "Is KLKT safe? How do I know this isn't a scam?",
     a: (

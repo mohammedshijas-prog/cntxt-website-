@@ -154,6 +154,42 @@ export const faqs = {
       a: "Use the form on this page: tell us what you do, where you operate and how you would like to work together.",
     },
   ],
+  contact: [
+    {
+      q: "Who should I contact about a project?",
+      a: "Use the form on this page or email sales@cntxt.tech. Tell us the problem, the systems it touches and the data behind it, and the right team replies.",
+    },
+    {
+      q: "Where do data and partnership enquiries go?",
+      a: "Data services and the data catalogue have their own pages with a request form; partnerships go through the partners page. Both reach the teams that run them.",
+    },
+    {
+      q: "I record work on KLKT. Where do I get help?",
+      a: "Email support@klkt.ai. KLKT is run by CNTXT-FZCO, part of CNTXT AI.",
+    },
+    {
+      q: "Where is CNTXT AI based?",
+      a: "Abu Dhabi, in the United Arab Emirates.",
+    },
+  ],
+  about: [
+    {
+      q: "What does CNTXT AI do?",
+      a: "CNTXT AI captures and verifies data from real work, trains models on it, and deploys Arabic-first AI on-premises, hybrid or in the cloud for enterprises and governments.",
+    },
+    {
+      q: "Where is CNTXT AI based?",
+      a: "Abu Dhabi, in the United Arab Emirates.",
+    },
+    {
+      q: "Who founded CNTXT AI?",
+      a: "Brothers Mohammad Abu Sheikh, Co-Founder and CEO, and Hassan Abu Sheikh, Co-Founder.",
+    },
+    {
+      q: "How is CNTXT AI funded?",
+      a: "CNTXT AI raised a $60M Series A in June 2026, co-led by AI71 and BlueFive Capital.",
+    },
+  ],
   agentix: [
     {
       q: "Which languages and dialects does Agentix speak?",
