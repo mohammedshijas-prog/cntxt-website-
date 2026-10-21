@@ -6,13 +6,6 @@ import styles from "./agentixHero.module.css";
 
 const channels = ["Voice", "Chat", "WhatsApp", "SMS"];
 
-/* Live conversations floating over the planet: what Agentix is handling right now. */
-const calls = [
-  { channel: "Voice", task: "Booking confirmed", dialect: "Emirati", place: "a" },
-  { channel: "WhatsApp", task: "Order status sent", dialect: "Saudi", place: "b" },
-  { channel: "Web chat", task: "Refund question answered", dialect: "Egyptian", place: "c" },
-  { channel: "SMS", task: "Payment reminder", dialect: "Gulf", place: "d" },
-] as const;
 
 /**
  * Agentix hero: a dark sky, a planet of purple dots rising from the bottom, and
@@ -86,15 +79,6 @@ export function AgentixHero({
         </div>
       </div>
 
-      <ul className={styles.calls} aria-label="Conversations Agentix is handling">
-        {calls.map((call) => (
-          <li key={call.task} className={styles[call.place]}>
-            <b>{call.channel}</b>
-            <span>{call.task}</span>
-            <em>{call.dialect} Arabic · done</em>
-          </li>
-        ))}
-      </ul>
 
       <dl className={styles.results}>
         {results.map((result) => (

@@ -304,17 +304,18 @@ export function Offering() {
 
 /* ------------------------------------------------------------ 5. Integrations */
 
+/* Real marks: brand icons from Simple Icons (CC0) and each vendor's own site icon. */
 const integrations = [
-  { name: "Maqsam", mark: "M" },
-  { name: "3CX", mark: "3" },
-  { name: "Telnyx", mark: "T" },
-  { name: "Twilio", mark: "T" },
-  { name: "Yeastar", mark: "Y" },
-  { name: "Cisco", mark: "C" },
-  { name: "Avaya", mark: "A" },
-  { name: "SIP and WebRTC", mark: "S" },
-  { name: "PABX", mark: "P" },
-  { name: "WhatsApp", mark: "W" },
+  { name: "Maqsam", logo: "/integrations/maqsam.png" },
+  { name: "3CX", logo: "/integrations/3cx.png" },
+  { name: "Telnyx", logo: "/integrations/telnyx.png" },
+  { name: "Twilio", logo: "/integrations/twilio.svg" },
+  { name: "Yeastar", logo: "/integrations/yeastar.png" },
+  { name: "Cisco", logo: "/integrations/cisco.svg" },
+  { name: "Avaya", logo: "/integrations/avaya.png" },
+  { name: "SIP and WebRTC", logo: "/integrations/webrtc.svg" },
+  { name: "PABX", logo: null },
+  { name: "WhatsApp", logo: "/integrations/whatsapp.svg" },
 ];
 
 export function Integrations({ contact }: { contact: string }) {
@@ -331,7 +332,15 @@ export function Integrations({ contact }: { contact: string }) {
         <ul>
           {integrations.map((item) => (
             <li key={item.name}>
-              <span aria-hidden="true">{item.mark}</span>
+              <span aria-hidden="true">
+                {item.logo ? (
+                  <img src={item.logo} alt="" width={22} height={22} loading="lazy" decoding="async" />
+                ) : (
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2" />
+                  </svg>
+                )}
+              </span>
               {item.name}
             </li>
           ))}
