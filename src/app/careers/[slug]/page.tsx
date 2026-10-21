@@ -17,7 +17,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   if (!role) return { title: "Careers" };
   return {
     title: `${role.title} · Careers`,
-    description: role.summary || `Apply for ${role.title} at CNTXT AI. ${role.location}, ${role.terms}.`,
+    // 120-160 characters reads best in search results.
+    description: `${role.summary || `Join CNTXT AI as ${role.title}.`} ${role.location}${role.terms ? `, ${role.terms.toLowerCase()}` : ""}. Apply online at CNTXT AI.`.slice(0, 160),
     alternates: { canonical: `/careers/${role.slug}` },
   };
 }

@@ -152,8 +152,17 @@ const Report = z.object({
     .array(z.object({ title: z.string(), why: z.string(), how: z.string(), impact: z.enum(["high", "medium", "low"]) }))
     .describe("The five most valuable next steps across SEO and GEO, most valuable first."),
   blogIdeas: z
-    .array(z.object({ title: z.string(), query: z.string().describe("The search or AI question this answers."), angle: z.string(), outline: z.array(z.string()) }))
-    .describe("Three blog posts CNTXT could publish next, each built only on the facts given."),
+    .array(
+      z.object({
+        title: z.string(),
+        query: z.string().describe("The search or AI question this answers."),
+        angle: z.string(),
+        whyNow: z.string().describe("The trend or news that makes this timely, in one sentence."),
+        source: z.string().describe("URL of the source for that trend, from the research notes, or empty."),
+        outline: z.array(z.string()),
+      }),
+    )
+    .describe("Three blog posts CNTXT could publish next, tied to current trends and built only on the facts given."),
 });
 
 const Post = z.object({
@@ -170,8 +179,47 @@ ${companyFacts}
 
 Write in British English, sentence case, short plain sentences. No hype words. Never invent customers, figures, dates or quotes.`;
 
+/**
+ * Trend research with web search: what people are searching and asking AI about
+ * in CNTXT's space right now. Returns plain notes with source URLs.
+ */
+async function researchTrends(client: Anthropic, blogTitles: string[]) {
+  const messages: Anthropic.Beta.BetaMessageParam[] = [
+    {
+      role: "user",
+      content: `Research what is trending right now (the last few weeks) that CNTXT AI could write about to be found in search and quoted by AI answer engines. Look at: Arabic and multi-dialect speech AI, AI adoption and regulation in the UAE, Saudi Arabia and the GCC, AI training data and labelling, AI agents for customer service, physical AI and robotics data, and model evaluation.
+
+Return 6-8 short notes. Each: the trend in one sentence, why people are searching for it, and its source URL. Skip topics CNTXT already covered: ${blogTitles.join("; ") || "none yet"}.`,
+    },
+  ];
+  // Server-side search can pause a long turn; resume it a few times at most.
+  for (let turn = 0; turn < 4; turn++) {
+    const response = await client.beta.messages.create({
+      model: "claude-opus-5-5",
+      max_tokens: 16000,
+      output_config: { effort: "medium" },
+      betas: ["server-side-fallback-2026-07-01"],
+      fallbacks: "default",
+      tools: [{ type: "web_search_20260209", name: "web_search", max_uses: 8 }],
+      messages,
+    });
+    if (response.stop_reason === "pause_turn") {
+      messages.push({ role: "assistant", content: response.content });
+      continue;
+    }
+    if (response.stop_reason === "refusal") return "";
+    return response.content
+      .filter((block): block is Anthropic.Beta.BetaTextBlock => block.type === "text")
+      .map((block) => block.text)
+      .join("\n")
+      .trim();
+  }
+  return "";
+}
+
 async function writeUp(apiKey: string, pages: Page[], issues: Issue[], score: number, geoScore: number, blogTitles: string[]) {
   const client = new Anthropic({ apiKey });
+  const trends = await researchTrends(client, blogTitles).catch(() => "");
   const audit = {
     score,
     geoScore,
@@ -186,7 +234,12 @@ async function writeUp(apiKey: string, pages: Page[], issues: Issue[], score: nu
     betas: ["server-side-fallback-2026-07-01"],
     fallbacks: "default",
     system: writer,
-    messages: [{ role: "user", content: `Here is this run's audit of www.cntxt.tech as JSON. Write the report.\n\n${JSON.stringify(audit)}` }],
+    messages: [
+      {
+        role: "user",
+        content: `Here is this run's audit of www.cntxt.tech as JSON:\n\n${JSON.stringify(audit)}\n\nTrend research from the web this run (use it for the blog ideas; cite its URLs):\n\n${trends || "(No trend research this run; base ideas on the audit and the company facts.)"}\n\nWrite the report.`,
+      },
+    ],
   });
   if (report.stop_reason === "refusal" || !report.parsed_output) throw new Error("No report returned.");
   const idea = report.parsed_output.blogIdeas[0];
@@ -199,11 +252,16 @@ async function writeUp(apiKey: string, pages: Page[], issues: Issue[], score: nu
       betas: ["server-side-fallback-2026-07-01"],
       fallbacks: "default",
       system: `${writer}\n\nYou write articles that rank in search and get quoted by AI answer engines: answer the question in the first paragraph, use clear headings, state facts plainly, and end with three short FAQs.`,
-      messages: [{ role: "user", content: `Write this post.\nTitle: ${idea.title}\nQuestion it answers: ${idea.query}\nAngle: ${idea.angle}\nOutline:\n- ${idea.outline.join("\n- ")}` }],
+      messages: [
+        {
+          role: "user",
+          content: `Write this post.\nTitle: ${idea.title}\nQuestion it answers: ${idea.query}\nAngle: ${idea.angle}\nWhy now: ${idea.whyNow}${idea.source ? ` (${idea.source})` : ""}\nOutline:\n- ${idea.outline.join("\n- ")}\n\nYou may mention the trend in general terms, but every claim about CNTXT must come from the company facts.`,
+        },
+      ],
     });
     if (post.stop_reason !== "refusal" && post.parsed_output) draft = post.parsed_output;
   }
-  return { report: report.parsed_output, draft };
+  return { report: report.parsed_output, draft, trends };
 }
 
 export async function runSeoReport(trigger: "schedule" | "manual") {
@@ -235,10 +293,11 @@ export async function runSeoReport(trigger: "schedule" | "manual") {
   if (apiKey) {
     try {
       const { data: posts } = await db.from("posts").select("title");
-      const { report, draft } = await writeUp(apiKey, pages, issues, score, geoScore, (posts ?? []).map((post) => post.title as string));
+      const { report, draft, trends } = await writeUp(apiKey, pages, issues, score, geoScore, (posts ?? []).map((post) => post.title as string));
       row.summary = report.summary;
       row.recommendations = report.recommendations;
       row.blog_ideas = report.blogIdeas;
+      row.site_checks = { ...siteChecks, trendNotes: trends };
       if (draft) {
         const slug = `${draft.slug.toLowerCase().replace(/[^a-z0-9-]+/g, "-").replace(/^-|-$/g, "").slice(0, 70)}-${Date.now().toString(36)}`;
         const { data: saved } = await db

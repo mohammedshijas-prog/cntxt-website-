@@ -19,7 +19,7 @@ type Report = {
   site_checks: { pagesInSitemap?: number; llmsTxt?: boolean; aiCrawlersAllowed?: string[]; averageMs?: number };
   summary: string | null;
   recommendations: { title: string; why: string; how: string; impact: "high" | "medium" | "low" }[];
-  blog_ideas: { title: string; query: string; angle: string; outline: string[] }[];
+  blog_ideas: { title: string; query: string; angle: string; whyNow?: string; source?: string; outline: string[] }[];
   draft_post_id: string | null;
   error: string | null;
 };
@@ -137,6 +137,16 @@ export function SeoReports({ session }: { session: Session }) {
                     <strong>{idea.title}</strong>
                     <em>Answers: {idea.query}</em>
                     <span>{idea.angle}</span>
+                    {idea.whyNow ? (
+                      <em>
+                        Why now: {idea.whyNow}{" "}
+                        {idea.source ? (
+                          <a href={idea.source} target="_blank" rel="noopener noreferrer">
+                            Source
+                          </a>
+                        ) : null}
+                      </em>
+                    ) : null}
                   </li>
                 ))}
               </ul>
