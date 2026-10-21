@@ -15,12 +15,13 @@ const csp = [
   "font-src 'self' data:",
   "media-src 'self'",
   "frame-src https://www.googletagmanager.com https://td.doubleclick.net https://www.facebook.com https://*.hsforms.com https://*.hsforms.net https://*.hubspot.com https://vercel.live",
-  "form-action 'self' https://*.hsforms.com https://*.hubspot.com",
+  "form-action 'self' https://*.hsforms.com https://*.hubspot.com https://www.facebook.com",
   "worker-src 'self' blob:",
   "object-src 'none'",
   "base-uri 'self'",
   "frame-ancestors 'none'",
-  "upgrade-insecure-requests",
+  // upgrade-insecure-requests is left out: browsers ignore it in a
+  // Report-Only policy and log an error on every page. HSTS covers it.
 ].join("; ");
 
 const nextConfig: NextConfig = {

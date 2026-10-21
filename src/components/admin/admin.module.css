@@ -270,7 +270,7 @@
 }
 
 .row:hover {
-  background: #faf9fd;
+  background: var(--fill);
 }
 
 .rowHead {
@@ -360,7 +360,7 @@
   margin: 0;
   padding: var(--space-4);
   border-radius: 10px;
-  background: var(--bg-2);
+  background: var(--fill);
   font-size: 15px;
   line-height: 1.6;
   white-space: pre-wrap;
@@ -413,7 +413,7 @@
   width: 96px;
   height: 60px;
   border-radius: 8px;
-  background: var(--bg-2);
+  background: var(--fill);
   object-fit: cover;
 }
 
@@ -673,7 +673,7 @@
   align-items: center;
   padding: 6px 12px 6px 6px;
   border-radius: 999px;
-  background: var(--bg-2);
+  background: var(--fill);
   font-family: var(--font-heading);
   font-size: 13px;
 }
@@ -925,7 +925,7 @@
   margin: 0 0 12px;
   padding: 10px 14px;
   border-radius: 12px;
-  background: var(--bg-2);
+  background: var(--fill);
   font-family: var(--font-heading);
   font-size: 14px;
 }
@@ -1427,7 +1427,7 @@
 
 .detail {
   border-radius: 0;
-  background: var(--bg-2);
+  background: var(--fill);
 }
 
 .fitCard {
@@ -1709,4 +1709,18 @@
 /* Status sits right after the title block, vertically centred with the actions. */
 .roleRow > button:last-child > span:last-child {
   align-self: center;
+}
+
+/* Alignment: badges inside rows and lists sit on the row's centre line. */
+.row > .status,
+.members li > .roleBadge,
+.roleRow .status {
+  align-self: center;
+}
+
+/* Stacked cards breathe; nothing touches its neighbour. */
+.department + .department,
+.department + details.department,
+details.department + .department {
+  margin-top: 16px;
 }

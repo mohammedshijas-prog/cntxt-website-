@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { AdminPortal } from "@/components/admin/AdminPortal";
 
 export const metadata: Metadata = {
@@ -18,5 +19,10 @@ export default function AdminPage() {
       </main>
     );
   }
-  return <AdminPortal />;
+  // The portal reads the section and filters from the URL.
+  return (
+    <Suspense>
+      <AdminPortal />
+    </Suspense>
+  );
 }

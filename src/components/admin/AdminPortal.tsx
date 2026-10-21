@@ -2,6 +2,7 @@
 
 import type { Session } from "@supabase/supabase-js";
 import Link from "next/link";
+import { usePathname, useSearchParams } from "next/navigation";
 import { renderMarkdown } from "@/lib/markdown";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { supabaseBrowser } from "@/lib/supabase/browser";
@@ -103,9 +104,15 @@ export function AdminPortal() {
   const [ready, setReady] = useState(false);
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
   const [role, setRole] = useState<PortalRole | null>(null);
-  const [chosen, setTab] = useState<Tab | null>(null);
+  // Each section has its own address (/admin/seo, /admin/roles…), so links,
+  // bookmarks and reloads land in the right place.
+  const pathname = usePathname();
+  const search = useSearchParams();
+  const section = pathname.split("/")[2] ?? "";
+  const chosen = section in tabs ? (section as Tab) : null;
   // Set when HR jumps from a role to the people who applied for it.
-  const [roleFocus, setRoleFocus] = useState<string | undefined>(undefined);
+  const roleFocus = chosen === "applications" ? search.get("role") ?? undefined : undefined;
+  const go = (next: Tab, query = "") => window.history.pushState(null, "", `/admin/${next}${query}`);
 
   useEffect(() => {
     db.auth.getSession().then(({ data }) => {
@@ -160,8 +167,7 @@ export function AdminPortal() {
                 <p>{group.name}</p>
                 {items.map((item) => (
                   <button key={item} className={tab === item ? styles.navOn : ""} aria-current={tab === item ? "page" : undefined} onClick={() => {
-                      setRoleFocus(undefined);
-                      setTab(item);
+                      go(item);
                     }}>
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                       <path d={icons[item]} />
@@ -194,8 +200,7 @@ export function AdminPortal() {
           <Roles
             role={role ?? "recruiter"}
             onApplicants={(roleId) => {
-              setRoleFocus(roleId);
-              setTab("applications");
+              go("applications", `?role=${encodeURIComponent(roleId)}`);
             }}
           />
         ) : null}

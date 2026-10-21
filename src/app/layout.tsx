@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { JsonLd, organization, website } from "@/lib/seo";
 import { Host_Grotesk, Manrope } from "next/font/google";
+import Script from "next/script";
 import "lenis/dist/lenis.css";
 import "./globals.css";
 import { MotionProvider } from "../components/motion/MotionProvider";
@@ -64,11 +65,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`${host.variable} ${manrope.variable}`}>
-      <head>
-        {/* Google Tag Manager */}
-        <script id="gtm-head" dangerouslySetInnerHTML={{ __html: gtmHead }} />
-        {/* End Google Tag Manager */}
-      </head>
       <body>
         {/* Google Tag Manager (noscript) */}
         <noscript>
@@ -85,17 +81,24 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <PhoneDock />
         <PageBeacon />
         <JsonLd data={[organization, website]} />
+        {/*
+          Third-party scripts load through next/script, after React has taken
+          over the page. Loaded as raw tags, HubSpot edits the DOM before
+          hydration and React throws a hydration error.
+        */}
+        <Script id="gtm-head" strategy="afterInteractive">
+          {gtmHead}
+        </Script>
         {/* Cookie banner, as on the current site */}
-        <script
+        <Script
+          id="cookie-consent"
           src="https://cookie-consent-cdn-prod.pages.dev/cookie-consent/3.0.33/cookie-consent.js"
-          type="text/javascript"
           integrity="sha384-hID7SQtXLqNKM1f6agvO2qhK2radQn5wf+Su4pAEM5ElgJ/FmSWXrmcaYP4/D3E0"
           crossOrigin="anonymous"
-          async
+          strategy="afterInteractive"
         />
-        {/* Start of HubSpot Embed Code */}
-        <script type="text/javascript" id="hs-script-loader" async defer src="//js.hs-scripts.com/48027770.js" />
-        {/* End of HubSpot Embed Code */}
+        {/* HubSpot embed code: chat and forms tracking, loaded when the page is idle. */}
+        <Script id="hs-script-loader" src="https://js.hs-scripts.com/48027770.js" strategy="lazyOnload" />
       </body>
     </html>
   );
