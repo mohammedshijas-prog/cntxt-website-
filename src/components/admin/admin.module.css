@@ -1104,3 +1104,495 @@
     grid-template-columns: 1fr 1fr;
   }
 }
+
+/* =====================================================================
+   Apple HIG theme for the portal (apple-design-library tokens).
+   Scoped to the portal, so the marketing site keeps its own look.
+   System font and semantic colours, CNTXT purple as the one tint,
+   a Mac-style sidebar, inset-grouped lists, light and dark.
+   ===================================================================== */
+.shell,
+.center {
+  --font-ui: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro", system-ui, "Segoe UI", Roboto, sans-serif;
+  --font-heading: var(--font-ui);
+  --font-body: var(--font-ui);
+  --label: #1d1d1f;
+  --label-2: rgba(60, 60, 67, 0.62);
+  --label-3: rgba(60, 60, 67, 0.36);
+  --separator: rgba(60, 60, 67, 0.16);
+  --bg-2: #f2f2f7;
+  --surface: #ffffff;
+  --fill: rgba(118, 118, 128, 0.12);
+  --sidebar: rgba(246, 246, 248, 0.82);
+  --accent: #7d52f4;
+  --accent-tint: rgba(125, 82, 244, 0.12);
+  --accent-text: #6538e8;
+  --red: #ff3b30;
+  color-scheme: light;
+  font-family: var(--font-ui);
+  -webkit-font-smoothing: antialiased;
+}
+
+@media (prefers-color-scheme: dark) {
+  .shell,
+  .center {
+    --label: #f5f5f7;
+    --label-2: rgba(235, 235, 245, 0.62);
+    --label-3: rgba(235, 235, 245, 0.34);
+    --separator: rgba(84, 84, 88, 0.55);
+    --bg-2: #000000;
+    --surface: #1c1c1e;
+    --fill: rgba(118, 118, 128, 0.24);
+    --sidebar: rgba(30, 30, 32, 0.82);
+    --accent: #9b7bff;
+    --accent-tint: rgba(155, 123, 255, 0.2);
+    --accent-text: #b8a2ff;
+    --red: #ff453a;
+    color-scheme: dark;
+  }
+}
+
+/* ---------- layout: sidebar + content ---------- */
+.shell {
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr);
+  min-height: 100vh;
+  background: var(--bg-2);
+  color: var(--label);
+}
+
+.sidebar {
+  position: sticky;
+  top: 0;
+  display: flex;
+  height: 100vh;
+  flex-direction: column;
+  gap: 20px;
+  padding: 18px 12px 14px;
+  border-right: 1px solid var(--separator);
+  background: var(--sidebar);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+}
+
+.sidebar .brand {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding: 4px 10px;
+}
+
+.sidebar .brand span {
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: var(--accent-tint);
+  color: var(--accent-text);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+@media (prefers-color-scheme: dark) {
+  .sidebar .brand img {
+    filter: brightness(0) invert(1);
+  }
+}
+
+.nav {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 16px;
+  overflow-y: auto;
+}
+
+.navGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* Section headers: small, semibold, secondary, like a Finder sidebar. */
+.navGroup p {
+  margin: 0 0 4px;
+  padding: 0 10px;
+  color: var(--label-3);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.navGroup button {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  min-height: 34px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 8px;
+  background: none;
+  color: var(--label);
+  font: 400 14px/18px var(--font-ui);
+  text-align: left;
+  cursor: pointer;
+  transition: background 160ms ease;
+}
+
+.navGroup button svg {
+  flex: none;
+  color: var(--accent);
+}
+
+.navGroup button:hover {
+  background: var(--fill);
+}
+
+/* Selection: the accent at low opacity, as the HIG asks for sidebars. */
+.navGroup .navOn {
+  background: var(--accent-tint);
+  color: var(--accent-text);
+  font-weight: 600;
+}
+
+.navGroup button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.who {
+  display: grid;
+  grid-template-columns: 30px 1fr;
+  gap: 2px 10px;
+  align-items: center;
+  margin: 0;
+  padding: 10px;
+  border-top: 1px solid var(--separator);
+}
+
+.avatar {
+  display: grid;
+  grid-row: span 2;
+  width: 30px;
+  height: 30px;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.whoText {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+}
+
+.whoText strong {
+  overflow: hidden;
+  font-size: 12px;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.whoText em {
+  color: var(--label-2);
+  font-size: 11px;
+  font-style: normal;
+}
+
+.who .link {
+  grid-column: 2;
+  justify-self: start;
+  font-size: 12px;
+}
+
+.main {
+  width: 100%;
+  max-width: 1120px;
+  margin: 0;
+  padding: 34px 40px 80px;
+}
+
+/* ---------- type: Mac large title, then text styles ---------- */
+.head h1,
+.card h1 {
+  color: var(--label);
+  font: 700 28px/34px var(--font-ui);
+  letter-spacing: 0.01em;
+}
+
+.head p,
+.card p {
+  color: var(--label-2);
+  font-size: 14px;
+}
+
+.department header h2 {
+  font: 600 15px/20px var(--font-ui);
+}
+
+/* ---------- surfaces: inset-grouped lists on the grouped background ---------- */
+.card,
+.department,
+.table,
+.scoreTile,
+.postList button,
+.detail,
+.fitCard,
+.keyStatus {
+  border: 0;
+  background: var(--surface);
+  box-shadow: none;
+}
+
+.table,
+.department,
+.scoreTile,
+.postList button {
+  border-radius: 12px;
+}
+
+.card {
+  border-radius: 20px;
+  box-shadow: 0 20px 50px -30px rgba(0, 0, 0, 0.35);
+}
+
+.row {
+  border-bottom: 1px solid var(--separator);
+}
+
+.rowHead {
+  color: var(--label-2);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.detail {
+  border-radius: 0;
+  background: var(--bg-2);
+}
+
+.fitCard {
+  border-radius: 12px;
+  box-shadow: inset 0 0 0 1px var(--accent-tint);
+}
+
+.reportSummary,
+.hint,
+.drafter {
+  border: 0;
+  border-radius: 12px;
+  background: var(--accent-tint);
+  color: var(--label);
+}
+
+/* ---------- controls ---------- */
+.primary,
+.secondary,
+.secondaryOn,
+.danger {
+  min-height: 34px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 999px;
+  font: 500 14px/18px var(--font-ui);
+}
+
+.primary {
+  background: var(--accent);
+  color: #ffffff;
+}
+
+.secondary {
+  background: var(--fill);
+  color: var(--accent-text);
+}
+
+.secondaryOn {
+  background: var(--accent);
+  color: #ffffff;
+}
+
+.danger {
+  background: var(--fill);
+  color: var(--red);
+}
+
+.primary:disabled,
+.secondary:disabled {
+  opacity: 0.45;
+}
+
+.link {
+  color: var(--accent-text);
+}
+
+.input {
+  min-height: 36px;
+  border: 0;
+  border-radius: 10px;
+  background: var(--fill);
+  color: var(--label);
+  font: 400 14px/20px var(--font-ui);
+}
+
+.input::placeholder {
+  color: var(--label-3);
+}
+
+.input:focus-visible {
+  outline: 3px solid var(--accent-tint);
+  box-shadow: inset 0 0 0 1px var(--accent);
+}
+
+.bodyTabs {
+  padding: 2px;
+  border-radius: 9px;
+  background: var(--fill);
+}
+
+.bodyTabs button {
+  min-height: 28px;
+  border-radius: 7px;
+  color: var(--label);
+  font: 500 13px/18px var(--font-ui);
+}
+
+.bodyTabs .tabOn {
+  background: var(--surface);
+  color: var(--label);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12), 0 3px 1px rgba(0, 0, 0, 0.04);
+}
+
+.roleBadge,
+.pill {
+  background: var(--accent-tint);
+  color: var(--accent-text);
+}
+
+.copyLink {
+  background: var(--surface) !important;
+}
+
+/* ---------- small screens: the sidebar becomes a top bar with scrolling sections ---------- */
+@media (max-width: 900px) {
+  .shell {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    position: sticky;
+    z-index: 10;
+    height: auto;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    padding: 10px 12px;
+    border-right: 0;
+    border-bottom: 1px solid var(--separator);
+  }
+
+  .nav {
+    order: 3;
+    flex: 1 1 100%;
+    flex-direction: row;
+    gap: 6px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .navGroup {
+    flex-direction: row;
+  }
+
+  .navGroup p {
+    display: none;
+  }
+
+  .navGroup button {
+    flex: none;
+    min-height: 36px;
+    border-radius: 999px;
+    background: var(--fill);
+  }
+
+  .who {
+    grid-template-columns: auto auto;
+    margin-left: auto;
+    padding: 0;
+    border-top: 0;
+  }
+
+  .avatar,
+  .whoText em {
+    display: none;
+  }
+
+  .whoText strong {
+    max-width: 140px;
+  }
+
+  .main {
+    padding: 22px 16px 60px;
+  }
+}
+
+/* Badges hug their text. */
+.fit,
+.status,
+.roleBadge {
+  align-self: flex-start;
+  width: fit-content;
+}
+
+/* Dark mode: tinted, not pastel, so badges sit quietly on dark surfaces. */
+@media (prefers-color-scheme: dark) {
+  .shell .new,
+  .shell .fit_possible {
+    background: rgba(255, 159, 10, 0.18);
+    color: #ffb340;
+  }
+
+  .shell .contacted,
+  .shell .reviewing,
+  .shell .scoping,
+  .shell .draft {
+    background: rgba(155, 123, 255, 0.2);
+    color: #c4b0ff;
+  }
+
+  .shell .interview,
+  .shell .offer {
+    background: rgba(10, 132, 255, 0.2);
+    color: #64b5ff;
+  }
+
+  .shell .closed,
+  .shell .hired,
+  .shell .delivered,
+  .shell .open,
+  .shell .published,
+  .shell .fit_strong {
+    background: rgba(48, 209, 88, 0.18);
+    color: #4cd964;
+  }
+
+  .shell .rejected,
+  .shell .fit_weak {
+    background: rgba(142, 142, 147, 0.22);
+    color: #aeaeb2;
+  }
+
+  .shell .scoreGood {
+    color: #30d158;
+  }
+
+  .shell .scoreOk {
+    color: #ff9f0a;
+  }
+
+  .shell .scoreLow {
+    color: #ff453a;
+  }
+}

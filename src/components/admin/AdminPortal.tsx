@@ -56,6 +56,27 @@ const tabs = {
 } as const;
 type Tab = keyof typeof tabs;
 
+/** Sidebar sections, Mac-style: grouped by what the work is. */
+const groups: { name: string; items: Tab[] }[] = [
+  { name: "Inbox", items: ["submissions", "applications", "requests"] },
+  { name: "Workspace", items: ["roles", "catalogue", "posts"] },
+  { name: "Insights", items: ["seo"] },
+  { name: "Admin", items: ["team", "settings"] },
+];
+
+/* Rounded-stroke icons drawn to sit with SF Symbols (Apple's symbol files are licensed for Apple platforms only). */
+const icons: Record<Tab, string> = {
+  submissions: "M4 6h16v12H4zM4 7l8 6 8-6",
+  applications: "M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M4 7h16v12H4zM4 12h16",
+  requests: "M12 3c4.4 0 8 1.3 8 3s-3.6 3-8 3-8-1.3-8-3 3.6-3 8-3zM4 6v12c0 1.7 3.6 3 8 3s8-1.3 8-3V6M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3",
+  roles: "M9 7a3 3 0 1 0 6 0 3 3 0 0 0-6 0M5 21v-1a6 6 0 0 1 6-6h2a6 6 0 0 1 6 6v1",
+  catalogue: "M4 5h16v4H4zM4 11h16v4H4zM4 17h16v2H4z",
+  posts: "M5 4h10l4 4v12H5zM14 4v5h5M8 13h8M8 17h6",
+  seo: "M4 19V9M10 19V5M16 19v-7M3 21h18",
+  team: "M7 9a3 3 0 1 0 6 0 3 3 0 0 0-6 0M15 7a3 3 0 1 1 3 5M2 20a6 6 0 0 1 12 0M16 14a5 5 0 0 1 6 6",
+  settings: "M12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6zM19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.6 1.1V21a2 2 0 1 1-4 0v-.1a1.6 1.6 0 0 0-2.6-1.1l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A1.6 1.6 0 0 0 4.6 15H3a2 2 0 1 1 0-4h.1a1.6 1.6 0 0 0 1.1-2.6l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 2.6-1.1V3a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 2.6 1.1l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8V9a1.6 1.6 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1z",
+};
+
 /** What each role can open. The database enforces the same split. */
 export type PortalRole = "admin" | "marketing" | "hr_head" | "recruiter" | "data_head" | "data_manager";
 export const roleNames: Record<PortalRole, string> = {
@@ -123,28 +144,43 @@ export function AdminPortal() {
 
   return (
     <div className={styles.shell}>
-      <header className={styles.top}>
+      <aside className={styles.sidebar} aria-label="Portal">
         <Link href="/" className={styles.brand}>
-          <img src="/partners/nav-logo.svg" alt="CNTXT AI" height={18} />
+          <img src="/partners/nav-logo.svg" alt="CNTXT AI" height={16} />
           <span>Portal</span>
         </Link>
-        <nav className={styles.tabs} aria-label="Portal sections">
-          {allowed.map((item) => (
-            <button key={item} className={tab === item ? styles.tabOn : ""} onClick={() => setTab(item)}>
-              {tabs[item]}
-            </button>
-          ))}
+        <nav className={styles.nav}>
+          {groups.map((group) => {
+            const items = group.items.filter((item) => allowed.includes(item));
+            if (!items.length) return null;
+            return (
+              <div key={group.name} className={styles.navGroup}>
+                <p>{group.name}</p>
+                {items.map((item) => (
+                  <button key={item} className={tab === item ? styles.navOn : ""} aria-current={tab === item ? "page" : undefined} onClick={() => setTab(item)}>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                      <path d={icons[item]} />
+                    </svg>
+                    {tabs[item]}
+                  </button>
+                ))}
+              </div>
+            );
+          })}
         </nav>
         <div className={styles.who}>
-          <span>
-            {session.user.email}
-            {role ? <b className={styles.roleBadge}>{roleNames[role]}</b> : null}
+          <span className={styles.avatar} aria-hidden="true">
+            {session.user.email?.[0]?.toUpperCase()}
+          </span>
+          <span className={styles.whoText}>
+            <strong>{session.user.email}</strong>
+            {role ? <em>{roleNames[role]}</em> : null}
           </span>
           <button className={styles.link} onClick={() => db.auth.signOut()}>
             Sign out
           </button>
         </div>
-      </header>
+      </aside>
       <main className={styles.main}>
         {tab === "submissions" ? <Submissions /> : null}
         {tab === "posts" ? <Posts /> : null}
