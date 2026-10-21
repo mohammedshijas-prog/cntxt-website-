@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { supabaseBrowser } from "@/lib/supabase/browser";
+import type { PortalRole } from "./AdminPortal";
 import { downloadCsv, slugify, when } from "./shared";
 import styles from "./admin.module.css";
 
@@ -38,7 +39,8 @@ const requestStages: DataRequest["status"][] = ["new", "contacted", "scoping", "
 const blankDataset: Dataset = { slug: "", title: "", kind: "labelled", category: "Text", blurb: "", capture: "", labels: ["", ""], sample_url: null, sample_name: null, status: "draft", sort: 100 };
 
 /* ------------------------------------------------------------ Data requests */
-export function DataRequests() {
+export function DataRequests({ role }: { role: PortalRole }) {
+  void role; // Everyone on the data team works requests; deletes stay with the database rules.
   const db = useMemo(() => supabaseBrowser(), []);
   const [rows, setRows] = useState<DataRequest[]>([]);
   const [query, setQuery] = useState("");
@@ -203,7 +205,8 @@ export function DataRequests() {
 }
 
 /* ------------------------------------------------------------ Catalogue */
-export function Catalogue() {
+export function Catalogue({ role }: { role: PortalRole }) {
+  const publisher = role === "admin" || role === "data_head";
   const db = useMemo(() => supabaseBrowser(), []);
   const [items, setItems] = useState<Dataset[]>([]);
   const [editing, setEditing] = useState<Dataset | null>(null);
@@ -220,6 +223,7 @@ export function Catalogue() {
   if (editing) {
     return (
       <DatasetEditor
+        publisher={publisher}
         initial={editing}
         onDone={() => {
           setEditing(null);
@@ -264,7 +268,7 @@ export function Catalogue() {
   );
 }
 
-function DatasetEditor({ initial, onDone }: { initial: Dataset; onDone: () => void }) {
+function DatasetEditor({ initial, onDone, publisher }: { initial: Dataset; onDone: () => void; publisher: boolean }) {
   const db = useMemo(() => supabaseBrowser(), []);
   const [item, setItem] = useState<Dataset>(initial);
   const [slugTouched, setSlugTouched] = useState(Boolean(initial.id));
@@ -323,20 +327,29 @@ function DatasetEditor({ initial, onDone }: { initial: Dataset; onDone: () => vo
           ← Catalogue
         </button>
         <div className={styles.actions}>
-          {item.id ? (
+          {item.id && publisher ? (
             <button className={styles.danger} onClick={remove}>
               Delete
             </button>
           ) : null}
-          <button className={styles.secondary} disabled={busy} onClick={() => save("draft")}>
-            {item.status === "published" ? "Unpublish" : "Save draft"}
-          </button>
-          <button className={styles.primary} disabled={busy} onClick={() => save("published")}>
-            {item.status === "published" ? "Update" : "Publish"}
-          </button>
+          {publisher ? (
+            <>
+              <button className={styles.secondary} disabled={busy} onClick={() => save("draft")}>
+                {item.status === "published" ? "Unpublish" : "Save draft"}
+              </button>
+              <button className={styles.primary} disabled={busy} onClick={() => save("published")}>
+                {item.status === "published" ? "Update" : "Publish"}
+              </button>
+            </>
+          ) : (
+            <button className={styles.primary} disabled={busy} onClick={() => save(item.status)}>
+              {item.status === "published" ? "Save changes" : "Save draft"}
+            </button>
+          )}
         </div>
       </div>
       {note ? <p className={styles.note}>{note}</p> : null}
+      {!publisher ? <p className={styles.hint}>You can add and edit datasets and upload samples. The head of data publishes them to the catalogue.</p> : null}
       <div className={styles.fields}>
         <label>
           Title

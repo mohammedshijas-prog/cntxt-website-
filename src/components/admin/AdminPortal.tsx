@@ -55,18 +55,22 @@ const tabs = {
 type Tab = keyof typeof tabs;
 
 /** What each role can open. The database enforces the same split. */
-export type PortalRole = "admin" | "marketing" | "hr_head" | "recruiter";
+export type PortalRole = "admin" | "marketing" | "hr_head" | "recruiter" | "data_head" | "data_manager";
 export const roleNames: Record<PortalRole, string> = {
   admin: "Admin",
   marketing: "Marketing",
   hr_head: "Head of HR",
   recruiter: "Recruiting manager",
+  data_head: "Head of data",
+  data_manager: "Data manager",
 };
 const access: Record<PortalRole, Tab[]> = {
   admin: ["submissions", "applications", "roles", "requests", "catalogue", "posts", "team", "settings"],
-  marketing: ["submissions", "requests", "catalogue", "posts"],
+  marketing: ["submissions", "posts"],
   hr_head: ["applications", "roles", "team"],
   recruiter: ["applications", "roles"],
+  data_head: ["requests", "catalogue", "team"],
+  data_manager: ["requests", "catalogue"],
 };
 
 /** The CNTXT portal: submissions, job applications, dataset requests, roles, the catalogue, blog posts and the team. */
@@ -144,8 +148,8 @@ export function AdminPortal() {
         {tab === "posts" ? <Posts /> : null}
         {tab === "applications" ? <Applications role={role ?? "recruiter"} /> : null}
         {tab === "roles" ? <Roles role={role ?? "recruiter"} /> : null}
-        {tab === "requests" ? <DataRequests /> : null}
-        {tab === "catalogue" ? <Catalogue /> : null}
+        {tab === "requests" ? <DataRequests role={role ?? "data_manager"} /> : null}
+        {tab === "catalogue" ? <Catalogue role={role ?? "data_manager"} /> : null}
         {tab === "team" ? <Team session={session} role={role ?? "recruiter"} /> : null}
         {tab === "settings" ? <Settings session={session} /> : null}
       </main>
@@ -566,15 +570,18 @@ type Member = { email: string; name: string | null; role: PortalRole };
 
 /** Who may give each role: admins give any; the head of HR adds recruiting managers. */
 const canGrant: Record<PortalRole, PortalRole[]> = {
-  admin: ["admin", "marketing", "hr_head", "recruiter"],
+  admin: ["admin", "marketing", "hr_head", "recruiter", "data_head", "data_manager"],
   marketing: [],
   hr_head: ["recruiter"],
   recruiter: [],
+  data_head: ["data_manager"],
+  data_manager: [],
 };
 
 const departments: { name: string; roles: PortalRole[]; note: string }[] = [
   { name: "Admin", roles: ["admin"], note: "Everything, including the team." },
-  { name: "Marketing", roles: ["marketing"], note: "Form submissions, blog posts, data requests and the catalogue." },
+  { name: "Marketing", roles: ["marketing"], note: "Form submissions and blog posts." },
+  { name: "Data", roles: ["data_head", "data_manager"], note: "The data catalogue and dataset requests. Only the head of data publishes datasets and deletes requests." },
   { name: "HR", roles: ["hr_head", "recruiter"], note: "Roles and applications. Only the head of HR opens or closes roles and deletes applications." },
 ];
 
@@ -611,7 +618,7 @@ function Team({ session, role }: { session: Session; role: PortalRole }) {
       <div className={styles.head}>
         <div>
           <h1>Team</h1>
-          <p>{role === "admin" ? "Add people and choose what each of them can see." : "Add recruiting managers to help with applications."}</p>
+          <p>{role === "admin" ? "Add people and choose what each of them can see." : role === "data_head" ? "Add data managers to help with the catalogue and requests." : "Add recruiting managers to help with applications."}</p>
         </div>
       </div>
       {grantable.length ? (

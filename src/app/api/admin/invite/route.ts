@@ -6,7 +6,7 @@ import { supabaseService } from "@/lib/supabase/server";
  * recruiting managers. Every check runs here, with the caller's own token.
  */
 
-const roles = ["admin", "marketing", "hr_head", "recruiter"] as const;
+const roles = ["admin", "marketing", "hr_head", "recruiter", "data_head", "data_manager"] as const;
 type Role = (typeof roles)[number];
 
 /** Who may grant (or take away) each role. */
@@ -15,6 +15,8 @@ const grantors: Record<Role, Role[]> = {
   marketing: ["admin"],
   hr_head: ["admin"],
   recruiter: ["admin", "hr_head"],
+  data_head: ["admin"],
+  data_manager: ["admin", "data_head"],
 };
 
 async function caller(request: Request) {
