@@ -3,8 +3,8 @@
 import { useState } from "react";
 import styles from "./dataTypes.module.css";
 
-/* Datasets named here are the ones listed in the Data Hub. */
-const modalities = [
+/* Datasets named here are the ones listed in the Data Hub. Also the catalogue's illustrative samples. */
+export const modalities = [
   {
     name: "Text",
     sample: `{

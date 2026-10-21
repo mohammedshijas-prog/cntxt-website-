@@ -4,7 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import { SiteClose } from "../site/SiteClose";
 import { SiteNav } from "../site/SiteNav";
 import { NumberField } from "./NumberField";
-import { RequestPanel, SampleLink } from "./RequestPanel";
+import { RequestPanel } from "./RequestPanel";
+import { SampleViewer } from "./SampleViewer";
 import { IconChip } from "../shared/graphics";
 import styles from "./data-hub.module.css";
 import { CtaBand } from "../shared/CtaBand";
@@ -181,6 +182,8 @@ export function DataHubPage({ initialCategory, datasets }: { initialCategory?: s
     .filter((item) => item.kind === "labelled")
     .map((item, age) => ({ ...item, kind: "agent", labels: [item.labels[0] ?? "", item.labels[1] ?? ""], age }));
   const [asking, setAsking] = useState(false);
+  const [viewing, setViewing] = useState<string | null>(null);
+  const viewed = datasets.find((item) => item.id === viewing);
   const toggle = (id: string) =>
     setRequested((current) => (current.includes(id) ? current.filter((item) => item !== id) : [...current, id]));
   const [query, setQuery] = useState("");
@@ -313,7 +316,9 @@ export function DataHubPage({ initialCategory, datasets }: { initialCategory?: s
                     <button type="button" aria-pressed={requested.includes(item.id)} onClick={() => toggle(item.id)}>
                       {requested.includes(item.id) ? "Added ✓" : "Add to request"}
                     </button>
-                    <SampleLink item={item} />
+                    <button type="button" className={styles.viewSample} onClick={() => setViewing(item.id)}>
+                      View sample
+                    </button>
                   </div>
                 </div>
               </li>
@@ -357,7 +362,9 @@ export function DataHubPage({ initialCategory, datasets }: { initialCategory?: s
                       <button type="button" aria-pressed={isRequested} onClick={() => toggle(item.id)}>
                         {isRequested ? "Added ✓" : "Add to request"}
                       </button>
-                      <SampleLink item={item} />
+                      <button type="button" className={styles.viewSample} onClick={() => setViewing(item.id)}>
+                      View sample
+                    </button>
                     </div>
                   </div>
                 </li>
@@ -366,6 +373,15 @@ export function DataHubPage({ initialCategory, datasets }: { initialCategory?: s
           </ul>
         ) : null}
       </section>
+
+      {viewed ? (
+        <SampleViewer
+          item={viewed}
+          requested={requested.includes(viewed.id)}
+          onToggle={() => toggle(viewed.id)}
+          onClose={() => setViewing(null)}
+        />
+      ) : null}
 
       {asking ? (
         <RequestPanel

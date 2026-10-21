@@ -26,14 +26,19 @@ export function RequestPanel({ items, onClose, onSent }: { items: CatalogueItem[
   const [error, setError] = useState("");
   const dialog = useRef<HTMLDialogElement>(null);
 
+  // Open once; keep the latest close handler without reopening the dialog.
+  const closeRef = useRef(onClose);
+  useEffect(() => {
+    closeRef.current = onClose;
+  }, [onClose]);
   useEffect(() => {
     const node = dialog.current;
     if (!node) return;
-    node.showModal();
-    const close = () => onClose();
+    if (!node.open) node.showModal();
+    const close = () => closeRef.current();
     node.addEventListener("close", close);
     return () => node.removeEventListener("close", close);
-  }, [onClose]);
+  }, []);
 
   const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
