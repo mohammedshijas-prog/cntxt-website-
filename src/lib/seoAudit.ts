@@ -148,6 +148,7 @@ function scoreOf(issues: Issue[], area?: Issue["area"]) {
 
 const Report = z.object({
   summary: z.string().describe("Three or four sentences for a marketing lead: how the site stands and what changed."),
+  visibilityNote: z.string().describe("Two or three sentences on where CNTXT appears in AI answers: how many of the buyer questions named or cited CNTXT, which questions it is missing from, and which sites appear instead. Use only the aiVisibility data."),
   trafficNote: z.string().describe("Two or three sentences on visits: how many, where they came from (AI engines, search, social, other sites, direct), what moved since the previous 3 days, and which AI crawlers visited. Say plainly if there is too little data yet."),
   recommendations: z
     .array(z.object({ title: z.string(), why: z.string(), how: z.string(), impact: z.enum(["high", "medium", "low"]) }))
@@ -185,6 +186,107 @@ Settled site decisions (do not recommend changing them):
 Traffic numbers come only from the traffic data you are given; never estimate or round them up. If a recommendation follows from the traffic (for example a page AI engines send people to), say which numbers it rests on.
 
 Write in British English, sentence case, short plain sentences. No hype words. Never invent customers, figures, dates or quotes.`;
+
+/*
+ * Where CNTXT appears in AI answers. Each question is one a buyer might ask an
+ * AI assistant; Claude answers it with live web search, and we check the answer
+ * (not Claude's opinion) for CNTXT names and links. The answer text comes from
+ * the open web, so it is only ever stored and shown as data.
+ */
+const visibilityQueries = [
+  "What is CNTXT AI?",
+  "Which companies offer Arabic speech-to-text across many dialects?",
+  "Best Arabic text-to-speech provider in the UAE",
+  "Arabic voice agents for call centres in the GCC",
+  "AI data labelling companies in the UAE",
+  "Who collects AI training data in the Middle East?",
+  "Companies that evaluate AI models with domain experts",
+  "Physical AI and robotics training data providers",
+  "On-premises Arabic AI for government",
+  "Apps that pay you to record your work for AI training",
+];
+
+const ours = /(^|\.)(cntxt\.tech|munsit\.com|klkt\.app)$/i;
+const brandNames = ["CNTXT", "Munsit", "Agentix", "KLKT"];
+
+export type Visibility = {
+  query: string;
+  mentioned: boolean;
+  brands: string[];
+  cited: boolean;
+  citedUrls: string[];
+  rank: number | null;
+  sources: string[];
+  snippet: string;
+};
+
+async function askWithSearch(client: Anthropic, query: string): Promise<Visibility> {
+  const messages: Anthropic.Beta.BetaMessageParam[] = [{ role: "user", content: query }];
+  let blocks: Anthropic.Beta.BetaContentBlock[] = [];
+  for (let turn = 0; turn < 3; turn++) {
+    const response = await client.beta.messages.create({
+      model: "claude-opus-5-5",
+      max_tokens: 4000,
+      output_config: { effort: "low" },
+      betas: ["server-side-fallback-2026-07-01"],
+      fallbacks: "default",
+      system: "Answer the way a helpful AI assistant answers a business buyer: search the web, then give a short answer that names the providers or sources you would point them to, with citations. Be neutral; do not favour any company.",
+      tools: [{ type: "web_search_20260209", name: "web_search", max_uses: 3 }],
+      messages,
+    });
+    blocks = blocks.concat(response.content);
+    if (response.stop_reason !== "pause_turn") break;
+    messages.push({ role: "assistant", content: response.content });
+  }
+  const texts = blocks.filter((block): block is Anthropic.Beta.BetaTextBlock => block.type === "text");
+  const answer = texts.map((block) => block.text).join("").trim();
+  // Sources: the pages the search returned for this answer, in order, plus any inline citations.
+  const urls: string[] = [];
+  for (const block of blocks) {
+    if (block.type === "web_search_tool_result" && Array.isArray(block.content)) {
+      for (const result of block.content) if (result.type === "web_search_result" && result.url) urls.push(result.url);
+    }
+    if (block.type === "text") for (const citation of block.citations ?? []) if ("url" in citation && citation.url) urls.push(citation.url);
+  }
+  const host = (url: string) => {
+    try {
+      return new URL(url).hostname.replace(/^www\./, "");
+    } catch {
+      return "";
+    }
+  };
+  const domains = [...new Set(urls.map(host).filter(Boolean))];
+  const firstOurs = domains.findIndex((domain) => ours.test(domain));
+  const brands = brandNames.filter((name) => new RegExp(`\\b${name}\\b`, "i").test(answer));
+  const citedUrls = [...new Set(urls.filter((url) => ours.test(host(url))))].slice(0, 5);
+  return {
+    query,
+    mentioned: brands.length > 0,
+    brands,
+    cited: citedUrls.length > 0,
+    citedUrls,
+    rank: firstOurs >= 0 ? firstOurs + 1 : null,
+    sources: domains.filter((domain) => !ours.test(domain)).slice(0, 8),
+    snippet: answer.slice(0, 600),
+  };
+}
+
+async function checkVisibility(client: Anthropic) {
+  const results: Visibility[] = [];
+  // Five at a time: two rounds, so the whole check stays well inside the route time limit.
+  for (let i = 0; i < visibilityQueries.length; i += 5) {
+    const batch = await Promise.all(visibilityQueries.slice(i, i + 5).map((query) => askWithSearch(client, query).catch(() => null)));
+    for (const item of batch) if (item) results.push(item);
+  }
+  return {
+    checkedAt: new Date().toISOString(),
+    engine: "Claude with live web search",
+    asked: results.length,
+    mentioned: results.filter((item) => item.mentioned).length,
+    cited: results.filter((item) => item.cited).length,
+    results,
+  };
+}
 
 /**
  * Trend research with web search: what people are searching and asking AI about
@@ -226,7 +328,7 @@ Return 6-8 short notes. Each: the trend in one sentence, why people are searchin
 
 async function writeUp(apiKey: string, pages: Page[], issues: Issue[], score: number, geoScore: number, blogTitles: string[], traffic: unknown) {
   const client = new Anthropic({ apiKey });
-  const trends = await researchTrends(client, blogTitles).catch(() => "");
+  const [trends, visibility] = await Promise.all([researchTrends(client, blogTitles).catch(() => ""), checkVisibility(client).catch(() => null)]);
   const audit = {
     score,
     geoScore,
@@ -235,6 +337,10 @@ async function writeUp(apiKey: string, pages: Page[], issues: Issue[], score: nu
     existingPosts: blogTitles,
     // Visits over the last 3 days next to the 3 days before, by source (ai, search, social, referral, campaign, direct), engine, page and crawler.
     traffic,
+    // Whether CNTXT is named or cited when buyers ask an AI assistant (answers trimmed).
+    aiVisibility: visibility
+      ? { asked: visibility.asked, mentioned: visibility.mentioned, cited: visibility.cited, results: visibility.results.map((item) => ({ query: item.query, mentioned: item.mentioned, brands: item.brands, cited: item.cited, rank: item.rank, sources: item.sources })) }
+      : null,
   };
   const report = await client.beta.messages.parse({
     model: "claude-opus-5-5",
@@ -270,7 +376,7 @@ async function writeUp(apiKey: string, pages: Page[], issues: Issue[], score: nu
     });
     if (post.stop_reason !== "refusal" && post.parsed_output) draft = post.parsed_output;
   }
-  return { report: report.parsed_output, draft, trends };
+  return { report: report.parsed_output, draft, trends, visibility };
 }
 
 export async function runSeoReport(trigger: "schedule" | "manual") {
@@ -310,8 +416,9 @@ export async function runSeoReport(trigger: "schedule" | "manual") {
   if (apiKey) {
     try {
       const { data: posts } = await db.from("posts").select("title");
-      const { report, draft, trends } = await writeUp(apiKey, pages, issues, score, geoScore, (posts ?? []).map((post) => post.title as string), traffic);
+      const { report, draft, trends, visibility } = await writeUp(apiKey, pages, issues, score, geoScore, (posts ?? []).map((post) => post.title as string), traffic);
       row.summary = report.summary;
+      row.ai_visibility = visibility ? { ...visibility, note: report.visibilityNote } : null;
       if (row.traffic) row.traffic = { ...(row.traffic as object), note: report.trafficNote };
       row.recommendations = report.recommendations;
       row.blog_ideas = report.blogIdeas;

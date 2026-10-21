@@ -1724,3 +1724,251 @@
 details.department + .department {
   margin-top: 16px;
 }
+
+/* ---------- SEO & GEO: live traffic and AI visibility ---------- */
+.liveHead {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.segmented {
+  display: inline-flex;
+  padding: 2px;
+  border-radius: 9px;
+  background: var(--fill);
+}
+
+.segmented button {
+  min-height: 32px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--label);
+  font: 500 13px/1 var(--font-ui);
+  cursor: pointer;
+}
+
+.segmented .segOn {
+  background: var(--surface);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 0 0 0.5px var(--separator);
+  font-weight: 600;
+}
+
+@media (prefers-color-scheme: dark) {
+  .shell .segmented .segOn {
+    background: #636366;
+  }
+}
+
+.tileHint {
+  display: block;
+  margin-top: 2px;
+  color: var(--label-3);
+  font-size: 11px;
+}
+
+.of {
+  color: var(--label-2);
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin: 8px 0 6px;
+  color: var(--label-2);
+  font-size: 12px;
+}
+
+.legend span {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.legend i {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+}
+
+.segAi {
+  background: var(--accent);
+}
+
+.segSearch {
+  background: #34c759;
+}
+
+.segOther {
+  background: color-mix(in srgb, var(--label) 22%, transparent);
+}
+
+.chart {
+  display: flex;
+  gap: 4px;
+  align-items: flex-end;
+  height: 160px;
+  padding: 8px 0 0;
+  overflow-x: auto;
+}
+
+.chartCol {
+  display: flex;
+  flex: 1 0 18px;
+  flex-direction: column;
+  gap: 6px;
+  align-items: center;
+  height: 100%;
+  min-width: 18px;
+}
+
+.chartBar {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  width: 100%;
+  max-width: 36px;
+  min-height: 2px;
+  margin-top: auto;
+  overflow: hidden;
+  border-radius: 5px 5px 2px 2px;
+}
+
+.chartBar i {
+  display: block;
+  flex-basis: 0;
+  min-height: 0;
+}
+
+.chartCol span {
+  color: var(--label-3);
+  font-size: 10px;
+  white-space: nowrap;
+}
+
+.miniTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  table-layout: fixed;
+}
+
+.miniTable th {
+  padding: 0 0 6px;
+  color: var(--label-2);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-align: left;
+  text-transform: uppercase;
+}
+
+.miniTable td {
+  padding: 7px 0;
+  overflow: hidden;
+  border-top: 1px solid var(--separator);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.miniTable th:first-child,
+.miniTable td:first-child {
+  width: 40%;
+}
+
+.miniTable .num {
+  padding-right: 8px;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.miniTable td:not(.num):not(:first-child) {
+  padding-left: 8px;
+  color: var(--label-2);
+}
+
+.visibility {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.visibility li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  gap: 10px;
+  align-items: center;
+  padding: 10px 0;
+  border-top: 1px solid var(--separator);
+}
+
+.visibility .status {
+  align-self: center;
+  white-space: nowrap;
+}
+
+.visQuery {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.visQuery strong {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.visQuery em {
+  display: -webkit-box;
+  overflow: hidden;
+  color: var(--label-2);
+  font-size: 12px;
+  font-style: normal;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.visibility .status {
+  text-transform: none;
+}
+
+.sectionTitle {
+  margin: 32px 0 12px;
+  font: 600 20px/1.2 var(--font-ui);
+}
+
+@media (max-width: 734px) {
+  .visibility li {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+
+  .visibility .status {
+    justify-self: start;
+  }
+}
+
+.department .scoreRow {
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+}
+
+.department .scoreTile {
+  background: var(--fill);
+  box-shadow: none;
+}
+
+.department .trafficGrid {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
+  gap: 24px 32px;
+  margin-top: 20px;
+}

@@ -3,23 +3,13 @@
 import type { Session } from "@supabase/supabase-js";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { supabaseBrowser } from "@/lib/supabase/browser";
+import { AiVisibility, LiveTraffic, type Visibility } from "./AdminTraffic";
 import { when } from "./shared";
 import styles from "./admin.module.css";
 
 type Issue = { severity: "high" | "medium" | "low"; area: "SEO" | "GEO" | "Speed"; page: string; issue: string; fix: string };
 type Page = { url: string; status: number; ms: number; title: string; words: number; schema: string[]; h1: number };
-type Summary = {
-  views: number;
-  bySource: Partial<Record<Source, number>>;
-  byEngine: { source: Source; engine: string; views: number }[];
-  topPages: { path: string; views: number }[];
-  aiLanding: { path: string; views: number }[];
-  countries: { country: string; views: number }[];
-  devices: Record<string, number>;
-  crawlers: { bot: string; hits: number }[];
-};
-type Source = "ai" | "search" | "social" | "referral" | "campaign" | "direct";
-type Traffic = { from: string; to: string; current: Summary; previous: Summary | null; note?: string };
+type Traffic = { note?: string };
 type Report = {
   id: string;
   created_at: string;
@@ -34,125 +24,12 @@ type Report = {
   blog_ideas: { title: string; query: string; angle: string; whyNow?: string; source?: string; outline: string[] }[];
   draft_post_id: string | null;
   traffic: Traffic | null;
+  ai_visibility: Visibility | null;
   error: string | null;
 };
 
-const sources: { key: Source; label: string }[] = [
-  { key: "ai", label: "AI engines" },
-  { key: "search", label: "Search" },
-  { key: "social", label: "Social" },
-  { key: "referral", label: "Other sites" },
-  { key: "campaign", label: "Campaigns" },
-  { key: "direct", label: "Direct" },
-];
-
-function Change({ now, before }: { now: number; before: number | undefined }) {
-  if (before === undefined) return <em>last 3 days</em>;
-  const diff = now - before;
-  if (diff === 0) return <em>same as before</em>;
-  const pct = before > 0 ? ` (${diff > 0 ? "+" : ""}${Math.round((diff / before) * 100)}%)` : "";
-  return (
-    <em className={diff > 0 ? styles.up : styles.down}>
-      {diff > 0 ? "+" : ""}
-      {diff}
-      {pct} vs 3 days before
-    </em>
-  );
-}
-
-function Bars({ rows }: { rows: { label: string; value: number; hint?: string }[] }) {
-  const max = Math.max(1, ...rows.map((row) => row.value));
-  if (rows.length === 0) return <p className={styles.emptySmall}>Nothing yet.</p>;
-  return (
-    <ul className={styles.bars}>
-      {rows.map((row) => (
-        <li key={`${row.label}-${row.hint ?? ""}`}>
-          <span>
-            {row.label}
-            {row.hint ? <em>{row.hint}</em> : null}
-          </span>
-          <i style={{ width: `${(row.value / max) * 100}%` }} />
-          <b>{row.value}</b>
-        </li>
-      ))}
-    </ul>
-  );
-}
-
-/** Visits for the report's 3 days: how many, and where they came from. */
-function TrafficPanel({ traffic }: { traffic: Traffic }) {
-  const { current, previous } = traffic;
-  const engines = current.byEngine.filter((row) => row.source === "ai" || row.source === "search");
-  const others = current.byEngine.filter((row) => row.source !== "ai" && row.source !== "search");
-  return (
-    <div className={styles.department}>
-      <header>
-        <h2>Traffic</h2>
-        <p>
-          {when(traffic.from)} to {when(traffic.to)}. Counted without cookies; bots are left out of visits and shown under crawlers.
-        </p>
-      </header>
-      {traffic.note ? <p className={styles.reportSummary}>{traffic.note}</p> : null}
-      <div className={styles.scoreRow}>
-        <div className={styles.scoreTile}>
-          <span>Visits</span>
-          <strong>{current.views}</strong>
-          <Change now={current.views} before={previous?.views} />
-        </div>
-        {sources
-          .filter((source) => source.key !== "campaign" || current.bySource.campaign)
-          .map((source) => (
-            <div key={source.key} className={styles.scoreTile}>
-              <span>{source.label}</span>
-              <strong>{current.bySource[source.key] ?? 0}</strong>
-              <Change now={current.bySource[source.key] ?? 0} before={previous ? previous.bySource[source.key] ?? 0 : undefined} />
-            </div>
-          ))}
-      </div>
-      <div className={styles.trafficGrid}>
-        <section>
-          <h3>AI engines and search</h3>
-          <Bars rows={engines.map((row) => ({ label: row.engine, value: row.views, hint: row.source === "ai" ? "AI" : "Search" }))} />
-        </section>
-        <section>
-          <h3>Social and other sites</h3>
-          <Bars rows={others.map((row) => ({ label: row.engine, value: row.views, hint: row.source === "social" ? "Social" : row.source === "campaign" ? "Campaign" : "Link" }))} />
-        </section>
-        <section>
-          <h3>Top pages</h3>
-          <Bars rows={current.topPages.map((row) => ({ label: row.path, value: row.views }))} />
-        </section>
-        <section>
-          <h3>Where AI engines send people</h3>
-          <Bars rows={current.aiLanding.map((row) => ({ label: row.path, value: row.views }))} />
-        </section>
-        <section>
-          <h3>AI and search crawlers</h3>
-          <Bars rows={current.crawlers.map((row) => ({ label: row.bot, value: row.hits }))} />
-        </section>
-        <section>
-          <h3>Countries and devices</h3>
-          <Bars
-            rows={[
-              ...current.countries.map((row) => ({ label: row.country === "??" ? "Unknown" : row.country, value: row.views })),
-              ...Object.entries(current.devices).map(([device, views]) => ({ label: device, value: views, hint: "Device" })),
-            ]}
-          />
-        </section>
-      </div>
-    </div>
-  );
-}
-
 /** Older reports predate some fields; fill the gaps so the page always renders. */
 function normalise(report: Report): Report {
-  const traffic = report.traffic?.current
-    ? {
-        ...report.traffic,
-        current: { ...emptySummary, ...report.traffic.current },
-        previous: report.traffic.previous ? { ...emptySummary, ...report.traffic.previous } : null,
-      }
-    : null;
   return {
     ...report,
     pages: report.pages ?? [],
@@ -160,11 +37,10 @@ function normalise(report: Report): Report {
     recommendations: report.recommendations ?? [],
     blog_ideas: report.blog_ideas ?? [],
     site_checks: report.site_checks ?? {},
-    traffic,
+    traffic: report.traffic && typeof report.traffic === "object" ? report.traffic : null,
+    ai_visibility: report.ai_visibility?.results ? report.ai_visibility : null,
   };
 }
-
-const emptySummary: Summary = { views: 0, bySource: {}, byEngine: [], topPages: [], aiLanding: [], countries: [], devices: {}, crawlers: [] };
 
 const tone = (score: number | null) => (score === null ? "" : score >= 85 ? styles.scoreGood : score >= 65 ? styles.scoreOk : styles.scoreLow);
 
@@ -209,7 +85,7 @@ export function SeoReports({ session }: { session: Session }) {
       <div className={styles.head}>
         <div>
           <h1>SEO & GEO</h1>
-          <p>Runs by itself every 3 days. Each run counts visits and where they came from, checks every page, scores search (SEO) and AI answer engines (GEO), and drafts one blog post for review.</p>
+          <p>Live traffic below. Every 3 days a report also checks every page, scores search (SEO) and AI answer engines (GEO), asks AI assistants buyer questions to see where CNTXT appears, and drafts one blog post for review.</p>
         </div>
         <div className={styles.actions}>
           <button className={styles.primary} disabled={running} onClick={runNow}>
@@ -218,6 +94,10 @@ export function SeoReports({ session }: { session: Session }) {
         </div>
       </div>
       {note ? <p className={styles.note}>{note}</p> : null}
+
+      <LiveTraffic session={session} />
+      <AiVisibility data={reports[0]?.ai_visibility ?? null} />
+      <h2 className={styles.sectionTitle}>Site report</h2>
 
       {!report ? (
         <p className={styles.empty}>No reports yet. The first one runs on the next 3-day cycle, or press Run now.</p>
@@ -248,7 +128,7 @@ export function SeoReports({ session }: { session: Session }) {
           {report.error ? <p className={styles.hint}>{report.error}</p> : null}
           {report.summary ? <p className={styles.reportSummary}>{report.summary}</p> : null}
 
-          {report.traffic?.current ? <TrafficPanel traffic={report.traffic} /> : null}
+          {report.traffic?.note ? <p className={styles.reportSummary}>Traffic: {report.traffic.note}</p> : null}
 
           {report.recommendations.length ? (
             <div className={styles.department}>

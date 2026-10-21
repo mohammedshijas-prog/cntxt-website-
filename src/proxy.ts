@@ -11,7 +11,7 @@ export function proxy(request: NextRequest, event: NextFetchEvent) {
   const match = crawlers.find(([pattern]) => pattern.test(ua));
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
-  if (!match || !url || !key) return;
+  if (!match || !url || !key || process.env.VERCEL_ENV !== "production") return;
   event.waitUntil(
     fetch(`${url}/rest/v1/bot_hits`, {
       method: "POST",

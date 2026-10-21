@@ -1,7 +1,7 @@
 import { runSeoReport } from "@/lib/seoAudit";
 import { supabaseService } from "@/lib/supabase/server";
 
-export const maxDuration = 300;
+export const maxDuration = 800;
 
 /** "Run now" from the portal, for admins and marketing. */
 export async function POST(request: Request) {

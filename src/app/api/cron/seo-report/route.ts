@@ -2,7 +2,7 @@ import { runSeoReport } from "@/lib/seoAudit";
 import { supabaseService } from "@/lib/supabase/server";
 
 // Crawling the site and writing the report takes a few minutes at most.
-export const maxDuration = 300;
+export const maxDuration = 800;
 
 /** Vercel Cron calls this every 3 days (see vercel.json). */
 export async function GET(request: Request) {
