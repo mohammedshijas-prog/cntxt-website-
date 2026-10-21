@@ -846,3 +846,23 @@
   color: var(--accent-text);
   font-size: 13px;
 }
+
+/* AI drafting for role descriptions. */
+.drafter {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px;
+  border: 1px dashed rgba(125, 82, 244, 0.45);
+  border-radius: 14px;
+  background: var(--accent-tint);
+}
+
+.drafter label span {
+  color: var(--label-3);
+  font-weight: 400;
+}
+
+.drafter button {
+  align-self: flex-start;
+}

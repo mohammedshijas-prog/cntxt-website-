@@ -344,6 +344,28 @@ function RoleEditor({ initial, onDone, me }: { initial: Role; onDone: () => void
   const [note, setNote] = useState("");
 
   const set = <K extends keyof Role>(key: K, value: Role[K]) => setRole((current) => ({ ...current, [key]: value }));
+  const [notes, setNotes] = useState("");
+  const [drafting, setDrafting] = useState(false);
+
+  // Ask Claude for a first draft from the title and details; HR edits it before saving.
+  const draft = async () => {
+    if (!role.title.trim()) return setNote("Add a title first, then draft the description.");
+    if ((role.description.trim() || role.summary.trim()) && !window.confirm("Replace the current summary and description with a new draft?")) return;
+    setDrafting(true);
+    setNote("");
+    const { data } = await db.auth.getSession();
+    const response = await fetch("/api/admin/generate-role", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${data.session?.access_token ?? ""}` },
+      body: JSON.stringify({ title: role.title, department: role.department, location: role.location, terms: role.terms, notes }),
+    });
+    const result = (await response.json().catch(() => ({}))) as { summary?: string; description?: string; error?: string };
+    setDrafting(false);
+    if (!response.ok || !result.description) return setNote(result.error ?? "Couldn't draft the description. Try again.");
+    setRole((current) => ({ ...current, summary: result.summary ?? current.summary, description: result.description ?? current.description }));
+    setPreview(true);
+    setNote("Drafted. Read it through and edit anything that isn't right before saving.");
+  };
 
   const save = async (status: Role["status"]) => {
     if (!role.title.trim() || !role.slug) return setNote("Add a title first.");
@@ -464,6 +486,21 @@ function RoleEditor({ initial, onDone, me }: { initial: Role; onDone: () => void
             Summary
             <textarea className={styles.input} rows={2} value={role.summary} onChange={(event) => set("summary", event.target.value)} placeholder="One sentence shown at the top of the role page." />
           </label>
+          <div className={styles.drafter}>
+            <label>
+              Notes for the AI draft <span>(optional)</span>
+              <textarea
+                className={styles.input}
+                rows={3}
+                value={notes}
+                onChange={(event) => setNotes(event.target.value)}
+                placeholder="Seniority, tools, team, what makes this role different…"
+              />
+            </label>
+            <button type="button" className={styles.primary} disabled={drafting} onClick={draft}>
+              {drafting ? "Drafting…" : "✦ Draft summary and description"}
+            </button>
+          </div>
         </div>
         <div className={styles.bodyCol}>
           <div className={styles.bodyTabs}>
