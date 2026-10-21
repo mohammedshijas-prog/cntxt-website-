@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 import { articleSlug } from "@/components/blog/posts";
 import { industries } from "@/components/industries/industries";
 import { verticals } from "@/components/physical-ai/verticals";
-import { publishedPosts } from "@/lib/supabase/server";
+import { openRoles, publishedPosts } from "@/lib/supabase/server";
 
 const base = "https://www.cntxt.tech";
 
@@ -54,5 +54,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     changeFrequency: "yearly" as const,
     priority: 0.5,
   }));
-  return [...pages, ...posts];
+  // Open roles, each with its own application page.
+  const roles = (await openRoles()).map((role) => ({
+    url: `${base}/careers/${role.slug}`,
+    lastModified: new Date(role.created_at ?? now),
+    changeFrequency: "weekly" as const,
+    priority: 0.5,
+  }));
+  return [...pages, ...posts, ...roles];
 }

@@ -1,3 +1,5 @@
+import { openRoles, publishedDatasets } from "@/lib/supabase/server";
+
 /*
  * llms.txt (llmstxt.org): a plain summary for AI assistants and answer engines,
  * so they describe CNTXT accurately. Facts restate docs/content-brief.md only.
@@ -42,8 +44,20 @@ Key facts:
 - [Contact](https://www.cntxt.tech/contact): sales@cntxt.tech
 `;
 
-export function GET() {
-  return new Response(body, {
+export const revalidate = 3600;
+
+export async function GET() {
+  // Live lists, so answer engines see today's catalogue and openings.
+  const [datasets, roles] = await Promise.all([publishedDatasets(), openRoles()]);
+  const live = [
+    datasets.length
+      ? `\n## Data catalogue\n${datasets.map((item) => `- ${item.title} (${item.category}, ${item.kind === "captured" ? "captured data" : "labelled data"}): ${item.blurb}`).join("\n")}`
+      : "",
+    roles.length
+      ? `\n## Open roles\n${roles.map((role) => `- [${role.title}](https://www.cntxt.tech/careers/${role.slug}): ${role.department}, ${role.location}, ${role.terms}`).join("\n")}`
+      : "",
+  ].join("\n");
+  return new Response(body + live + "\n", {
     headers: { "Content-Type": "text/plain; charset=utf-8", "Cache-Control": "public, max-age=3600" },
   });
 }

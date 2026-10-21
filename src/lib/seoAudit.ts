@@ -1,0 +1,260 @@
+import "server-only";
+import Anthropic from "@anthropic-ai/sdk";
+import { betaZodOutputFormat } from "@anthropic-ai/sdk/helpers/beta/zod";
+import { z } from "zod";
+import { companyFacts } from "@/lib/companyFacts";
+import { anthropicKey } from "@/lib/secrets";
+import { supabaseService } from "@/lib/supabase/server";
+
+/*
+ * The SEO and GEO pipeline. Every run crawls the live sitemap, checks each page
+ * the way a search engine and an AI answer engine would read it, scores the
+ * site, then (when the Anthropic key is set) writes a plain report, suggests
+ * blog topics, and drafts one post for marketing to review. Nothing publishes.
+ */
+
+const SITE = "https://www.cntxt.tech";
+const AI_BOTS = ["GPTBot", "ClaudeBot", "PerplexityBot", "Google-Extended"];
+
+type Page = {
+  url: string;
+  status: number;
+  ms: number;
+  kb: number;
+  title: string;
+  description: string;
+  canonical: string;
+  h1: number;
+  words: number;
+  imagesWithoutAlt: number;
+  internalLinks: number;
+  schema: string[];
+  ogImage: boolean;
+  noindex: boolean;
+};
+
+type Issue = { severity: "high" | "medium" | "low"; area: "SEO" | "GEO" | "Speed"; page: string; issue: string; fix: string };
+
+const pick = (html: string, re: RegExp) => (html.match(re)?.[1] ?? "").replace(/&amp;/g, "&").trim();
+
+/** Every @type in the page's JSON-LD, flattened. */
+function schemaTypes(html: string) {
+  const types = new Set<string>();
+  for (const block of html.matchAll(/<script type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g)) {
+    try {
+      const walk = (node: unknown) => {
+        if (Array.isArray(node)) node.forEach(walk);
+        else if (node && typeof node === "object") {
+          const type = (node as Record<string, unknown>)["@type"];
+          if (typeof type === "string") types.add(type);
+          Object.values(node as Record<string, unknown>).forEach(walk);
+        }
+      };
+      walk(JSON.parse(block[1]));
+    } catch {
+      /* malformed block: reported below as missing schema */
+    }
+  }
+  return [...types];
+}
+
+async function crawl(url: string): Promise<Page> {
+  const started = Date.now();
+  const response = await fetch(url, { headers: { "User-Agent": "CNTXT-SEO-Audit/1.0" }, redirect: "follow", cache: "no-store" });
+  const html = await response.text();
+  const text = html
+    .replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>/g, " ")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/\s+/g, " ");
+  return {
+    url: url.replace(SITE, "") || "/",
+    status: response.status,
+    ms: Date.now() - started,
+    kb: Math.round(html.length / 1024),
+    title: pick(html, /<title>([^<]*)<\/title>/),
+    description: pick(html, /<meta name="description" content="([^"]*)"/),
+    canonical: pick(html, /<link rel="canonical" href="([^"]*)"/),
+    h1: (html.match(/<h1[\s>]/g) ?? []).length,
+    words: text.split(" ").filter((word) => word.length > 1).length,
+    imagesWithoutAlt: [...html.matchAll(/<img\b[^>]*>/g)].filter((tag) => !/\balt=/.test(tag[0])).length,
+    internalLinks: (html.match(/href="\/(?!\/)/g) ?? []).length,
+    schema: schemaTypes(html),
+    ogImage: /property="og:image"/.test(html),
+    noindex: /<meta name="robots" content="[^"]*noindex/.test(html),
+  };
+}
+
+/** Run with a small pool so the site is never hammered. */
+async function crawlAll(urls: string[], width = 6) {
+  const out: Page[] = [];
+  let next = 0;
+  await Promise.all(
+    Array.from({ length: width }, async () => {
+      while (next < urls.length) {
+        const url = urls[next++];
+        try {
+          out.push(await crawl(url));
+        } catch {
+          out.push({ url: url.replace(SITE, ""), status: 0, ms: 0, kb: 0, title: "", description: "", canonical: "", h1: 0, words: 0, imagesWithoutAlt: 0, internalLinks: 0, schema: [], ogImage: false, noindex: false });
+        }
+      }
+    }),
+  );
+  return out.sort((a, b) => a.url.localeCompare(b.url));
+}
+
+function findIssues(pages: Page[], site: { robots: string; llms: string }): Issue[] {
+  const issues: Issue[] = [];
+  const titles = new Map<string, string>();
+  for (const page of pages) {
+    const add = (severity: Issue["severity"], area: Issue["area"], issue: string, fix: string) => issues.push({ severity, area, page: page.url, issue, fix });
+    if (page.status !== 200) add("high", "SEO", `Returns ${page.status || "no response"}`, "Fix or remove the page and its sitemap entry.");
+    if (page.noindex) add("high", "SEO", "Marked noindex but listed in the sitemap", "Remove noindex or drop it from the sitemap.");
+    if (!page.title) add("high", "SEO", "No title", "Add a unique title of 30-60 characters.");
+    else if (page.title.length > 65) add("low", "SEO", `Title is ${page.title.length} characters`, "Shorten to 60 so it isn't cut off in results.");
+    if (page.title) {
+      if (titles.has(page.title)) add("medium", "SEO", `Same title as ${titles.get(page.title)}`, "Give each page its own title.");
+      titles.set(page.title, page.url);
+    }
+    if (!page.description) add("medium", "SEO", "No meta description", "Add a 120-160 character description.");
+    else if (page.description.length < 70 || page.description.length > 170) add("low", "SEO", `Description is ${page.description.length} characters`, "Aim for 120-160 characters.");
+    if (!page.canonical) add("medium", "SEO", "No canonical URL", "Add a canonical link.");
+    if (page.h1 !== 1) add("medium", "SEO", `${page.h1} H1 headings`, "Use exactly one H1 per page.");
+    if (page.imagesWithoutAlt) add("low", "SEO", `${page.imagesWithoutAlt} images without alt text`, "Add alt text (empty alt for decoration).");
+    if (!page.ogImage) add("low", "SEO", "No share image", "Add an og:image.");
+    if (page.words < 250 && !/policy|conditions|admin/.test(page.url)) add("medium", "GEO", `Only ${page.words} words of text`, "Answer engines quote text: add a short, factual section.");
+    if (!page.schema.length) add("medium", "GEO", "No structured data", "Add schema.org JSON-LD for what the page is about.");
+    if (page.ms > 1500) add("medium", "Speed", `HTML took ${page.ms} ms`, "Check caching and server work on this route.");
+    if (page.kb > 400) add("low", "Speed", `HTML is ${page.kb} KB`, "Trim inline data or split heavy components.");
+  }
+  const home = pages.find((page) => page.url === "/");
+  if (home && !home.schema.includes("Organization")) issues.push({ severity: "high", area: "GEO", page: "/", issue: "No Organization schema on the home page", fix: "Add Organization JSON-LD with name, logo and sameAs." });
+  if (!pages.some((page) => page.schema.includes("FAQPage"))) issues.push({ severity: "medium", area: "GEO", page: "site", issue: "No FAQ schema anywhere", fix: "Mark up buyer FAQs with FAQPage." });
+  for (const bot of AI_BOTS) {
+    if (!new RegExp(`User-Agent: ${bot}`, "i").test(site.robots) && /Disallow: \/\s*$/m.test(site.robots)) {
+      issues.push({ severity: "high", area: "GEO", page: "/robots.txt", issue: `${bot} may be blocked`, fix: `Allow ${bot} in robots.txt.` });
+    }
+  }
+  if (!site.llms) issues.push({ severity: "medium", area: "GEO", page: "/llms.txt", issue: "llms.txt is missing", fix: "Publish a factual llms.txt summary." });
+  return issues;
+}
+
+/** 100 minus weighted issues, kept in range. */
+function scoreOf(issues: Issue[], area?: Issue["area"]) {
+  const weight = { high: 8, medium: 3, low: 1 } as const;
+  const lost = issues.filter((issue) => !area || issue.area === area).reduce((sum, issue) => sum + weight[issue.severity], 0);
+  return Math.max(0, Math.min(100, 100 - lost));
+}
+
+const Report = z.object({
+  summary: z.string().describe("Three or four sentences for a marketing lead: how the site stands and what changed."),
+  recommendations: z
+    .array(z.object({ title: z.string(), why: z.string(), how: z.string(), impact: z.enum(["high", "medium", "low"]) }))
+    .describe("The five most valuable next steps across SEO and GEO, most valuable first."),
+  blogIdeas: z
+    .array(z.object({ title: z.string(), query: z.string().describe("The search or AI question this answers."), angle: z.string(), outline: z.array(z.string()) }))
+    .describe("Three blog posts CNTXT could publish next, each built only on the facts given."),
+});
+
+const Post = z.object({
+  title: z.string(),
+  slug: z.string().describe("lowercase-words-with-hyphens"),
+  excerpt: z.string().describe("One or two sentences for the blog card."),
+  category: z.enum(["Arabic AI", "Data", "Evaluation", "Agents", "Industry"]),
+  body: z.string().describe("The article in markdown, 600-900 words, with ## headings and a short FAQ at the end."),
+});
+
+const writer = `You are CNTXT AI's SEO and GEO (generative engine optimisation) lead.
+Company facts you may use, and nothing beyond them:
+${companyFacts}
+
+Write in British English, sentence case, short plain sentences. No hype words. Never invent customers, figures, dates or quotes.`;
+
+async function writeUp(apiKey: string, pages: Page[], issues: Issue[], score: number, geoScore: number, blogTitles: string[]) {
+  const client = new Anthropic({ apiKey });
+  const audit = {
+    score,
+    geoScore,
+    pages: pages.map((page) => ({ url: page.url, title: page.title, words: page.words, schema: page.schema, ms: page.ms })),
+    issues: issues.slice(0, 60),
+    existingPosts: blogTitles,
+  };
+  const report = await client.beta.messages.parse({
+    model: "claude-opus-5-5",
+    max_tokens: 16000,
+    output_config: { effort: "medium", format: betaZodOutputFormat(Report) },
+    betas: ["server-side-fallback-2026-07-01"],
+    fallbacks: "default",
+    system: writer,
+    messages: [{ role: "user", content: `Here is this run's audit of www.cntxt.tech as JSON. Write the report.\n\n${JSON.stringify(audit)}` }],
+  });
+  if (report.stop_reason === "refusal" || !report.parsed_output) throw new Error("No report returned.");
+  const idea = report.parsed_output.blogIdeas[0];
+  let draft: z.infer<typeof Post> | null = null;
+  if (idea) {
+    const post = await client.beta.messages.parse({
+      model: "claude-opus-5-5",
+      max_tokens: 16000,
+      output_config: { effort: "medium", format: betaZodOutputFormat(Post) },
+      betas: ["server-side-fallback-2026-07-01"],
+      fallbacks: "default",
+      system: `${writer}\n\nYou write articles that rank in search and get quoted by AI answer engines: answer the question in the first paragraph, use clear headings, state facts plainly, and end with three short FAQs.`,
+      messages: [{ role: "user", content: `Write this post.\nTitle: ${idea.title}\nQuestion it answers: ${idea.query}\nAngle: ${idea.angle}\nOutline:\n- ${idea.outline.join("\n- ")}` }],
+    });
+    if (post.stop_reason !== "refusal" && post.parsed_output) draft = post.parsed_output;
+  }
+  return { report: report.parsed_output, draft };
+}
+
+export async function runSeoReport(trigger: "schedule" | "manual") {
+  const db = supabaseService();
+  if (!db) throw new Error("Portal is not configured.");
+
+  const [sitemap, robots, llms] = await Promise.all(
+    ["/sitemap.xml", "/robots.txt", "/llms.txt"].map((path) =>
+      fetch(`${SITE}${path}`, { cache: "no-store" })
+        .then((response) => (response.ok ? response.text() : ""))
+        .catch(() => ""),
+    ),
+  );
+  const urls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]).slice(0, 80);
+  const pages = await crawlAll(urls);
+  const issues = findIssues(pages, { robots, llms });
+  issues.sort((a, b) => ["high", "medium", "low"].indexOf(a.severity) - ["high", "medium", "low"].indexOf(b.severity));
+  const score = scoreOf(issues.filter((issue) => issue.area !== "GEO"));
+  const geoScore = scoreOf(issues, "GEO");
+  const siteChecks = {
+    pagesInSitemap: urls.length,
+    llmsTxt: Boolean(llms),
+    aiCrawlersAllowed: AI_BOTS.filter((bot) => new RegExp(bot, "i").test(robots)),
+    averageMs: Math.round(pages.reduce((sum, page) => sum + page.ms, 0) / Math.max(1, pages.length)),
+  };
+
+  const row: Record<string, unknown> = { trigger, score, geo_score: geoScore, pages, issues, site_checks: siteChecks };
+  const apiKey = await anthropicKey();
+  if (apiKey) {
+    try {
+      const { data: posts } = await db.from("posts").select("title");
+      const { report, draft } = await writeUp(apiKey, pages, issues, score, geoScore, (posts ?? []).map((post) => post.title as string));
+      row.summary = report.summary;
+      row.recommendations = report.recommendations;
+      row.blog_ideas = report.blogIdeas;
+      if (draft) {
+        const slug = `${draft.slug.toLowerCase().replace(/[^a-z0-9-]+/g, "-").replace(/^-|-$/g, "").slice(0, 70)}-${Date.now().toString(36)}`;
+        const { data: saved } = await db
+          .from("posts")
+          .insert({ slug, title: draft.title, excerpt: draft.excerpt, category: draft.category, body: draft.body, author: "CNTXT AI", status: "draft" })
+          .select("id")
+          .single();
+        row.draft_post_id = saved?.id ?? null;
+      }
+    } catch (error) {
+      row.error = error instanceof Anthropic.APIError ? `The AI write-up failed (${error.status}).` : "The AI write-up failed.";
+    }
+  } else {
+    row.error = "Checks ran. Add the Anthropic key in Settings to get the written report, blog ideas and a draft post.";
+  }
+  const { data, error } = await db.from("seo_reports").insert(row).select("id").single();
+  if (error) throw new Error(error.message);
+  return data.id as string;
+}

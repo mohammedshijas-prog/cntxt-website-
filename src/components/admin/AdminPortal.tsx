@@ -7,6 +7,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { supabaseBrowser } from "@/lib/supabase/browser";
 import { Applications, Roles } from "./AdminCareers";
 import { Catalogue, DataRequests } from "./AdminCatalogue";
+import { SeoReports } from "./AdminSeo";
 import { slugify, when } from "./shared";
 import styles from "./admin.module.css";
 
@@ -49,6 +50,7 @@ const tabs = {
   requests: "Data requests",
   catalogue: "Catalogue",
   posts: "Blog posts",
+  seo: "SEO & GEO",
   team: "Team",
   settings: "Settings",
 } as const;
@@ -65,8 +67,8 @@ export const roleNames: Record<PortalRole, string> = {
   data_manager: "Data manager",
 };
 const access: Record<PortalRole, Tab[]> = {
-  admin: ["submissions", "applications", "roles", "requests", "catalogue", "posts", "team", "settings"],
-  marketing: ["submissions", "posts"],
+  admin: ["submissions", "applications", "roles", "requests", "catalogue", "posts", "seo", "team", "settings"],
+  marketing: ["submissions", "posts", "seo"],
   hr_head: ["applications", "roles", "team"],
   recruiter: ["applications", "roles"],
   data_head: ["requests", "catalogue", "team"],
@@ -152,6 +154,7 @@ export function AdminPortal() {
         {tab === "catalogue" ? <Catalogue role={role ?? "data_manager"} /> : null}
         {tab === "team" ? <Team session={session} role={role ?? "recruiter"} /> : null}
         {tab === "settings" ? <Settings session={session} /> : null}
+        {tab === "seo" ? <SeoReports session={session} /> : null}
       </main>
     </div>
   );

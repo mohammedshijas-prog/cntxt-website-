@@ -1,0 +1,6 @@
+/** CNTXT facts every AI feature may use, restated from docs/content-brief.md. Nothing outside this list. */
+export const companyFacts = `CNTXT AI is a UAE-based data and AI company headquartered in Abu Dhabi. It captures and verifies data from real work, trains models on it, and deploys Arabic-first AI on-premises, hybrid or in the cloud for enterprises and governments.
+- Products: Munsit (Arabic speech-to-text and text-to-speech across 25+ dialects), Agentix (Arabic voice and chat agents on GCC phone lines), KLKT (an app where people record everyday work with consent and are paid per accepted hour).
+- Data services: data collection, labelling of text, image, video and audio at 98% accuracy with human review, expert AI evaluation, and physical-AI data for robotics.
+- 250+ enterprise and government organisations served; 30M+ data points annotated. Raised a $60M Series A in June 2026.
+- What people get working here: mentorship from people who have done the job before; live projects from the start (data collection, annotation, model evaluation, custom AI builds); support for professional certifications relevant to the role; some roles are remote and some on site, and each listing says which.`;

@@ -964,3 +964,143 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* ---------------------------------------------------------- SEO & GEO */
+.scoreRow {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.scoreTile {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 16px;
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 0 0 1px rgba(21, 17, 31, 0.06);
+}
+
+.scoreTile span {
+  color: var(--label-2);
+  font-size: 13px;
+}
+
+.scoreTile strong {
+  font-family: var(--font-heading);
+  font-size: 34px;
+  font-weight: 600;
+  line-height: 1.1;
+}
+
+.scoreTile em {
+  color: var(--label-3);
+  font-size: 12px;
+  font-style: normal;
+}
+
+.scoreGood {
+  color: #1c7a4a;
+}
+
+.scoreOk {
+  color: #a5620c;
+}
+
+.scoreLow {
+  color: #b42318;
+}
+
+.up {
+  color: #1c7a4a !important;
+}
+
+.down {
+  color: #b42318 !important;
+}
+
+.reportSummary {
+  margin: 0 0 16px;
+  padding: 16px 18px;
+  border-radius: 16px;
+  background: var(--accent-tint);
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+.recs,
+.ideas,
+.issues {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.recs li,
+.ideas li {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 0;
+  border-top: 1px solid var(--separator);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.recs em,
+.ideas em {
+  color: var(--label-2);
+  font-style: normal;
+}
+
+.issues li {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 10px;
+  align-items: start;
+  padding: 10px 0;
+  border-top: 1px solid var(--separator);
+}
+
+.issues li > span {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 14px;
+}
+
+.issues em {
+  color: var(--label-3);
+  font-size: 12px;
+  font-style: normal;
+}
+
+.pagesTable {
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
+  font-size: 12px;
+}
+
+.pagesTable > div {
+  display: grid;
+  grid-template-columns: 2fr 50px 70px 80px 2fr;
+  gap: 8px;
+  padding: 6px 0;
+  border-top: 1px solid var(--separator);
+}
+
+@media (max-width: 734px) {
+  .scoreRow {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .pagesTable > div {
+    grid-template-columns: 1fr 1fr;
+  }
+}
