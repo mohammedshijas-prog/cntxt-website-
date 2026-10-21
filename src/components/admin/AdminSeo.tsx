@@ -144,6 +144,28 @@ function TrafficPanel({ traffic }: { traffic: Traffic }) {
   );
 }
 
+/** Older reports predate some fields; fill the gaps so the page always renders. */
+function normalise(report: Report): Report {
+  const traffic = report.traffic?.current
+    ? {
+        ...report.traffic,
+        current: { ...emptySummary, ...report.traffic.current },
+        previous: report.traffic.previous ? { ...emptySummary, ...report.traffic.previous } : null,
+      }
+    : null;
+  return {
+    ...report,
+    pages: report.pages ?? [],
+    issues: report.issues ?? [],
+    recommendations: report.recommendations ?? [],
+    blog_ideas: report.blog_ideas ?? [],
+    site_checks: report.site_checks ?? {},
+    traffic,
+  };
+}
+
+const emptySummary: Summary = { views: 0, bySource: {}, byEngine: [], topPages: [], aiLanding: [], countries: [], devices: {}, crawlers: [] };
+
 const tone = (score: number | null) => (score === null ? "" : score >= 85 ? styles.scoreGood : score >= 65 ? styles.scoreOk : styles.scoreLow);
 
 /** SEO and GEO reports: the 3-day automated audit, with the AI write-up and blog ideas. */
@@ -157,7 +179,7 @@ export function SeoReports({ session }: { session: Session }) {
 
   const load = useCallback(async () => {
     const { data } = await db.from("seo_reports").select("*").order("created_at", { ascending: false }).limit(30);
-    setReports((data as Report[]) ?? []);
+    setReports(((data as Report[]) ?? []).map(normalise));
   }, [db]);
 
   useEffect(() => {
@@ -226,7 +248,7 @@ export function SeoReports({ session }: { session: Session }) {
           {report.error ? <p className={styles.hint}>{report.error}</p> : null}
           {report.summary ? <p className={styles.reportSummary}>{report.summary}</p> : null}
 
-          {report.traffic ? <TrafficPanel traffic={report.traffic} /> : null}
+          {report.traffic?.current ? <TrafficPanel traffic={report.traffic} /> : null}
 
           {report.recommendations.length ? (
             <div className={styles.department}>
@@ -317,7 +339,7 @@ export function SeoReports({ session }: { session: Session }) {
                   <span>{page.status}</span>
                   <span>{page.ms} ms</span>
                   <span>{page.words} words</span>
-                  <span>{page.schema.join(", ") || "no schema"}</span>
+                  <span>{(page.schema ?? []).join(", ") || "no schema"}</span>
                 </div>
               ))}
             </div>
