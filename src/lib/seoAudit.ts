@@ -148,6 +148,7 @@ function scoreOf(issues: Issue[], area?: Issue["area"]) {
 
 const Report = z.object({
   summary: z.string().describe("Three or four sentences for a marketing lead: how the site stands and what changed."),
+  trafficNote: z.string().describe("Two or three sentences on visits: how many, where they came from (AI engines, search, social, other sites, direct), what moved since the previous 3 days, and which AI crawlers visited. Say plainly if there is too little data yet."),
   recommendations: z
     .array(z.object({ title: z.string(), why: z.string(), how: z.string(), impact: z.enum(["high", "medium", "low"]) }))
     .describe("The five most valuable next steps across SEO and GEO, most valuable first."),
@@ -180,6 +181,8 @@ ${companyFacts}
 Settled site decisions (do not recommend changing them):
 - Munsit and KLKT live on their own sites (munsit.com, klkt.app); /munsit redirects there on purpose. Don't suggest a Munsit page on cntxt.tech.
 - Legal pages are kept verbatim; don't suggest rewriting them.
+
+Traffic numbers come only from the traffic data you are given; never estimate or round them up. If a recommendation follows from the traffic (for example a page AI engines send people to), say which numbers it rests on.
 
 Write in British English, sentence case, short plain sentences. No hype words. Never invent customers, figures, dates or quotes.`;
 
@@ -221,7 +224,7 @@ Return 6-8 short notes. Each: the trend in one sentence, why people are searchin
   return "";
 }
 
-async function writeUp(apiKey: string, pages: Page[], issues: Issue[], score: number, geoScore: number, blogTitles: string[]) {
+async function writeUp(apiKey: string, pages: Page[], issues: Issue[], score: number, geoScore: number, blogTitles: string[], traffic: unknown) {
   const client = new Anthropic({ apiKey });
   const trends = await researchTrends(client, blogTitles).catch(() => "");
   const audit = {
@@ -230,6 +233,8 @@ async function writeUp(apiKey: string, pages: Page[], issues: Issue[], score: nu
     pages: pages.map((page) => ({ url: page.url, title: page.title, words: page.words, schema: page.schema, ms: page.ms })),
     issues: issues.slice(0, 60),
     existingPosts: blogTitles,
+    // Visits over the last 3 days next to the 3 days before, by source (ai, search, social, referral, campaign, direct), engine, page and crawler.
+    traffic,
   };
   const report = await client.beta.messages.parse({
     model: "claude-opus-5-5",
@@ -292,13 +297,22 @@ export async function runSeoReport(trigger: "schedule" | "manual") {
     averageMs: Math.round(pages.reduce((sum, page) => sum + page.ms, 0) / Math.max(1, pages.length)),
   };
 
-  const row: Record<string, unknown> = { trigger, score, geo_score: geoScore, pages, issues, site_checks: siteChecks };
+  // Traffic: the last 3 days against the 3 days before, summed in the database.
+  const now = Date.now();
+  const day = 24 * 60 * 60 * 1000;
+  const span = (from: number, to: number) =>
+    db.rpc("traffic_summary", { since: new Date(from).toISOString(), until: new Date(to).toISOString() }).then(({ data }) => data ?? null);
+  const [current, before] = await Promise.all([span(now - 3 * day, now), span(now - 6 * day, now - 3 * day)]).catch(() => [null, null]);
+  const traffic = current ? { from: new Date(now - 3 * day).toISOString(), to: new Date(now).toISOString(), current, previous: before } : null;
+
+  const row: Record<string, unknown> = { trigger, score, geo_score: geoScore, pages, issues, site_checks: siteChecks, traffic };
   const apiKey = await anthropicKey();
   if (apiKey) {
     try {
       const { data: posts } = await db.from("posts").select("title");
-      const { report, draft, trends } = await writeUp(apiKey, pages, issues, score, geoScore, (posts ?? []).map((post) => post.title as string));
+      const { report, draft, trends } = await writeUp(apiKey, pages, issues, score, geoScore, (posts ?? []).map((post) => post.title as string), traffic);
       row.summary = report.summary;
+      if (row.traffic) row.traffic = { ...(row.traffic as object), note: report.trafficNote };
       row.recommendations = report.recommendations;
       row.blog_ideas = report.blogIdeas;
       row.site_checks = { ...siteChecks, trendNotes: trends };

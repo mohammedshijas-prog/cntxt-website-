@@ -5,6 +5,7 @@ import "lenis/dist/lenis.css";
 import "./globals.css";
 import { MotionProvider } from "../components/motion/MotionProvider";
 import { PhoneDock } from "../components/site/PhoneDock";
+import { PageBeacon } from "../components/site/PageBeacon";
 
 // Site-wide type: Host Grotesk for titles and UI, Manrope for descriptions.
 const host = Host_Grotesk({
@@ -82,6 +83,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         {children}
         <MotionProvider />
         <PhoneDock />
+        <PageBeacon />
         <JsonLd data={[organization, website]} />
         {/* Cookie banner, as on the current site */}
         <script

@@ -104,6 +104,8 @@ export function AdminPortal() {
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
   const [role, setRole] = useState<PortalRole | null>(null);
   const [chosen, setTab] = useState<Tab | null>(null);
+  // Set when HR jumps from a role to the people who applied for it.
+  const [roleFocus, setRoleFocus] = useState<string | undefined>(undefined);
 
   useEffect(() => {
     db.auth.getSession().then(({ data }) => {
@@ -157,7 +159,10 @@ export function AdminPortal() {
               <div key={group.name} className={styles.navGroup}>
                 <p>{group.name}</p>
                 {items.map((item) => (
-                  <button key={item} className={tab === item ? styles.navOn : ""} aria-current={tab === item ? "page" : undefined} onClick={() => setTab(item)}>
+                  <button key={item} className={tab === item ? styles.navOn : ""} aria-current={tab === item ? "page" : undefined} onClick={() => {
+                      setRoleFocus(undefined);
+                      setTab(item);
+                    }}>
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                       <path d={icons[item]} />
                     </svg>
@@ -184,8 +189,16 @@ export function AdminPortal() {
       <main className={styles.main}>
         {tab === "submissions" ? <Submissions /> : null}
         {tab === "posts" ? <Posts /> : null}
-        {tab === "applications" ? <Applications role={role ?? "recruiter"} /> : null}
-        {tab === "roles" ? <Roles role={role ?? "recruiter"} /> : null}
+        {tab === "applications" ? <Applications key={roleFocus ?? "all"} role={role ?? "recruiter"} focus={roleFocus} /> : null}
+        {tab === "roles" ? (
+          <Roles
+            role={role ?? "recruiter"}
+            onApplicants={(roleId) => {
+              setRoleFocus(roleId);
+              setTab("applications");
+            }}
+          />
+        ) : null}
         {tab === "requests" ? <DataRequests role={role ?? "data_manager"} /> : null}
         {tab === "catalogue" ? <Catalogue role={role ?? "data_manager"} /> : null}
         {tab === "team" ? <Team session={session} role={role ?? "recruiter"} /> : null}

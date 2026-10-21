@@ -8,6 +8,18 @@ import styles from "./admin.module.css";
 
 type Issue = { severity: "high" | "medium" | "low"; area: "SEO" | "GEO" | "Speed"; page: string; issue: string; fix: string };
 type Page = { url: string; status: number; ms: number; title: string; words: number; schema: string[]; h1: number };
+type Summary = {
+  views: number;
+  bySource: Partial<Record<Source, number>>;
+  byEngine: { source: Source; engine: string; views: number }[];
+  topPages: { path: string; views: number }[];
+  aiLanding: { path: string; views: number }[];
+  countries: { country: string; views: number }[];
+  devices: Record<string, number>;
+  crawlers: { bot: string; hits: number }[];
+};
+type Source = "ai" | "search" | "social" | "referral" | "campaign" | "direct";
+type Traffic = { from: string; to: string; current: Summary; previous: Summary | null; note?: string };
 type Report = {
   id: string;
   created_at: string;
@@ -21,8 +33,116 @@ type Report = {
   recommendations: { title: string; why: string; how: string; impact: "high" | "medium" | "low" }[];
   blog_ideas: { title: string; query: string; angle: string; whyNow?: string; source?: string; outline: string[] }[];
   draft_post_id: string | null;
+  traffic: Traffic | null;
   error: string | null;
 };
+
+const sources: { key: Source; label: string }[] = [
+  { key: "ai", label: "AI engines" },
+  { key: "search", label: "Search" },
+  { key: "social", label: "Social" },
+  { key: "referral", label: "Other sites" },
+  { key: "campaign", label: "Campaigns" },
+  { key: "direct", label: "Direct" },
+];
+
+function Change({ now, before }: { now: number; before: number | undefined }) {
+  if (before === undefined) return <em>last 3 days</em>;
+  const diff = now - before;
+  if (diff === 0) return <em>same as before</em>;
+  const pct = before > 0 ? ` (${diff > 0 ? "+" : ""}${Math.round((diff / before) * 100)}%)` : "";
+  return (
+    <em className={diff > 0 ? styles.up : styles.down}>
+      {diff > 0 ? "+" : ""}
+      {diff}
+      {pct} vs 3 days before
+    </em>
+  );
+}
+
+function Bars({ rows }: { rows: { label: string; value: number; hint?: string }[] }) {
+  const max = Math.max(1, ...rows.map((row) => row.value));
+  if (rows.length === 0) return <p className={styles.emptySmall}>Nothing yet.</p>;
+  return (
+    <ul className={styles.bars}>
+      {rows.map((row) => (
+        <li key={`${row.label}-${row.hint ?? ""}`}>
+          <span>
+            {row.label}
+            {row.hint ? <em>{row.hint}</em> : null}
+          </span>
+          <i style={{ width: `${(row.value / max) * 100}%` }} />
+          <b>{row.value}</b>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+/** Visits for the report's 3 days: how many, and where they came from. */
+function TrafficPanel({ traffic }: { traffic: Traffic }) {
+  const { current, previous } = traffic;
+  const engines = current.byEngine.filter((row) => row.source === "ai" || row.source === "search");
+  const others = current.byEngine.filter((row) => row.source !== "ai" && row.source !== "search");
+  return (
+    <div className={styles.department}>
+      <header>
+        <h2>Traffic</h2>
+        <p>
+          {when(traffic.from)} to {when(traffic.to)}. Counted without cookies; bots are left out of visits and shown under crawlers.
+        </p>
+      </header>
+      {traffic.note ? <p className={styles.reportSummary}>{traffic.note}</p> : null}
+      <div className={styles.scoreRow}>
+        <div className={styles.scoreTile}>
+          <span>Visits</span>
+          <strong>{current.views}</strong>
+          <Change now={current.views} before={previous?.views} />
+        </div>
+        {sources
+          .filter((source) => source.key !== "campaign" || current.bySource.campaign)
+          .map((source) => (
+            <div key={source.key} className={styles.scoreTile}>
+              <span>{source.label}</span>
+              <strong>{current.bySource[source.key] ?? 0}</strong>
+              <Change now={current.bySource[source.key] ?? 0} before={previous ? previous.bySource[source.key] ?? 0 : undefined} />
+            </div>
+          ))}
+      </div>
+      <div className={styles.trafficGrid}>
+        <section>
+          <h3>AI engines and search</h3>
+          <Bars rows={engines.map((row) => ({ label: row.engine, value: row.views, hint: row.source === "ai" ? "AI" : "Search" }))} />
+        </section>
+        <section>
+          <h3>Social and other sites</h3>
+          <Bars rows={others.map((row) => ({ label: row.engine, value: row.views, hint: row.source === "social" ? "Social" : row.source === "campaign" ? "Campaign" : "Link" }))} />
+        </section>
+        <section>
+          <h3>Top pages</h3>
+          <Bars rows={current.topPages.map((row) => ({ label: row.path, value: row.views }))} />
+        </section>
+        <section>
+          <h3>Where AI engines send people</h3>
+          <Bars rows={current.aiLanding.map((row) => ({ label: row.path, value: row.views }))} />
+        </section>
+        <section>
+          <h3>AI and search crawlers</h3>
+          <Bars rows={current.crawlers.map((row) => ({ label: row.bot, value: row.hits }))} />
+        </section>
+        <section>
+          <h3>Countries and devices</h3>
+          <Bars
+            rows={[
+              ...current.countries.map((row) => ({ label: row.country === "??" ? "Unknown" : row.country, value: row.views })),
+              ...Object.entries(current.devices).map(([device, views]) => ({ label: device, value: views, hint: "Device" })),
+            ]}
+          />
+        </section>
+      </div>
+    </div>
+  );
+}
 
 const tone = (score: number | null) => (score === null ? "" : score >= 85 ? styles.scoreGood : score >= 65 ? styles.scoreOk : styles.scoreLow);
 
@@ -67,7 +187,7 @@ export function SeoReports({ session }: { session: Session }) {
       <div className={styles.head}>
         <div>
           <h1>SEO & GEO</h1>
-          <p>Runs by itself every 3 days. Each run checks every page, scores search (SEO) and AI answer engines (GEO), and drafts one blog post for review.</p>
+          <p>Runs by itself every 3 days. Each run counts visits and where they came from, checks every page, scores search (SEO) and AI answer engines (GEO), and drafts one blog post for review.</p>
         </div>
         <div className={styles.actions}>
           <button className={styles.primary} disabled={running} onClick={runNow}>
@@ -105,6 +225,8 @@ export function SeoReports({ session }: { session: Session }) {
 
           {report.error ? <p className={styles.hint}>{report.error}</p> : null}
           {report.summary ? <p className={styles.reportSummary}>{report.summary}</p> : null}
+
+          {report.traffic ? <TrafficPanel traffic={report.traffic} /> : null}
 
           {report.recommendations.length ? (
             <div className={styles.department}>

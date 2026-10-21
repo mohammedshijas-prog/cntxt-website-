@@ -79,12 +79,15 @@ const stages: Application["status"][] = ["new", "reviewing", "interview", "offer
 const blankRole: Role = { slug: "", title: "", department: "", location: "Remote", terms: "", summary: "", description: "", status: "draft", sort: 100 };
 
 /* ------------------------------------------------------------ Applications */
-export function Applications({ role: me }: { role: PortalRole }) {
+/** Applications are grouped by the role they were sent to; removed roles fall back to their title. */
+const roleKey = (row: { role_id: string | null; role_title: string }) => row.role_id ?? `title:${row.role_title}`;
+
+export function Applications({ role: me, focus }: { role: PortalRole; focus?: string }) {
   const canDelete = me === "admin" || me === "hr_head";
   const db = useMemo(() => supabaseBrowser(), []);
   const [rows, setRows] = useState<Application[]>([]);
   const [query, setQuery] = useState("");
-  const [role, setRole] = useState("all");
+  const [role, setRole] = useState(focus ?? "all");
   const [stage, setStage] = useState<"all" | Application["status"]>("all");
   const [open, setOpen] = useState<string | null>(null);
   const [notes, setNotes] = useState<Record<string, string>>({});
@@ -99,9 +102,9 @@ export function Applications({ role: me }: { role: PortalRole }) {
     queueMicrotask(load);
   }, [load]);
 
-  const roleTitles = [...new Set(rows.map((row) => row.role_title))].sort();
+  const roleOptions = [...new Map(rows.map((row) => [roleKey(row), row.role_title])).entries()].sort((a, b) => a[1].localeCompare(b[1]));
   const visible = rows.filter((row) => {
-    if (role !== "all" && row.role_title !== role) return false;
+    if (role !== "all" && roleKey(row) !== role) return false;
     if (stage !== "all" && row.status !== stage) return false;
     const text = `${row.name} ${row.email} ${row.location ?? ""} ${row.cover_note ?? ""} ${row.role_title}`.toLowerCase();
     return text.includes(query.toLowerCase());
@@ -185,8 +188,10 @@ export function Applications({ role: me }: { role: PortalRole }) {
         <input className={styles.input} placeholder="Search name, email, location or note" value={query} onChange={(event) => setQuery(event.target.value)} />
         <select className={styles.input} value={role} onChange={(event) => setRole(event.target.value)}>
           <option value="all">All roles</option>
-          {roleTitles.map((title) => (
-            <option key={title}>{title}</option>
+          {roleOptions.map(([key, title]) => (
+            <option key={key} value={key}>
+              {title}
+            </option>
           ))}
         </select>
         <select className={styles.input} value={stage} onChange={(event) => setStage(event.target.value as typeof stage)}>
@@ -341,7 +346,7 @@ export function Applications({ role: me }: { role: PortalRole }) {
 }
 
 /* ------------------------------------------------------------ Roles */
-export function Roles({ role: me }: { role: PortalRole }) {
+export function Roles({ role: me, onApplicants }: { role: PortalRole; onApplicants: (roleId: string) => void }) {
   const db = useMemo(() => supabaseBrowser(), []);
   const [roles, setRoles] = useState<Role[]>([]);
   const [counts, setCounts] = useState<Record<string, number>>({});
@@ -392,7 +397,19 @@ export function Roles({ role: me }: { role: PortalRole }) {
         <ul className={styles.postList}>
           {roles.map((role) => (
             <li key={role.id} className={styles.roleRow}>
-              <CopyLink slug={role.slug} status={role.status} />
+              <div className={styles.roleActions}>
+                {role.id ? (
+                <button
+                  className={styles.applicantsLink}
+                  onClick={() => onApplicants(role.id!)}
+                  disabled={!counts[role.id]}
+                  title={counts[role.id] ? `See the people who applied for ${role.title}` : "No applications yet"}
+                >
+                  {counts[role.id] ? `${counts[role.id]} applicant${counts[role.id] === 1 ? "" : "s"} →` : "No applicants"}
+                </button>
+                ) : null}
+                <CopyLink slug={role.slug} status={role.status} />
+              </div>
               <button onClick={() => setEditing(role)}>
                 <span className={styles.countBadge}>{counts[role.id ?? ""] ?? 0}</span>
                 <span>
