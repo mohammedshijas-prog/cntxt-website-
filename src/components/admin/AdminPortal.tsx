@@ -50,6 +50,7 @@ const tabs = {
   catalogue: "Catalogue",
   posts: "Blog posts",
   team: "Team",
+  settings: "Settings",
 } as const;
 type Tab = keyof typeof tabs;
 
@@ -62,7 +63,7 @@ export const roleNames: Record<PortalRole, string> = {
   recruiter: "Recruiting manager",
 };
 const access: Record<PortalRole, Tab[]> = {
-  admin: ["submissions", "applications", "roles", "requests", "catalogue", "posts", "team"],
+  admin: ["submissions", "applications", "roles", "requests", "catalogue", "posts", "team", "settings"],
   marketing: ["submissions", "requests", "catalogue", "posts"],
   hr_head: ["applications", "roles", "team"],
   recruiter: ["applications", "roles"],
@@ -146,6 +147,7 @@ export function AdminPortal() {
         {tab === "requests" ? <DataRequests /> : null}
         {tab === "catalogue" ? <Catalogue /> : null}
         {tab === "team" ? <Team session={session} role={role ?? "recruiter"} /> : null}
+        {tab === "settings" ? <Settings session={session} /> : null}
       </main>
     </div>
   );
@@ -704,6 +706,103 @@ function Team({ session, role }: { session: Session; role: PortalRole }) {
             </section>
           );
         })}
+      </div>
+    </section>
+  );
+}
+
+/* ------------------------------------------------------------ Settings */
+type KeyStatus = { set: boolean; source: "environment" | "portal" | null; last4: string | null; updatedBy: string | null; updatedAt: string | null };
+
+/** Admin-only: the Anthropic key used to draft role descriptions. The key itself is never shown again. */
+function Settings({ session }: { session: Session }) {
+  const [status, setStatus] = useState<KeyStatus | null>(null);
+  const [key, setKey] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [note, setNote] = useState("");
+
+  const call = useCallback(
+    async (method: "GET" | "PUT" | "DELETE", body?: object) => {
+      const response = await fetch("/api/admin/settings", {
+        method,
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${session.access_token}` },
+        body: body ? JSON.stringify(body) : undefined,
+      });
+      const result = (await response.json().catch(() => ({}))) as { anthropic?: KeyStatus; error?: string };
+      if (result.anthropic) setStatus(result.anthropic);
+      return response.ok ? null : result.error || "Something went wrong.";
+    },
+    [session.access_token],
+  );
+
+  useEffect(() => {
+    queueMicrotask(() => {
+      call("GET");
+    });
+  }, [call]);
+
+  return (
+    <section>
+      <div className={styles.head}>
+        <div>
+          <h1>Settings</h1>
+          <p>Only admins see this page.</p>
+        </div>
+      </div>
+      <div className={styles.department}>
+        <header>
+          <h2>Anthropic API key</h2>
+          <p>Used to draft role summaries and descriptions with Claude. It is checked with Anthropic before it is saved, stored where no one can read it back, and only ever shown as its last four characters.</p>
+        </header>
+        <p className={styles.keyStatus}>
+          {status === null
+            ? "Checking…"
+            : status.source === "environment"
+              ? "Set in the site's environment (Vercel). That key is used, and this one is ignored."
+              : status.set
+                ? `Saved · ends in …${status.last4}${status.updatedBy ? ` · by ${status.updatedBy}` : ""}${status.updatedAt ? ` · ${when(status.updatedAt)}` : ""}`
+                : "Not set yet. Role drafting is off until a key is added."}
+        </p>
+        <form
+          className={styles.filters}
+          onSubmit={async (event) => {
+            event.preventDefault();
+            setBusy(true);
+            setNote("");
+            const error = await call("PUT", { anthropicApiKey: key });
+            setBusy(false);
+            setKey("");
+            setNote(error ?? "Key checked and saved. Role drafting is on.");
+          }}
+        >
+          <input
+            className={styles.input}
+            type="password"
+            autoComplete="off"
+            spellCheck={false}
+            required
+            placeholder={status?.set ? "Paste a new key to replace it" : "sk-ant-…"}
+            value={key}
+            onChange={(event) => setKey(event.target.value)}
+          />
+          <button className={styles.primary} disabled={busy || !key}>
+            {busy ? "Checking…" : status?.set ? "Replace key" : "Save key"}
+          </button>
+          {status?.source === "portal" ? (
+            <button
+              type="button"
+              className={styles.danger}
+              onClick={async () => {
+                if (!window.confirm("Remove the saved key? Role drafting will stop until a new key is added.")) return;
+                const error = await call("DELETE");
+                setNote(error ?? "Key removed.");
+              }}
+            >
+              Remove
+            </button>
+          ) : null}
+        </form>
+        {note ? <p className={styles.note}>{note}</p> : null}
       </div>
     </section>
   );

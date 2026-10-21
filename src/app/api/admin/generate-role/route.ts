@@ -1,6 +1,7 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { betaZodOutputFormat } from "@anthropic-ai/sdk/helpers/beta/zod";
 import { z } from "zod";
+import { anthropicKey } from "@/lib/secrets";
 import { supabaseService } from "@/lib/supabase/server";
 
 /*
@@ -51,8 +52,9 @@ export const maxDuration = 60;
 export async function POST(request: Request) {
   const who = await hrCaller(request);
   if ("error" in who) return Response.json({ error: who.error }, { status: who.status });
-  if (!process.env.ANTHROPIC_API_KEY) {
-    return Response.json({ error: "AI drafting isn't switched on yet: add ANTHROPIC_API_KEY to the site's environment." }, { status: 503 });
+  const apiKey = await anthropicKey();
+  if (!apiKey) {
+    return Response.json({ error: "AI drafting isn't switched on yet. An admin can add the Anthropic key in Settings." }, { status: 503 });
   }
 
   const body = (await request.json().catch(() => ({}))) as Record<string, unknown>;
@@ -69,7 +71,7 @@ export async function POST(request: Request) {
     .filter(Boolean)
     .join("\n");
 
-  const client = new Anthropic();
+  const client = new Anthropic({ apiKey });
   try {
     const response = await client.beta.messages.parse({
       model: "claude-opus-5-5",
@@ -87,7 +89,7 @@ export async function POST(request: Request) {
     return Response.json(response.parsed_output);
   } catch (error) {
     if (error instanceof Anthropic.RateLimitError) return Response.json({ error: "Too many drafts at once. Try again in a minute." }, { status: 429 });
-    if (error instanceof Anthropic.AuthenticationError) return Response.json({ error: "The AI key was rejected. Check ANTHROPIC_API_KEY." }, { status: 503 });
+    if (error instanceof Anthropic.AuthenticationError) return Response.json({ error: "The Anthropic key was rejected. An admin can replace it in Settings." }, { status: 503 });
     if (error instanceof Anthropic.APIError) {
       console.error("generate-role: API error", error.status, error.message);
       return Response.json({ error: "The AI service had a problem. Try again." }, { status: 502 });
