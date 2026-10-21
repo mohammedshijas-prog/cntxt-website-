@@ -35,7 +35,17 @@ type Application = {
   status: "new" | "reviewing" | "interview" | "offer" | "hired" | "rejected";
   notes: string;
   created_at: string;
+  fit_score: number | null;
+  fit_label: "strong" | "possible" | "weak" | null;
+  fit_summary: string | null;
+  fit_strengths: string[];
+  fit_gaps: string[];
+  fit_questions: string[];
+  fit_checked_at: string | null;
+  fit_error: string | null;
 };
+
+const fitNames = { strong: "Strong fit", possible: "Possible fit", weak: "Weak fit" } as const;
 
 /** The public link to a role, on whatever domain the portal is open on. */
 const roleUrl = (slug: string) => `${window.location.origin}/careers/${slug}`;
@@ -123,6 +133,24 @@ export function Applications({ role: me }: { role: PortalRole }) {
     setRows((current) => current.filter((row) => row.id !== id));
   };
 
+  const [checking, setChecking] = useState<string | null>(null);
+
+  // Re-run the AI fit check for one application.
+  const checkFit = async (id: string) => {
+    setChecking(id);
+    setNote("");
+    const { data } = await db.auth.getSession();
+    const response = await fetch("/api/admin/screen-application", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${data.session?.access_token ?? ""}` },
+      body: JSON.stringify({ id }),
+    });
+    const result = (await response.json().catch(() => ({}))) as Partial<Application> & { error?: string };
+    setChecking(null);
+    if (!response.ok) return setNote(result.error ?? "The fit check didn't finish.");
+    setRows((current) => current.map((row) => (row.id === id ? { ...row, ...result } : row)));
+  };
+
   const counts = { total: rows.length, new: rows.filter((row) => row.status === "new").length };
 
   return (
@@ -193,6 +221,11 @@ export function Applications({ role: me }: { role: PortalRole }) {
                 </span>
                 <span>
                   {row.role_title}
+                  {row.fit_label ? (
+                    <b className={`${styles.fit} ${styles[`fit_${row.fit_label}`]}`}>
+                      {fitNames[row.fit_label]} · {row.fit_score}
+                    </b>
+                  ) : null}
                   <em className={styles.snippet}>{row.cover_note ?? ""}</em>
                 </span>
                 <span className={styles.date}>{when(row.created_at)}</span>
@@ -200,6 +233,51 @@ export function Applications({ role: me }: { role: PortalRole }) {
               </button>
               {open === row.id ? (
                 <div className={styles.detail}>
+                  <div className={styles.fitCard}>
+                    <header>
+                      <strong>AI fit check</strong>
+                      {row.fit_label ? (
+                        <b className={`${styles.fit} ${styles[`fit_${row.fit_label}`]}`}>
+                          {fitNames[row.fit_label]} · {row.fit_score}/100
+                        </b>
+                      ) : null}
+                      <button className={styles.secondary} disabled={checking === row.id} onClick={() => checkFit(row.id)}>
+                        {checking === row.id ? "Checking…" : row.fit_checked_at ? "Check again" : "Check fit"}
+                      </button>
+                    </header>
+                    {row.fit_summary ? <p>{row.fit_summary}</p> : null}
+                    {row.fit_error && !row.fit_summary ? <p className={styles.fitError}>{row.fit_error}</p> : null}
+                    {!row.fit_checked_at && !checking ? <p className={styles.fitMuted}>Not checked yet.</p> : null}
+                    {row.fit_summary ? (
+                      <div className={styles.fitCols}>
+                        <div>
+                          <h4>Strengths</h4>
+                          <ul>
+                            {row.fit_strengths.map((item) => (
+                              <li key={item}>{item}</li>
+                            ))}
+                          </ul>
+                        </div>
+                        <div>
+                          <h4>Gaps</h4>
+                          <ul>
+                            {row.fit_gaps.map((item) => (
+                              <li key={item}>{item}</li>
+                            ))}
+                          </ul>
+                        </div>
+                        <div>
+                          <h4>Ask at interview</h4>
+                          <ul>
+                            {row.fit_questions.map((item) => (
+                              <li key={item}>{item}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
+                    ) : null}
+                    <p className={styles.fitMuted}>Advice from AI, based only on job-relevant evidence. A person on the team makes the decision.</p>
+                  </div>
                   {row.cover_note ? <p className={styles.messageFull}>{row.cover_note}</p> : null}
                   <dl>
                     <dt>Phone</dt>

@@ -1,4 +1,6 @@
+import { after } from "next/server";
 import { limited } from "@/lib/rateLimit";
+import { screenApplication } from "@/lib/screening";
 import { supabaseService } from "@/lib/supabase/server";
 
 const types: Record<string, string> = {
@@ -8,6 +10,9 @@ const types: Record<string, string> = {
 };
 const maxBytes = 10 * 1024 * 1024;
 const text = (value: FormDataEntryValue | null, max: number) => (typeof value === "string" ? value.trim().slice(0, max) : "");
+
+// Leaves time for the background fit check after the response.
+export const maxDuration = 60;
 
 /** A job application: details into `applications`, the CV into the private `cvs` bucket. */
 export async function POST(request: Request) {
@@ -71,6 +76,9 @@ export async function POST(request: Request) {
     return Response.json({ error: "We could not upload your CV. Please try again." }, { status: 500 });
   }
   await db.from("applications").update({ cv_path: path }).eq("id", application.id);
+
+  // The fit check runs after the applicant has their answer, so they never wait on it.
+  after(() => screenApplication(application.id));
 
   return Response.json({ ok: true });
 }

@@ -875,3 +875,92 @@
   font-family: var(--font-heading);
   font-size: 14px;
 }
+
+/* AI fit check on applications. */
+.fit {
+  display: inline-block;
+  margin: 0 6px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.fit_strong {
+  background: #e7f9ef;
+  color: #1c7a4a;
+}
+
+.fit_possible {
+  background: #fff3df;
+  color: #a5620c;
+}
+
+.fit_weak {
+  background: #f3f1f6;
+  color: #6b6478;
+}
+
+.fitCard {
+  margin-bottom: 12px;
+  padding: 14px 16px;
+  border: 1px solid rgba(125, 82, 244, 0.25);
+  border-radius: 14px;
+  background: #fbfaff;
+}
+
+.fitCard header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.fitCard header button {
+  margin-left: auto;
+}
+
+.fitCard p {
+  margin: 10px 0 0;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.fitCols {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 12px;
+}
+
+.fitCols h4 {
+  margin: 0 0 6px;
+  color: var(--label-2);
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.fitCols ul {
+  margin: 0;
+  padding-left: 1.1em;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.fitMuted {
+  color: var(--label-3);
+  font-size: 12px !important;
+}
+
+.fitError {
+  color: #a12a2a;
+}
+
+@media (max-width: 734px) {
+  .fitCols {
+    grid-template-columns: 1fr;
+  }
+}
