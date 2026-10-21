@@ -411,7 +411,10 @@ export function Roles({ role: me, onApplicants }: { role: PortalRole; onApplican
                 <CopyLink slug={role.slug} status={role.status} />
               </div>
               <button onClick={() => setEditing(role)}>
-                <span className={styles.countBadge}>{counts[role.id ?? ""] ?? 0}</span>
+                <span className={`${styles.countBadge} ${counts[role.id ?? ""] ? "" : styles.zero}`} aria-label={`${counts[role.id ?? ""] ?? 0} applications`}>
+                  <b>{counts[role.id ?? ""] ?? 0}</b>
+                  <small>applied</small>
+                </span>
                 <span>
                   <strong>{role.title || "Untitled role"}</strong>
                   <em>

@@ -21,7 +21,7 @@
   width: min(420px, 100%);
   padding: var(--space-9) var(--space-8);
   border-radius: var(--radius-card);
-  background: #ffffff;
+  background: var(--surface);
   box-shadow: 0 30px 60px -36px rgba(45, 25, 110, 0.35);
 }
 
@@ -56,7 +56,7 @@
   align-items: center;
   padding: var(--space-3) var(--space-7);
   border-bottom: 1px solid var(--separator);
-  background: rgba(255, 255, 255, 0.92);
+  background: color-mix(in srgb, var(--surface) 92%, transparent);
   backdrop-filter: blur(12px);
 }
 
@@ -99,7 +99,7 @@
 
 .tabs .tabOn,
 .bodyTabs .tabOn {
-  background: #ffffff;
+  background: var(--surface);
   color: var(--label);
   box-shadow: 0 1px 3px rgba(21, 17, 31, 0.1);
 }
@@ -162,7 +162,7 @@
 
 .secondary {
   border-color: var(--separator);
-  background: #ffffff;
+  background: var(--surface);
   color: var(--label);
 }
 
@@ -173,9 +173,9 @@
 }
 
 .danger {
-  border-color: #f0c8c8;
-  background: #ffffff;
-  color: #c43c3c;
+  border-color: color-mix(in srgb, var(--red) 35%, transparent);
+  background: var(--surface);
+  color: var(--red);
 }
 
 .primary:disabled,
@@ -200,7 +200,7 @@
   padding: 10px 12px;
   border: 1px solid var(--separator);
   border-radius: 10px;
-  background: #ffffff;
+  background: var(--surface);
   color: var(--label);
   font-family: var(--font-body);
   font-size: 15px;
@@ -212,7 +212,7 @@
 }
 
 .error {
-  color: #c43c3c !important;
+  color: var(--red) !important;
 }
 
 .note {
@@ -228,7 +228,7 @@
   padding: var(--space-10);
   border: 1px dashed var(--separator);
   border-radius: var(--radius-tile);
-  background: #ffffff;
+  background: var(--surface);
   color: var(--label-2);
   text-align: center;
 }
@@ -244,8 +244,8 @@
 .table {
   overflow: hidden;
   border-radius: var(--radius-tile);
-  background: #ffffff;
-  box-shadow: 0 0 0 1px rgba(21, 17, 31, 0.06);
+  background: var(--surface);
+  box-shadow: 0 0 0 1px var(--separator);
 }
 
 .rowWrap + .rowWrap,
@@ -401,8 +401,8 @@
   padding: var(--space-3);
   border: 0;
   border-radius: var(--radius-tile);
-  background: #ffffff;
-  box-shadow: 0 0 0 1px rgba(21, 17, 31, 0.06);
+  background: var(--surface);
+  box-shadow: 0 0 0 1px var(--separator);
   text-align: left;
   cursor: pointer;
 }
@@ -448,7 +448,7 @@
   gap: var(--space-4);
   padding: var(--space-6);
   border-radius: var(--radius-tile);
-  background: #ffffff;
+  background: var(--surface);
 }
 
 .fields label {
@@ -523,7 +523,7 @@
   min-height: 560px;
   padding: var(--space-6);
   border-radius: 10px;
-  background: #ffffff;
+  background: var(--surface);
   font-size: 16px;
   line-height: 1.7;
 }
@@ -535,7 +535,7 @@
   padding: 0;
   overflow: hidden;
   border-radius: var(--radius-tile);
-  background: #ffffff;
+  background: var(--surface);
   list-style: none;
 }
 
@@ -650,7 +650,8 @@
   padding: 0 8px;
   place-items: center;
   border-radius: 12px;
-  background: var(--bg-2);
+  background: var(--accent-tint);
+  text-align: center;
   color: var(--accent-text);
   font-family: var(--font-heading);
   font-size: 13px;
@@ -694,7 +695,7 @@
 }
 
 .roleRow > button:last-child {
-  padding-right: 370px;
+  padding-right: 270px;
 }
 
 /* "3 applicants →": jumps to Applications filtered to this role. */
@@ -702,7 +703,7 @@
 .roleActions {
   position: absolute;
   top: 50%;
-  right: 110px;
+  right: 16px;
   z-index: 1;
   display: flex;
   gap: 8px;
@@ -756,7 +757,7 @@
   align-items: center;
   border: 1px solid var(--separator) !important;
   border-radius: 999px !important;
-  background: #ffffff !important;
+  background: var(--surface) !important;
   box-shadow: none !important;
   color: var(--accent-text);
   font-family: var(--font-heading);
@@ -827,8 +828,8 @@
 .department {
   padding: 18px 20px;
   border-radius: 16px;
-  background: #ffffff;
-  box-shadow: 0 0 0 1px rgba(21, 17, 31, 0.06);
+  background: var(--surface);
+  box-shadow: 0 0 0 1px var(--separator);
 }
 
 .department header h2 {
@@ -960,7 +961,7 @@
   padding: 14px 16px;
   border: 1px solid rgba(125, 82, 244, 0.25);
   border-radius: 14px;
-  background: #fbfaff;
+  background: color-mix(in srgb, var(--accent) 6%, var(--surface));
 }
 
 .fitCard header {
@@ -1009,7 +1010,7 @@
 }
 
 .fitError {
-  color: #a12a2a;
+  color: var(--red);
 }
 
 @media (max-width: 734px) {
@@ -1032,8 +1033,8 @@
   gap: 4px;
   padding: 16px;
   border-radius: 16px;
-  background: #ffffff;
-  box-shadow: 0 0 0 1px rgba(21, 17, 31, 0.06);
+  background: var(--surface);
+  box-shadow: 0 0 0 1px var(--separator);
 }
 
 .scoreTile span {
@@ -1055,23 +1056,23 @@
 }
 
 .scoreGood {
-  color: #1c7a4a;
+  color: var(--green);
 }
 
 .scoreOk {
-  color: #a5620c;
+  color: var(--orange);
 }
 
 .scoreLow {
-  color: #b42318;
+  color: var(--red);
 }
 
 .up {
-  color: #1c7a4a !important;
+  color: var(--green) !important;
 }
 
 .down {
-  color: #b42318 !important;
+  color: var(--red) !important;
 }
 
 .reportSummary {
@@ -1181,6 +1182,8 @@
   --accent-tint: rgba(125, 82, 244, 0.12);
   --accent-text: #6538e8;
   --red: #ff3b30;
+  --green: #1c7a4a;
+  --orange: #a5620c;
   color-scheme: light;
   font-family: var(--font-ui);
   -webkit-font-smoothing: antialiased;
@@ -1201,6 +1204,8 @@
     --accent-tint: rgba(155, 123, 255, 0.2);
     --accent-text: #b8a2ff;
     --red: #ff453a;
+    --green: #30d158;
+    --orange: #ff9f0a;
     color-scheme: dark;
   }
 }
@@ -1652,10 +1657,56 @@
 
 /* Traffic panel */
 .trafficGrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-top: 16px; }
-.trafficGrid h3 { font: var(--t-subhead, 600 15px/1.3 system-ui); margin: 0 0 8px; color: var(--secondary-label, inherit); }
+.trafficGrid h3 { font: var(--t-subhead, 600 15px/1.3 system-ui); margin: 0 0 8px; color: var(--label-2); }
 .bars { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
 .bars li { display: grid; grid-template-columns: minmax(0, 1fr) 30% auto; align-items: center; gap: 10px; font-size: 13px; }
 .bars li span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.bars li span em { margin-left: 6px; font-style: normal; color: var(--secondary-label, #888); font-size: 11px; }
+.bars li span em { margin-left: 6px; font-style: normal; color: var(--label-2); font-size: 11px; }
 .bars li i { display: block; height: 6px; border-radius: 3px; background: var(--accent, #0a84ff); min-width: 2px; }
 .bars li b { font-variant-numeric: tabular-nums; font-weight: 600; min-width: 2.5ch; text-align: right; }
+
+/* Roles list: applicant count as a tidy number tile, centred, with a caption. */
+.roleRow > button:last-child {
+  grid-template-columns: 64px minmax(0, 1fr) auto;
+}
+
+.roleRow .countBadge {
+  display: flex;
+  flex-direction: column;
+  width: 64px;
+  min-width: 0;
+  height: 56px;
+  padding: 0;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  border-radius: 12px;
+  background: var(--accent-tint);
+  color: var(--accent-text);
+  line-height: 1;
+}
+
+.roleRow .countBadge b {
+  font-family: var(--font-heading);
+  font-size: 20px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.roleRow .countBadge small {
+  color: var(--label-2);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.roleRow .countBadge.zero {
+  background: var(--fill, rgba(120, 120, 128, 0.12));
+  color: var(--label-2);
+}
+
+/* Status sits right after the title block, vertically centred with the actions. */
+.roleRow > button:last-child > span:last-child {
+  align-self: center;
+}
