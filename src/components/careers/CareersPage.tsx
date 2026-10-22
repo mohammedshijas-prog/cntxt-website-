@@ -149,24 +149,36 @@ function Filter({
   );
 }
 
+/** Group "Abu Dhabi, UAE" and "Dubai, UAE" under "UAE", and so on, for the location filter. */
+function placesOf(location: string) {
+  if (/remote/i.test(location)) return ["Remote"];
+  if (/multiple countries/i.test(location)) return ["Multiple countries"];
+  return location
+    .split("·")
+    .map((part) => part.split(",").pop()?.trim() ?? "")
+    .map((place) => (/^(CA|NY|TX|United States)$/.test(place) ? "United States" : place))
+    .filter(Boolean);
+}
+
+const FIRST_PAGE = 12;
+
 export function CareersPage({ roles }: { roles: RoleCard[] }) {
   const [location, setLocation] = useState("all");
   const [department, setDepartment] = useState("all");
+  const [query, setQuery] = useState("");
+  const [showAll, setShowAll] = useState(false);
   const [openBenefit, setOpenBenefit] = useState(0);
 
-  const locations = useMemo(
-    () => [...new Set(roles.map((role) => role.location))],
-    [roles],
-  );
-  const departments = useMemo(
-    () => [...new Set(roles.map((role) => role.department))],
-    [roles],
-  );
+  const locations = useMemo(() => [...new Set(roles.flatMap((role) => placesOf(role.location)))].sort(), [roles]);
+  const departments = useMemo(() => [...new Set(roles.map((role) => role.department).filter(Boolean))].sort(), [roles]);
   const visible = roles.filter(
     (role) =>
-      (location === "all" || role.location === location) &&
-      (department === "all" || role.department === department),
+      (location === "all" || placesOf(role.location).includes(location)) &&
+      (department === "all" || role.department === department) &&
+      `${role.title} ${role.department} ${role.location}`.toLowerCase().includes(query.trim().toLowerCase()),
   );
+  const filtering = location !== "all" || department !== "all" || query.trim() !== "";
+  const shown = filtering || showAll ? visible : visible.slice(0, FIRST_PAGE);
 
   return (
     <main className={styles.page}>
@@ -176,7 +188,7 @@ export function CareersPage({ roles }: { roles: RoleCard[] }) {
         id="careers-heading"
         kicker="Careers"
         title={["Build AI on real data,", "with people who do the real work."]}
-        lead="CNTXT captures and verifies data from real work, trains models on it and deploys AI on-premise. We are hiring evaluators, coding experts, annotators and data collectors."
+        lead="CNTXT captures and verifies data from real work, trains models on it and deploys AI on-premise. We are hiring across engineering, product, marketing, AI evaluation, annotation and data collection."
         actions={[
           { label: "See open roles", href: "#openings", primary: true },
           { label: "How we work", href: "#culture-heading" },
@@ -204,6 +216,10 @@ export function CareersPage({ roles }: { roles: RoleCard[] }) {
         </h2>
         <div className={styles.board}>
           <div className={styles.filters}>
+            <label className={styles.search}>
+              <span className={styles.srOnly}>Search roles</span>
+              <input type="search" placeholder="Search roles" value={query} onChange={(event) => setQuery(event.target.value)} />
+            </label>
             <Filter label="Location" value={location} options={locations} onChange={setLocation} />
             <Filter
               label="Department"
@@ -213,15 +229,19 @@ export function CareersPage({ roles }: { roles: RoleCard[] }) {
             />
           </div>
           <ul className={styles.roles}>
+            <li className={styles.count} aria-live="polite">
+              {visible.length} open {visible.length === 1 ? "role" : "roles"}
+              {filtering ? " match" : ""}
+            </li>
             {visible.length === 0 ? (
               <li className={styles.empty}>{roles.length ? "No open roles match these filters." : "No open roles right now. Check back soon."}</li>
             ) : (
-              visible.map((role) => (
+              shown.map((role) => (
                 <li key={role.slug}>
                   <div>
                     <h3>{role.title}</h3>
                     <p>
-                      {role.location} · {role.terms}
+                      {[role.department, role.location, role.terms].filter(Boolean).join(" · ")}
                     </p>
                   </div>
                   <a className={styles.apply} href={`/careers/${role.slug}`} aria-label={`Apply for ${role.title}`}>
@@ -230,6 +250,13 @@ export function CareersPage({ roles }: { roles: RoleCard[] }) {
                 </li>
               ))
             )}
+            {shown.length < visible.length ? (
+              <li className={styles.more}>
+                <button type="button" onClick={() => setShowAll(true)}>
+                  Show all {visible.length} roles
+                </button>
+              </li>
+            ) : null}
           </ul>
         </div>
       </section>
