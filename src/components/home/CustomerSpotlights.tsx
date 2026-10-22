@@ -17,6 +17,10 @@ type Spotlight = {
   body: string;
 };
 
+/*
+ * Verified clients only (confirmed by CNTXT, 22 Oct 2026; see docs/content-brief.md).
+ * Add a name here only once it is confirmed, with facts from the brief.
+ */
 const spotlights: Spotlight[] = [
   {
     name: "US robotics company",
@@ -26,66 +30,30 @@ const spotlights: Spotlight[] = [
     body: "Fuelling the next generation of robotic foundation models with real-world training data.",
   },
   {
-    name: "Munsit",
-    logo: "/customers/munsit.svg",
-    aspect: 4.14,
-    weight: 0.62,
-    sector: "Our product · Arabic voice AI",
-    figure: "250+",
-    figureLabel: "Government & enterprise organisations",
-    body: "Arabic voice AI for 150,000+ users, inside government and enterprise workflows.",
-  },
-  {
-    name: "Burjeel",
-    sector: "Healthcare",
-    figure: "Healthcare",
-    figureLabel: "Clinical support",
-    body: "Capturing clinical support work to train AI that assists on the ward.",
-  },
-  {
-    name: "DP World",
-    logo: "/customers/dp-world.png",
-    aspect: 4.07,
-    sector: "Logistics",
-    figure: "Logistics",
-    figureLabel: "Warehouse & port operations",
-    body: "Real-world warehouse and port operations data for physical AI.",
-  },
-  {
-    name: "noon",
-    logo: "/customers/noon.png",
-    aspect: 3.3,
-    sector: "Retail & e-commerce",
-    figure: "Retail",
-    figureLabel: "Picking, packing & restock",
-    body: "Picking, packing and restock shifts turned into robotics-ready training data.",
-  },
-  {
-    name: "dnata",
-    logo: "/customers/dnata.png",
-    aspect: 3.6,
-    sector: "Aviation",
-    figure: "Aviation",
-    figureLabel: "Airport ground handling",
-    body: "Airport ground handling captured for the next generation of autonomous operations.",
-  },
-  {
-    name: "Emirates NBD",
-    logo: "/customers/emirates-nbd.png",
-    aspect: 3.6,
-    sector: "Banking",
-    figure: "Banking",
-    figureLabel: "Customer service & operations",
-    body: "Agentic AI deployed on-premise across customer service and operations.",
-  },
-  {
     name: "TII",
     logo: "/customers/tii.png",
     aspect: 1.81,
-    sector: "Research partner",
+    sector: "Technology Innovation Institute · Research",
     figure: "Research",
     figureLabel: "Arabic language models",
-    body: "Research partner on Arabic-centric language models: specialised linguistic datasets, multilingual annotation frameworks and evaluation methods.",
+    body: "Research work on Arabic-centric language models: specialised linguistic datasets, multilingual annotation frameworks and evaluation methods.",
+  },
+  {
+    name: "AI71",
+    logo: "/customers/ai71.svg",
+    aspect: 1.24,
+    weight: 0.8,
+    sector: "AI · Also an investor",
+    figure: "$60M",
+    figureLabel: "Series A co-led by AI71",
+    body: "\u201cCNTXT AI capabilities and speed of execution stand out in this fast-moving AI world.\u201d \u2014 Reda Nidhakou, AI71",
+  },
+  {
+    name: "Venture One",
+    sector: "Client",
+    figure: "Client",
+    figureLabel: "Verified customer",
+    body: "Working with CNTXT AI.",
   },
 ];
 
