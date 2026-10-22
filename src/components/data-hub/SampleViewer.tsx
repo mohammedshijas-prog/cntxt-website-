@@ -59,12 +59,18 @@ function TextSample({ url }: { url: string }) {
 export function SampleViewer({
   item,
   requested,
+  others,
   onToggle,
+  onRequest,
   onClose,
 }: {
   item: CatalogueItem;
   requested: boolean;
+  /** Other datasets already in the request. */
+  others: number;
   onToggle: () => void;
+  /** Add this dataset (if needed) and go straight to the request form. */
+  onRequest: () => void;
   onClose: () => void;
 }) {
   const dialog = useRef<HTMLDialogElement>(null);
@@ -118,8 +124,19 @@ export function SampleViewer({
         </p>
 
         <div className={styles.sampleActions}>
-          <button type="button" className={styles.panelPrimary} aria-pressed={requested} onClick={onToggle}>
-            {requested ? "Added to request ✓" : "Add to request"}
+          <button
+            type="button"
+            className={styles.panelPrimary}
+            onClick={() => {
+              // Close the sample first, then open the request form in its place: one step, no back-and-forth.
+              dialog.current?.close();
+              onRequest();
+            }}
+          >
+            {others > 0 ? `Request ${others + 1} datasets` : "Request this dataset"} <span aria-hidden="true">→</span>
+          </button>
+          <button type="button" className={styles.sampleSecondary} aria-pressed={requested} onClick={onToggle}>
+            {requested ? "Added ✓ · keep browsing" : "Add and keep browsing"}
           </button>
           {url ? (
             <a className={styles.sample} href={url} target="_blank" rel="noopener noreferrer" download={item.sample_name ?? undefined}>

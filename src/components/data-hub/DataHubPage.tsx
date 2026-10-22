@@ -383,7 +383,13 @@ export function DataHubPage({ initialCategory, datasets }: { initialCategory?: s
         <SampleViewer
           item={viewed}
           requested={requested.includes(viewed.id)}
+          others={requested.filter((id) => id !== viewed.id).length}
           onToggle={() => toggle(viewed.id)}
+          onRequest={() => {
+            setRequested((current) => (current.includes(viewed.id) ? current : [...current, viewed.id]));
+            setViewing(null);
+            setAsking(true);
+          }}
           onClose={() => setViewing(null)}
         />
       ) : null}

@@ -1002,8 +1002,26 @@
   padding: 0 24px;
 }
 
-.sampleActions .panelPrimary[aria-pressed="true"] {
-  background: var(--label);
+.sampleSecondary {
+  min-height: 50px;
+  padding: 0 20px;
+  border: 1px solid rgba(21, 17, 31, 0.16);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--label, #15111f);
+  font: 500 15px/1 var(--font-heading);
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.sampleSecondary:hover {
+  border-color: var(--accent, #7d52f4);
+}
+
+.sampleSecondary[aria-pressed="true"] {
+  border-color: transparent;
+  background: rgba(125, 82, 244, 0.1);
+  color: var(--accent-text, #6538e8);
 }
 
 @media (max-width: 734px) {
