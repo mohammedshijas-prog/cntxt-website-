@@ -1,4 +1,5 @@
 import { runSeoReport } from "@/lib/seoAudit";
+import { audit } from "@/lib/audit";
 import { supabaseService } from "@/lib/supabase/server";
 
 export const maxDuration = 800;
@@ -19,7 +20,10 @@ export async function POST(request: Request) {
     return Response.json({ error: "A report ran in the last 10 minutes. Give it a moment." }, { status: 429 });
   }
   try {
-    const id = await runSeoReport("manual");
+    const { data: claimed } = await db.rpc("claim_job", { job: "seo-report", ttl_minutes: 20 });
+    if (!claimed) return Response.json({ error: "A report is already running. It takes a few minutes." }, { status: 429 });
+    await audit(db, request, { actor: email, action: "ran the SEO & GEO report", area: "seo_reports" });
+    const id = await runSeoReport("manual").finally(() => db.from("job_locks").delete().eq("name", "seo-report"));
     return Response.json({ ok: true, id });
   } catch (error) {
     console.error("seo-report: failed", error instanceof Error ? error.message : error);

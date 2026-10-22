@@ -9,6 +9,7 @@ import { supabaseBrowser } from "@/lib/supabase/browser";
 import { Applications, Roles } from "./AdminCareers";
 import { Catalogue, DataRequests } from "./AdminCatalogue";
 import { SeoReports } from "./AdminSeo";
+import { ActivityLog } from "./AdminActivity";
 import { slugify, when } from "./shared";
 import styles from "./admin.module.css";
 
@@ -53,6 +54,7 @@ const tabs = {
   posts: "Blog posts",
   seo: "SEO & GEO",
   team: "Team",
+  activity: "Activity log",
   settings: "Settings",
 } as const;
 type Tab = keyof typeof tabs;
@@ -62,7 +64,7 @@ const groups: { name: string; items: Tab[] }[] = [
   { name: "Inbox", items: ["submissions", "applications", "requests"] },
   { name: "Workspace", items: ["roles", "catalogue", "posts"] },
   { name: "Insights", items: ["seo"] },
-  { name: "Admin", items: ["team", "settings"] },
+  { name: "Admin", items: ["team", "activity", "settings"] },
 ];
 
 /* Rounded-stroke icons drawn to sit with SF Symbols (Apple's symbol files are licensed for Apple platforms only). */
@@ -75,6 +77,7 @@ const icons: Record<Tab, string> = {
   posts: "M5 4h10l4 4v12H5zM14 4v5h5M8 13h8M8 17h6",
   seo: "M4 19V9M10 19V5M16 19v-7M3 21h18",
   team: "M7 9a3 3 0 1 0 6 0 3 3 0 0 0-6 0M15 7a3 3 0 1 1 3 5M2 20a6 6 0 0 1 12 0M16 14a5 5 0 0 1 6 6",
+  activity: "M12 7v5l3 2M21 12a9 9 0 1 1-9-9 9 9 0 0 1 9 9z",
   settings: "M12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6zM19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.6 1.1V21a2 2 0 1 1-4 0v-.1a1.6 1.6 0 0 0-2.6-1.1l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A1.6 1.6 0 0 0 4.6 15H3a2 2 0 1 1 0-4h.1a1.6 1.6 0 0 0 1.1-2.6l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 2.6-1.1V3a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 2.6 1.1l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8V9a1.6 1.6 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1z",
 };
 
@@ -89,7 +92,7 @@ export const roleNames: Record<PortalRole, string> = {
   data_manager: "Data manager",
 };
 const access: Record<PortalRole, Tab[]> = {
-  admin: ["submissions", "applications", "roles", "requests", "catalogue", "posts", "seo", "team", "settings"],
+  admin: ["submissions", "applications", "roles", "requests", "catalogue", "posts", "seo", "team", "activity", "settings"],
   marketing: ["submissions", "posts", "seo"],
   hr_head: ["applications", "roles", "team"],
   recruiter: ["applications", "roles"],
@@ -123,6 +126,22 @@ export function AdminPortal() {
     return () => data.subscription.unsubscribe();
   }, [db]);
 
+  // Record the sign-in once per session (the server ignores repeats).
+  const token = session?.access_token;
+  useEffect(() => {
+    if (!token) return;
+    fetch("/api/admin/audit", { method: "POST", headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" }, body: JSON.stringify({ event: "sign_in" }) }).catch(() => {});
+    // Only once per page load; a refreshed token is the same session.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [Boolean(token)]);
+
+  const signOut = async () => {
+    if (token) {
+      await fetch("/api/admin/audit", { method: "POST", headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" }, body: JSON.stringify({ event: "sign_out" }) }).catch(() => {});
+    }
+    await db.auth.signOut();
+  };
+
   useEffect(() => {
     if (!session) return;
     db.rpc("portal_role").then(({ data }) => {
@@ -140,7 +159,7 @@ export function AdminPortal() {
         <div className={styles.card}>
           <h1>No access</h1>
           <p>{session.user.email} is not on the portal allowlist. Ask an admin to add you.</p>
-          <button className={styles.secondary} onClick={() => db.auth.signOut()}>
+          <button className={styles.secondary} onClick={signOut}>
             Sign out
           </button>
         </div>
@@ -187,7 +206,7 @@ export function AdminPortal() {
             <strong>{session.user.email}</strong>
             {role ? <em>{roleNames[role]}</em> : null}
           </span>
-          <button className={styles.link} onClick={() => db.auth.signOut()}>
+          <button className={styles.link} onClick={signOut}>
             Sign out
           </button>
         </div>
@@ -207,6 +226,7 @@ export function AdminPortal() {
         {tab === "requests" ? <DataRequests role={role ?? "data_manager"} /> : null}
         {tab === "catalogue" ? <Catalogue role={role ?? "data_manager"} /> : null}
         {tab === "team" ? <Team session={session} role={role ?? "recruiter"} /> : null}
+        {tab === "activity" ? <ActivityLog /> : null}
         {tab === "settings" ? <Settings session={session} /> : null}
         {tab === "seo" ? <SeoReports session={session} /> : null}
       </main>

@@ -3,6 +3,7 @@ import { betaZodOutputFormat } from "@anthropic-ai/sdk/helpers/beta/zod";
 import { z } from "zod";
 import { companyFacts as company } from "@/lib/companyFacts";
 import { anthropicKey } from "@/lib/secrets";
+import { audit } from "@/lib/audit";
 import { supabaseService } from "@/lib/supabase/server";
 
 /*
@@ -38,7 +39,7 @@ async function hrCaller(request: Request) {
   if (!email) return { error: "Sign in first.", status: 401 } as const;
   const { data: row } = await db.from("admins").select("role").eq("email", email).maybeSingle();
   if (!row || !["admin", "hr_head", "recruiter"].includes(row.role)) return { error: "Only HR can draft roles.", status: 403 } as const;
-  return { ok: true } as const;
+  return { ok: true, db, email } as const;
 }
 
 // Drafting takes a little while; give the function room.
@@ -81,6 +82,7 @@ export async function POST(request: Request) {
     if (response.stop_reason === "refusal" || !response.parsed_output) {
       return Response.json({ error: "Couldn't draft this one. Try rewording the title or notes." }, { status: 422 });
     }
+    await audit(who.db, request, { actor: who.email, action: "drafted with AI", area: "roles", target: title });
     return Response.json(response.parsed_output);
   } catch (error) {
     if (error instanceof Anthropic.RateLimitError) return Response.json({ error: "Too many drafts at once. Try again in a minute." }, { status: 429 });

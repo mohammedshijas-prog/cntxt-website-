@@ -15,6 +15,8 @@ const text = (value: FormDataEntryValue | null, max: number) => (typeof value ==
 export const maxDuration = 60;
 
 /** A job application: details into `applications`, the CV into the private `cvs` bucket. */
+const DAILY_AUTO_CHECKS = 300;
+
 export async function POST(request: Request) {
   const db = supabaseService();
   if (!db) return Response.json({ error: "Applications are closed for maintenance. Please try again later." }, { status: 503 });
@@ -78,7 +80,14 @@ export async function POST(request: Request) {
   await db.from("applications").update({ cv_path: path }).eq("id", application.id);
 
   // The fit check runs after the applicant has their answer, so they never wait on it.
-  after(() => screenApplication(application.id));
+  // Automatic checks stop at a daily cap so a flood of applications can't run up
+  // the AI bill; HR can still check any application by hand.
+  after(async () => {
+    const since = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+    const { count } = await db.from("applications").select("id", { count: "exact", head: true }).gte("fit_checked_at", since);
+    if ((count ?? 0) >= DAILY_AUTO_CHECKS) return;
+    await screenApplication(application.id);
+  });
 
   return Response.json({ ok: true });
 }

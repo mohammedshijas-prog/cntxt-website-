@@ -8,7 +8,12 @@ export const when = (iso: string) =>
 
 /** Download rows as a CSV file named cntxt-<name>-<date>.csv. */
 export function downloadCsv(name: string, header: string[], rows: (string | number | null | undefined)[][]) {
-  const cell = (value: string | number | null | undefined) => `"${String(value ?? "").replace(/"/g, '""')}"`;
+  // A leading = + - @ would run as a formula in Excel (CSV injection); prefix it so it stays text.
+  const cell = (value: string | number | null | undefined) => {
+    const text = String(value ?? "");
+    const safe = typeof value === "string" && /^[=+\-@\t\r]/.test(text) ? `'${text}` : text;
+    return `"${safe.replace(/"/g, '""')}"`;
+  };
   const blob = new Blob([[header.map(cell).join(","), ...rows.map((row) => row.map(cell).join(","))].join("\n")], { type: "text/csv" });
   const link = document.createElement("a");
   link.href = URL.createObjectURL(blob);

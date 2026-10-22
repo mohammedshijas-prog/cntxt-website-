@@ -1,3 +1,4 @@
+import { audit } from "@/lib/audit";
 import { supabaseService } from "@/lib/supabase/server";
 
 /*
@@ -65,6 +66,7 @@ export async function POST(request: Request) {
     console.error("team: createUser failed", userError.message);
     return Response.json({ error: "Could not create that login." }, { status: 500 });
   }
+  await audit(who.db, request, { actor: who.email, action: existing ? "changed a role" : "added a teammate", area: "team", target: email, detail: { role, ...(existing ? { from: existing.role } : {}) } });
   return Response.json({ ok: true });
 }
 
@@ -84,6 +86,7 @@ export async function PATCH(request: Request) {
 
   const { error } = await who.db.from("admins").update({ role }).eq("email", email);
   if (error) return Response.json({ error: "Could not change the role." }, { status: 500 });
+  await audit(who.db, request, { actor: who.email, action: "changed a role", area: "team", target: email, detail: { from: existing.role, role } });
   return Response.json({ ok: true });
 }
 
@@ -100,5 +103,6 @@ export async function DELETE(request: Request) {
 
   const { error } = await who.db.from("admins").delete().eq("email", email);
   if (error) return Response.json({ error: "Could not remove that person." }, { status: 500 });
+  await audit(who.db, request, { actor: who.email, action: "removed a teammate", area: "team", target: email, detail: { role: existing.role } });
   return Response.json({ ok: true });
 }

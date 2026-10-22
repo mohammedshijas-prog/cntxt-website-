@@ -43,6 +43,7 @@ type Application = {
   fit_questions: string[];
   fit_checked_at: string | null;
   fit_error: string | null;
+  fit_flag: string | null;
 };
 
 const fitNames = { strong: "Strong fit", possible: "Possible fit", weak: "Weak fit" } as const;
@@ -252,6 +253,11 @@ export function Applications({ role: me, focus }: { role: PortalRole; focus?: st
                     </header>
                     {row.fit_summary ? <p>{row.fit_summary}</p> : null}
                     {row.fit_error && !row.fit_summary ? <p className={styles.fitError}>{row.fit_error}</p> : null}
+                    {row.fit_flag ? (
+                      <p className={styles.fitError}>
+                        This application contains text aimed at the AI reviewer, so the score is capped and needs a person&rsquo;s read: &ldquo;{row.fit_flag}&rdquo;
+                      </p>
+                    ) : null}
                     {!row.fit_checked_at && !checking ? <p className={styles.fitMuted}>Not checked yet.</p> : null}
                     {row.fit_summary ? (
                       <div className={styles.fitCols}>

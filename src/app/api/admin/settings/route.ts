@@ -1,4 +1,5 @@
 import Anthropic from "@anthropic-ai/sdk";
+import { audit } from "@/lib/audit";
 import { supabaseService } from "@/lib/supabase/server";
 
 /*
@@ -62,6 +63,7 @@ export async function PUT(request: Request) {
 
   const { error } = await who.db.from("app_secrets").upsert({ name: "anthropic_api_key", value: key, updated_by: who.email, updated_at: new Date().toISOString() });
   if (error) return Response.json({ error: "Couldn't save the key." }, { status: 500 });
+  await audit(who.db, request, { actor: who.email, action: "saved the Anthropic key", area: "settings", target: "Anthropic API key" });
   return Response.json(await status(who.db));
 }
 
@@ -69,5 +71,6 @@ export async function DELETE(request: Request) {
   const who = await admin(request);
   if ("error" in who) return who.error;
   await who.db.from("app_secrets").delete().eq("name", "anthropic_api_key");
+  await audit(who.db, request, { actor: who.email, action: "removed the Anthropic key", area: "settings", target: "Anthropic API key" });
   return Response.json(await status(who.db));
 }

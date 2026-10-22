@@ -6,12 +6,24 @@ import { crawlers } from "@/lib/traffic";
  * counter can't see them). Only matching user agents do any work, and the log
  * is written after the response, so pages are never slowed down.
  */
+// At most this many crawler log writes per minute per server instance, so a
+// faked crawler user agent can't flood the table.
+const WRITES_PER_MINUTE = 60;
+let windowStart = 0;
+let writes = 0;
+
 export function proxy(request: NextRequest, event: NextFetchEvent) {
   const ua = request.headers.get("user-agent") ?? "";
   const match = crawlers.find(([pattern]) => pattern.test(ua));
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
   if (!match || !url || !key || process.env.VERCEL_ENV !== "production") return;
+  const now = Date.now();
+  if (now - windowStart > 60_000) {
+    windowStart = now;
+    writes = 0;
+  }
+  if (++writes > WRITES_PER_MINUTE) return;
   event.waitUntil(
     fetch(`${url}/rest/v1/bot_hits`, {
       method: "POST",

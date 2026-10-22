@@ -1972,3 +1972,52 @@ details.department + .department {
   gap: 24px 32px;
   margin-top: 20px;
 }
+
+/* ---------- Activity log ---------- */
+.auditTable td {
+  white-space: normal;
+  vertical-align: top;
+}
+
+.auditTable th:first-child,
+.auditTable td:first-child {
+  width: auto;
+}
+
+.auditTable td:first-child {
+  white-space: nowrap;
+}
+
+.auditMeta {
+  display: block;
+  margin-top: 2px;
+  color: var(--label-2);
+  font-size: 12px;
+  font-style: normal;
+}
+
+.auditTable .link {
+  padding: 0;
+  text-align: left;
+}
+
+.peopleTable td:first-child {
+  white-space: normal;
+  word-break: break-word;
+}
+
+.peopleTable th:first-child,
+.peopleTable td:first-child {
+  width: 26%;
+}
+
+.auditName {
+  display: block;
+  font-weight: 600;
+}
+
+.logTable th:nth-child(1) { width: 17%; }
+.logTable th:nth-child(2) { width: 23%; }
+.logTable th:nth-child(3) { width: 18%; }
+.logTable th:nth-child(4) { width: 42%; }
+.logTable td:first-child { width: auto; }

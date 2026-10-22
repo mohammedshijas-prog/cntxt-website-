@@ -1,4 +1,5 @@
 import { screenApplication } from "@/lib/screening";
+import { audit } from "@/lib/audit";
 import { supabaseService } from "@/lib/supabase/server";
 
 export const maxDuration = 60;
@@ -17,10 +18,12 @@ export async function POST(request: Request) {
   const { id } = (await request.json().catch(() => ({}))) as { id?: string };
   if (!id) return Response.json({ error: "Missing application." }, { status: 400 });
   const result = await screenApplication(id);
+  const { data: who } = await db.from("applications").select("name, role_title").eq("id", id).maybeSingle();
+  await audit(db, request, { actor: email, action: result.ok ? "ran an AI fit check" : "AI fit check failed", area: "applications", target: who ? `${who.name} · ${who.role_title}` : id, targetId: id });
   if (!result.ok) return Response.json({ error: result.error }, { status: 502 });
   const { data: app } = await db
     .from("applications")
-    .select("fit_score, fit_label, fit_summary, fit_strengths, fit_gaps, fit_questions, fit_checked_at, fit_error")
+    .select("fit_score, fit_label, fit_summary, fit_strengths, fit_gaps, fit_questions, fit_checked_at, fit_error, fit_flag")
     .eq("id", id)
     .maybeSingle();
   return Response.json(app);
