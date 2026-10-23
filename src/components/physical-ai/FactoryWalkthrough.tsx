@@ -1,12 +1,12 @@
 "use client";
 
-import dynamic from "next/dynamic";
+import { nearView } from "../three/nearView";
 import { useEffect, useRef, useState } from "react";
 import type { Shot } from "../three/FactoryScene";
 import { useSwipe } from "@/lib/useSwipe";
 import styles from "./factoryWalkthrough.module.css";
 
-const FactoryScene = dynamic(() => import("../three/FactoryScene"), { ssr: false });
+const FactoryScene = nearView(() => import("../three/FactoryScene"));
 
 type Chapter = {
   group: "Overview" | "The kit" | "Environments" | "Process";

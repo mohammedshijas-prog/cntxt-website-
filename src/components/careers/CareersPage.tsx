@@ -5,7 +5,7 @@ import { SiteClose } from "../site/SiteClose";
 import { PageHero } from "../shared/PageHero";
 import { CtaBand } from "../shared/CtaBand";
 import { SiteNav } from "../site/SiteNav";
-import dynamic from "next/dynamic";
+import { nearView } from "../three/nearView";
 import { CareerDots } from "./CareerDots";
 import { PhysicalAccordion, type Segment } from "../home/PhysicalAccordion";
 import styles from "./careers.module.css";
@@ -51,7 +51,7 @@ const culture: Segment[] = [
 
 
 
-const BenefitScene = dynamic(() => import("../three/BenefitScene"), { ssr: false });
+const BenefitScene = nearView(() => import("../three/BenefitScene"));
 
 /** A role as the careers board shows it; the list comes from the portal (Supabase). */
 export type RoleCard = { slug: string; title: string; department: string; location: string; terms: string; summary?: string; featured?: boolean };

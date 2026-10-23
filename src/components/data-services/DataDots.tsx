@@ -1,10 +1,10 @@
 "use client";
 
-import dynamic from "next/dynamic";
+import { nearView } from "../three/nearView";
 import { useRef, useState } from "react";
 import { ribbon, terrain } from "../three/shapes";
 
-const ParticleField = dynamic(() => import("../three/ParticleField"), { ssr: false });
+const ParticleField = nearView(() => import("../three/ParticleField"), { idle: true });
 
 /** An abstract form in the site's purple dots: a flowing ribbon or a rolling surface. */
 export function DataDots({ form, className }: { form: "ribbon" | "terrain"; className?: string }) {

@@ -1,12 +1,12 @@
 "use client";
 
-import dynamic from "next/dynamic";
+import { nearView } from "../three/nearView";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { agentHub, frames, network, rain, worker } from "../three/shapes";
 import type { Place } from "../three/ParticleField";
 import styles from "./sections.module.css";
 
-const ParticleField = dynamic(() => import("../three/ParticleField"), { ssr: false });
+const ParticleField = nearView(() => import("../three/ParticleField"));
 
 // Rain over the hero, then one form per stage: a worker, labelled frames,
 // a neural network, and an agent wired into the systems it runs.

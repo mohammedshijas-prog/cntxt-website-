@@ -1,11 +1,11 @@
 "use client";
 
-import dynamic from "next/dynamic";
+import { nearView } from "../three/nearView";
 import { useRef } from "react";
 import type { Shot } from "../three/FactoryScene";
 import styles from "./verticalHero.module.css";
 
-const FactoryScene = dynamic(() => import("../three/FactoryScene"), { ssr: false });
+const FactoryScene = nearView(() => import("../three/FactoryScene"), { idle: true });
 
 /* Where each vertical sits in the Physical AI world. */
 const framing: Record<string, { shot: Shot; station: number; label: string }> = {

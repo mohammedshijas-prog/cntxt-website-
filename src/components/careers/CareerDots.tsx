@@ -1,10 +1,10 @@
 "use client";
 
-import dynamic from "next/dynamic";
+import { nearView } from "../three/nearView";
 import { useEffect, useRef, useState } from "react";
 import { briefcase, growth, team } from "../three/shapes";
 
-const ParticleField = dynamic(() => import("../three/ParticleField"), { ssr: false });
+const ParticleField = nearView(() => import("../three/ParticleField"), { idle: true });
 
 /** The careers hero in the site's dots: a team, then growth, then the work, and back. */
 export function CareerDots({ className }: { className?: string }) {

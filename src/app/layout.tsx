@@ -7,6 +7,7 @@ import "./globals.css";
 import { MotionProvider } from "../components/motion/MotionProvider";
 import { PhoneDock } from "../components/site/PhoneDock";
 import { PageBeacon } from "../components/site/PageBeacon";
+import { DeferredTags } from "../components/site/DeferredTags";
 
 // Site-wide type: Host Grotesk for titles and UI, Manrope for descriptions.
 const host = Host_Grotesk({
@@ -56,11 +57,7 @@ export const viewport: Viewport = {
  * submitted" events; HubSpot's own script records page visits and sources.
  */
 const gtmId = "GTM-PVNBSB8S";
-const gtmHead = `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','${gtmId}');`;
+
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
@@ -82,13 +79,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <PageBeacon />
         <JsonLd data={[organization, website]} />
         {/*
-          Third-party scripts load through next/script, after React has taken
-          over the page. Loaded as raw tags, HubSpot edits the DOM before
-          hydration and React throws a hydration error.
+          Third-party scripts load after React has taken over the page (raw tags
+          let HubSpot edit the DOM before hydration). Marketing tags wait for the
+          first interaction or a few seconds; see DeferredTags.
         */}
-        <Script id="gtm-head" strategy="lazyOnload">
-          {gtmHead}
-        </Script>
         {/* Cookie banner, as on the current site */}
         <Script
           id="cookie-consent"
@@ -97,8 +91,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           crossOrigin="anonymous"
           strategy="lazyOnload"
         />
-        {/* HubSpot embed code: chat and forms tracking, loaded when the page is idle. */}
-        <Script id="hs-script-loader" src="https://js.hs-scripts.com/48027770.js" strategy="lazyOnload" />
+        <DeferredTags gtmId={gtmId} hubspotId="48027770" />
       </body>
     </html>
   );
