@@ -540,3 +540,149 @@
 .roles li.more button:hover {
   border-color: var(--accent, #7d52f4);
 }
+
+/* Featured positions: a short, scannable set above the full list. */
+.featured {
+  margin: 0 0 40px;
+}
+
+.featuredHeading,
+.featuredAll {
+  margin: 0 0 16px;
+  color: #6b6478;
+  font-family: var(--font-heading);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.featuredAll {
+  margin: 40px 0 0;
+}
+
+.featuredGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.featuredCard {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  height: 100%;
+  padding: 24px;
+  border: 1px solid #ebebeb;
+  border-radius: 20px;
+  background: #ffffff;
+  color: var(--text-strong);
+  text-decoration: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.featuredCard:hover,
+.featuredCard:focus-visible {
+  border-color: rgba(125, 82, 244, 0.45);
+  box-shadow: 0 18px 40px -24px rgba(83, 46, 191, 0.35);
+  transform: translateY(-2px);
+}
+
+.featuredCard strong {
+  font-family: var(--font-heading);
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.3px;
+}
+
+.featuredTag {
+  align-self: flex-start;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: rgba(125, 82, 244, 0.1);
+  color: #6538e8;
+  font-family: var(--font-heading);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.featuredSummary {
+  display: -webkit-box;
+  overflow: hidden;
+  color: #6b6478;
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+
+.featuredMeta {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;
+  padding-top: 8px;
+  color: #6b6478;
+  font-size: 14px;
+}
+
+.featuredArrow {
+  display: inline-grid;
+  flex: none;
+  width: 36px;
+  height: 36px;
+  place-items: center;
+  border-radius: 999px;
+  background: #7d52f4;
+  color: #ffffff;
+  transition: transform 0.2s ease;
+}
+
+.featuredCard:hover .featuredArrow {
+  transform: translateX(3px);
+}
+
+@media (max-width: 1068px) {
+  .featuredGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* Phones: a swipeable row, so the full list stays close. */
+@media (max-width: 734px) {
+  .featuredGrid {
+    grid-auto-columns: 82%;
+    grid-auto-flow: column;
+    grid-template-columns: none;
+    margin: 0 calc(-1 * var(--pad-x));
+    padding: 4px var(--pad-x) 12px;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-padding: 0 var(--pad-x);
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+
+  .featuredGrid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .featuredGrid > li {
+    scroll-snap-align: start;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .featuredCard,
+  .featuredArrow {
+    transition: none;
+  }
+  .featuredCard:hover {
+    transform: none;
+  }
+}

@@ -15,7 +15,7 @@ export default async function Careers() {
   const roles = await openRoles();
   return (
     <div>
-      <CareersPage roles={roles.map(({ slug, title, department, location, terms }) => ({ slug, title, department, location, terms }))} />
+      <CareersPage roles={roles.map(({ slug, title, department, location, terms, summary, featured }) => ({ slug, title, department, location, terms, summary, featured }))} />
     </div>
   );
 }

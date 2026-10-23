@@ -54,7 +54,7 @@ const culture: Segment[] = [
 const BenefitScene = dynamic(() => import("../three/BenefitScene"), { ssr: false });
 
 /** A role as the careers board shows it; the list comes from the portal (Supabase). */
-export type RoleCard = { slug: string; title: string; department: string; location: string; terms: string };
+export type RoleCard = { slug: string; title: string; department: string; location: string; terms: string; summary?: string; featured?: boolean };
 
 const benefits = [
   {
@@ -179,6 +179,7 @@ export function CareersPage({ roles }: { roles: RoleCard[] }) {
   );
   const filtering = location !== "all" || department !== "all" || query.trim() !== "";
   const shown = filtering || showAll ? visible : visible.slice(0, FIRST_PAGE);
+  const featured = roles.filter((role) => role.featured).slice(0, 6);
 
   return (
     <main className={styles.page}>
@@ -214,6 +215,31 @@ export function CareersPage({ roles }: { roles: RoleCard[] }) {
         <h2 id="openings-heading">
           Open positions at <span>CNTXT</span>
         </h2>
+        {featured.length > 0 && !filtering ? (
+          <div className={styles.featured} aria-labelledby="featured-heading">
+            <h3 id="featured-heading" className={styles.featuredHeading}>
+              Featured positions
+            </h3>
+            <ul className={styles.featuredGrid}>
+              {featured.map((role) => (
+                <li key={role.slug}>
+                  <a href={`/careers/${role.slug}`} className={styles.featuredCard}>
+                    <span className={styles.featuredTag}>{role.department || "CNTXT"}</span>
+                    <strong>{role.title}</strong>
+                    {role.summary ? <span className={styles.featuredSummary}>{role.summary}</span> : null}
+                    <span className={styles.featuredMeta}>
+                      {[role.location, role.terms].filter(Boolean).join(" · ")}
+                      <span aria-hidden="true" className={styles.featuredArrow}>
+                        →
+                      </span>
+                    </span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+            <p className={styles.featuredAll}>All open roles</p>
+          </div>
+        ) : null}
         <div className={styles.board}>
           <div className={styles.filters}>
             <label className={styles.search}>

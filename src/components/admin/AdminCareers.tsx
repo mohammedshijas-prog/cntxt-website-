@@ -17,6 +17,7 @@ type Role = {
   summary: string;
   description: string;
   status: "draft" | "open" | "closed";
+  featured?: boolean;
   sort: number;
   updated_at?: string;
 };
@@ -373,6 +374,20 @@ export function Roles({ role: me, onApplicants }: { role: PortalRole; onApplican
     queueMicrotask(load);
   }, [load]);
 
+  // Featured roles show first on /careers; the head of HR and admins choose them.
+  const canFeature = me === "admin" || me === "hr_head";
+  const toggleFeatured = async (role: Role) => {
+    if (!role.id || !canFeature) return;
+    const featured = !role.featured;
+    setRoles((current) => current.map((item) => (item.id === role.id ? { ...item, featured } : item)));
+    const { error } = await db.from("roles").update({ featured }).eq("id", role.id);
+    if (error) {
+      setRoles((current) => current.map((item) => (item.id === role.id ? { ...item, featured: !featured } : item)));
+      window.alert("Couldn't change that. Try again.");
+    }
+  };
+  const featuredCount = roles.filter((item) => item.featured && item.status === "open").length;
+
   if (editing) {
     return (
       <RoleEditor
@@ -391,7 +406,10 @@ export function Roles({ role: me, onApplicants }: { role: PortalRole; onApplican
       <div className={styles.head}>
         <div>
           <h1>Roles</h1>
-          <p>Open roles show on /careers within a minute, each with its own application page.</p>
+          <p>
+            Open roles show on /careers within a minute, each with its own application page. {featuredCount} featured at the top
+            {canFeature ? "; use the star to change which." : "."}
+          </p>
         </div>
         <button className={styles.primary} onClick={() => setEditing({ ...blankRole })}>
           New role
@@ -404,6 +422,18 @@ export function Roles({ role: me, onApplicants }: { role: PortalRole; onApplican
           {roles.map((role) => (
             <li key={role.id} className={styles.roleRow}>
               <div className={styles.roleActions}>
+                {role.id && (canFeature || role.featured) ? (
+                  <button
+                    className={`${styles.featureToggle} ${role.featured ? styles.featureOn : ""}`}
+                    aria-pressed={Boolean(role.featured)}
+                    disabled={!canFeature}
+                    title={role.featured ? "Featured at the top of /careers" + (canFeature ? ". Click to unfeature." : "") : "Feature at the top of /careers"}
+                    aria-label={role.featured ? `Unfeature ${role.title}` : `Feature ${role.title}`}
+                    onClick={() => toggleFeatured(role)}
+                  >
+                    {role.featured ? "★" : "☆"}
+                  </button>
+                ) : null}
                 {role.id ? (
                 <button
                   className={styles.applicantsLink}

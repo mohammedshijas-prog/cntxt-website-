@@ -2021,3 +2021,51 @@ details.department + .department {
 .logTable th:nth-child(3) { width: 18%; }
 .logTable th:nth-child(4) { width: 42%; }
 .logTable td:first-child { width: auto; }
+
+/* Roles: feature star, part of the row's action group. */
+.roleRow > button:last-child {
+  padding-right: 330px;
+}
+
+.featureToggle {
+  display: inline-grid !important;
+  width: 36px !important;
+  height: 36px;
+  padding: 0 !important;
+  place-items: center;
+  border: 1px solid var(--separator) !important;
+  border-radius: 999px !important;
+  background: var(--surface) !important;
+  box-shadow: none !important;
+  color: var(--label-2);
+  font-size: 17px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.featureToggle:hover:not(:disabled) {
+  border-color: #ff9f0a !important;
+  color: #ff9f0a;
+}
+
+.featureOn {
+  border-color: transparent !important;
+  background: rgba(255, 159, 10, 0.16) !important;
+  color: #c77700;
+}
+
+.featureToggle:disabled {
+  cursor: default;
+}
+
+@media (prefers-color-scheme: dark) {
+  .shell .featureOn {
+    color: #ffb340;
+  }
+}
+
+@media (max-width: 734px) {
+  .roleRow > button:last-child {
+    padding-right: var(--space-3);
+  }
+}

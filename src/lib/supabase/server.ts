@@ -57,6 +57,7 @@ export type Role = {
   summary: string;
   description: string;
   status: "draft" | "open" | "closed";
+  featured: boolean;
   sort: number;
   created_at: string;
 };
