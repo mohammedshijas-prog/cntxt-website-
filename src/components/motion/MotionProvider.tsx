@@ -34,7 +34,7 @@ export function MotionProvider() {
   useEffect(() => {
     // Touch screens keep native scrolling: it is what people expect there.
     if (reduced() || !window.matchMedia("(pointer: fine)").matches) return;
-    const lenis = new Lenis({ lerp: 0.11, anchors: { offset: -80 }, prevent: (node) => !!node.closest("[data-lenis-prevent]") });
+    const lenis = new Lenis({ lerp: 0.16, anchors: { offset: -80 }, prevent: (node) => !!node.closest("[data-lenis-prevent]") });
     lenis.on("scroll", ScrollTrigger.update);
     const tick = (time: number) => lenis.raf(time * 1000);
     gsap.ticker.add(tick);
@@ -100,10 +100,10 @@ export function MotionProvider() {
             onSplit: (self) =>
               gsap.from(self.lines, {
                 yPercent: 105,
-                duration: 0.7,
-                stagger: 0.06,
+                duration: 0.5,
+                stagger: 0.05,
                 ease: "expo.out",
-                scrollTrigger: { trigger: title, start: "top 96%", once: true },
+                scrollTrigger: { trigger: title, start: "top bottom", once: true },
               }),
           });
           splits.push(split);
@@ -114,12 +114,15 @@ export function MotionProvider() {
           ...section.querySelectorAll<HTMLElement>(
             "h2 ~ p, [class*='eyebrow'], [class*='dek'], :scope ul > li, :scope ol > li, :scope dl > div, article, details",
           ),
-        ].filter((el) => !lite && keep(el) && el.getBoundingClientRect().top > window.innerHeight * 0.92);
+        ]
+          // Long lists (role boards, tables of results) show at once: animating dozens of rows only delays them.
+          .filter((el) => !(el.tagName === "LI" && (el.parentElement?.children.length ?? 0) > 8))
+          .filter((el) => !lite && keep(el) && el.getBoundingClientRect().top > window.innerHeight * 0.92);
         if (items.length) {
           pending.push(...items);
           ScrollTrigger.batch(items, {
-            // Start as soon as an item peeks in, so nothing sits blank on screen.
-            start: "top 100%",
+            // Start just before an item scrolls in, so it is already landing as it appears.
+            start: "top bottom+=80",
             once: true,
             onEnter: (batch) => {
               batch.forEach((el) => {
@@ -129,13 +132,12 @@ export function MotionProvider() {
               // Rise and settle. Short, and the whole group lands within 0.3s of the first card.
               return gsap.fromTo(
                 batch,
-                { autoAlpha: 0, y: 24, scale: 0.98 },
+                { autoAlpha: 0, y: 14 },
                 {
                   autoAlpha: 1,
                   y: 0,
-                  scale: 1,
-                  duration: phone ? 0.45 : 0.6,
-                  stagger: batch.length > 5 ? { amount: 0.3 } : 0.06,
+                  duration: phone ? 0.32 : 0.4,
+                  stagger: batch.length > 5 ? { amount: 0.18 } : 0.04,
                   ease: "expo.out",
                   overwrite: true,
                   // Hand control back to the page's own CSS states afterwards.
@@ -144,7 +146,7 @@ export function MotionProvider() {
               );
             },
           });
-          gsap.set(items, { autoAlpha: 0, y: 24, scale: 0.98 });
+          gsap.set(items, { autoAlpha: 0, y: 14 });
         }
 
         // Big figures count up from zero the first time they are seen.
@@ -201,10 +203,10 @@ export function MotionProvider() {
             {
               clipPath: "inset(0% 0% 0% 0% round 0px)",
               scale: 1,
-              duration: 0.7,
+              duration: 0.5,
               ease: "expo.out",
               clearProps: "clipPath,transform",
-              scrollTrigger: { trigger: img, start: "top 98%", once: true },
+              scrollTrigger: { trigger: img, start: "top bottom+=60", once: true },
             },
           );
         });

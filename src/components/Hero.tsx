@@ -25,8 +25,17 @@ export function Hero() {
     if (!hero || !video) return;
     // On Data Saver or a 2G/3G connection the poster stands in for the clip. Phones get a
     // portrait centre-crop (675 KB) instead of the full-width 1.5 MB file they would mostly crop away.
+    // The poster paints first; the clip starts downloading once the page has settled,
+    // so it never competes with the code and fonts the page needs to become usable.
+    let cancelled = false;
     if (!slowNetwork() && !video.getAttribute("src")) {
-      video.src = window.matchMedia("(max-width: 734px)").matches ? "/home/hero-video-m.mp4" : "/home/hero-video.mp4";
+      const start = () => {
+        if (cancelled) return;
+        video.src = window.matchMedia("(max-width: 734px)").matches ? "/home/hero-video-m.mp4" : "/home/hero-video.mp4";
+      };
+      const later = () => (typeof window.requestIdleCallback === "function" ? window.requestIdleCallback(start, { timeout: 1500 }) : setTimeout(start, 300));
+      if (document.readyState === "complete") later();
+      else window.addEventListener("load", later, { once: true });
     }
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
     let frame = 0;
@@ -59,6 +68,7 @@ export function Hero() {
     window.addEventListener("scroll", request, { passive: true });
     window.addEventListener("resize", request);
     return () => {
+      cancelled = true;
       cancelAnimationFrame(frame);
       seen.disconnect();
       window.removeEventListener("scroll", request);

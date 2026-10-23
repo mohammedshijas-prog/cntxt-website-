@@ -86,7 +86,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           over the page. Loaded as raw tags, HubSpot edits the DOM before
           hydration and React throws a hydration error.
         */}
-        <Script id="gtm-head" strategy="afterInteractive">
+        <Script id="gtm-head" strategy="lazyOnload">
           {gtmHead}
         </Script>
         {/* Cookie banner, as on the current site */}
@@ -95,7 +95,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           src="https://cookie-consent-cdn-prod.pages.dev/cookie-consent/3.0.33/cookie-consent.js"
           integrity="sha384-hID7SQtXLqNKM1f6agvO2qhK2radQn5wf+Su4pAEM5ElgJ/FmSWXrmcaYP4/D3E0"
           crossOrigin="anonymous"
-          strategy="afterInteractive"
+          strategy="lazyOnload"
         />
         {/* HubSpot embed code: chat and forms tracking, loaded when the page is idle. */}
         <Script id="hs-script-loader" src="https://js.hs-scripts.com/48027770.js" strategy="lazyOnload" />

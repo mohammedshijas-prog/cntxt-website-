@@ -6,10 +6,16 @@ import { usePathname, useSearchParams } from "next/navigation";
 import { renderMarkdown } from "@/lib/markdown";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { supabaseBrowser } from "@/lib/supabase/browser";
-import { Applications, Roles } from "./AdminCareers";
-import { Catalogue, DataRequests } from "./AdminCatalogue";
-import { SeoReports } from "./AdminSeo";
-import { ActivityLog } from "./AdminActivity";
+import dynamic from "next/dynamic";
+
+// Each section's code downloads only when that section is opened.
+const loading = () => <p className={styles.emptySmall}>Loading…</p>;
+const Applications = dynamic(() => import("./AdminCareers").then((m) => m.Applications), { loading });
+const Roles = dynamic(() => import("./AdminCareers").then((m) => m.Roles), { loading });
+const Catalogue = dynamic(() => import("./AdminCatalogue").then((m) => m.Catalogue), { loading });
+const DataRequests = dynamic(() => import("./AdminCatalogue").then((m) => m.DataRequests), { loading });
+const SeoReports = dynamic(() => import("./AdminSeo").then((m) => m.SeoReports), { loading });
+const ActivityLog = dynamic(() => import("./AdminActivity").then((m) => m.ActivityLog), { loading });
 import { slugify, when } from "./shared";
 import styles from "./admin.module.css";
 
