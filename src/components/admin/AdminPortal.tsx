@@ -16,7 +16,7 @@ const Catalogue = dynamic(() => import("./AdminCatalogue").then((m) => m.Catalog
 const DataRequests = dynamic(() => import("./AdminCatalogue").then((m) => m.DataRequests), { loading });
 const SeoReports = dynamic(() => import("./AdminSeo").then((m) => m.SeoReports), { loading });
 const ActivityLog = dynamic(() => import("./AdminActivity").then((m) => m.ActivityLog), { loading });
-import { slugify, when } from "./shared";
+import { fetchAll, slugify, when } from "./shared";
 import styles from "./admin.module.css";
 
 type Submission = {
@@ -293,8 +293,7 @@ function Submissions() {
   const [open, setOpen] = useState<string | null>(null);
 
   const load = useCallback(async () => {
-    const { data } = await db.from("submissions").select("*").order("created_at", { ascending: false }).limit(1000);
-    setRows((data as Submission[]) ?? []);
+    setRows(await fetchAll<Submission>((from, to) => db.from("submissions").select("*").order("created_at", { ascending: false }).order("id").range(from, to)));
   }, [db]);
 
   useEffect(() => {

@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { supabaseBrowser } from "@/lib/supabase/browser";
 import type { PortalRole } from "./AdminPortal";
-import { downloadCsv, slugify, when } from "./shared";
+import { downloadCsv, fetchAll, slugify, when } from "./shared";
 import styles from "./admin.module.css";
 
 type Dataset = {
@@ -50,8 +50,7 @@ export function DataRequests({ role }: { role: PortalRole }) {
   const [note, setNote] = useState("");
 
   const load = useCallback(async () => {
-    const { data } = await db.from("dataset_requests").select("*").order("created_at", { ascending: false }).limit(2000);
-    setRows((data as DataRequest[]) ?? []);
+    setRows(await fetchAll<DataRequest>((from, to) => db.from("dataset_requests").select("*").order("created_at", { ascending: false }).order("id").range(from, to)));
   }, [db]);
 
   useEffect(() => {

@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { renderMarkdown } from "@/lib/markdown";
 import { supabaseBrowser } from "@/lib/supabase/browser";
 import type { PortalRole } from "./AdminPortal";
-import { downloadCsv, slugify, when } from "./shared";
+import { downloadCsv, fetchAll, slugify, when } from "./shared";
 import styles from "./admin.module.css";
 
 type Role = {
@@ -96,8 +96,7 @@ export function Applications({ role: me, focus }: { role: PortalRole; focus?: st
   const [note, setNote] = useState("");
 
   const load = useCallback(async () => {
-    const { data } = await db.from("applications").select("*").order("created_at", { ascending: false }).limit(2000);
-    setRows((data as Application[]) ?? []);
+    setRows(await fetchAll<Application>((from, to) => db.from("applications").select("*").order("created_at", { ascending: false }).order("id").range(from, to)));
   }, [db]);
 
   useEffect(() => {
@@ -360,13 +359,13 @@ export function Roles({ role: me, onApplicants }: { role: PortalRole; onApplican
   const [editing, setEditing] = useState<Role | null>(null);
 
   const load = useCallback(async () => {
-    const [{ data }, { data: apps }] = await Promise.all([
+    const [{ data }, apps] = await Promise.all([
       db.from("roles").select("*").order("sort").order("title"),
-      db.from("applications").select("role_id"),
+      fetchAll<{ role_id: string | null }>((from, to) => db.from("applications").select("role_id").order("id").range(from, to)),
     ]);
     setRoles((data as Role[]) ?? []);
     const tally: Record<string, number> = {};
-    for (const app of (apps as { role_id: string | null }[]) ?? []) if (app.role_id) tally[app.role_id] = (tally[app.role_id] ?? 0) + 1;
+    for (const app of apps) if (app.role_id) tally[app.role_id] = (tally[app.role_id] ?? 0) + 1;
     setCounts(tally);
   }, [db]);
 

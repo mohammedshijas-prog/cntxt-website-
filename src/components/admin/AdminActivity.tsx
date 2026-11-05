@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { supabaseBrowser } from "@/lib/supabase/browser";
-import { downloadCsv, when } from "./shared";
+import { downloadCsv, fetchAll, when } from "./shared";
 import styles from "./admin.module.css";
 
 /*
@@ -86,10 +86,13 @@ export function ActivityLog() {
 
   const load = useCallback(async () => {
     setLoading(true);
-    let request = db.from("portal_audit").select("*").order("at", { ascending: false }).limit(2000);
-    if (days) request = request.gte("at", new Date(Date.now() - days * 86_400_000).toISOString());
-    const [{ data }, { data: members }] = await Promise.all([request, db.from("admins").select("email, role, name").order("email")]);
-    setEntries((data as Entry[]) ?? []);
+    const since = days ? new Date(Date.now() - days * 86_400_000).toISOString() : "";
+    const page = (from: number, to: number) => {
+      const request = db.from("portal_audit").select("*");
+      return (since ? request.gte("at", since) : request).order("at", { ascending: false }).order("id").range(from, to);
+    };
+    const [data, { data: members }] = await Promise.all([fetchAll<Entry>(page), db.from("admins").select("email, role, name").order("email")]);
+    setEntries(data);
     setTeam((members as Member[]) ?? []);
     setLoading(false);
   }, [db, days]);
@@ -298,7 +301,6 @@ export function ActivityLog() {
                 ))}
               </tbody>
             </table>
-            {filtered.length >= 2000 ? <p className={styles.fitMuted}>Showing the latest 2,000 entries. Narrow the window or export to see more.</p> : null}
           </div>
         )
       ) : null}

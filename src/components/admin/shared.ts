@@ -6,6 +6,19 @@ export const slugify = (text: string) =>
 export const when = (iso: string) =>
   new Date(iso).toLocaleString("en-GB", { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" });
 
+/** Every row of a query, however many: the database returns at most 1,000 at a time. Order by something unique so pages never overlap. */
+export async function fetchAll<Row>(page: (from: number, to: number) => PromiseLike<{ data: unknown; error: { message: string } | null }>) {
+  const size = 1000;
+  const rows: Row[] = [];
+  for (let from = 0; ; from += size) {
+    const { data, error } = await page(from, from + size - 1);
+    if (error) console.error("portal: could not load every row", error.message);
+    const batch = (data as Row[] | null) ?? [];
+    rows.push(...batch);
+    if (error || batch.length < size) return rows;
+  }
+}
+
 /** Download rows as a CSV file named cntxt-<name>-<date>.csv. */
 export function downloadCsv(name: string, header: string[], rows: (string | number | null | undefined)[][]) {
   // A leading = + - @ would run as a formula in Excel (CSV injection); prefix it so it stays text.
